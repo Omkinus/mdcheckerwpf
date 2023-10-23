@@ -30,10 +30,11 @@ namespace mdcheckerwpf
     {
         public MainWindow()
         {
+            testfunction();
+
+            this.Close();
+
             InitializeComponent();
-            
-            check_precision();
-            check_reflectedview();
         }
 
         tsm.Model _model = new tsm.Model();
@@ -159,6 +160,37 @@ namespace mdcheckerwpf
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
+
+        void testfunction()
+        {
+
+            try
+            {
+                if (!_model.GetConnectionStatus() || !_drawinghandler.GetConnectionStatus())
+                    return;
+
+                Tekla.Structures.Drawing.UI.DrawingSelector _currentdrawings = _drawinghandler.GetDrawingSelector();
+                Tekla.Structures.Drawing.DrawingEnumerator _selecteddrawings = _currentdrawings.GetSelected();
+
+                string listofnames = null;
+
+                foreach (var _currentdrawing in _selecteddrawings)
+                {
+                    check_precision();
+                    Tekla.Structures.Drawing.Drawing _currentdrawing1 = _currentdrawing as Tekla.Structures.Drawing.Drawing;
+                    string _currentdrawing1name = _currentdrawing1.Mark;
+                    listofnames += _currentdrawing1name;
+                    listofnames += "\n";
+                }
+
+                MessageBox.Show(listofnames, "АЛЕРТ");
+            }
+            catch (Exception)
+            {
+
                 throw;
             }
         }
