@@ -1,6 +1,7 @@
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\mdcheckerwpf.exe.config
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\mdcheckerwpf.exe
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\mdcheckerwpf.pdb
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Gat.Controls.MessageBox.dll
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Tekla.Application.Library.dll
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Tekla.Structures.Catalogs.dll
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Tekla.Structures.Datatype.dll
@@ -17,7 +18,6 @@ C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Tekla.Structures
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Tekla.Structures.Drawing.xml
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Tekla.Structures.Model.xml
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Tekla.Structures.Plugins.xml
-C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\mdcheckerwpf.csprojAssemblyReference.cache
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MainWindow.g.cs
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\App.g.cs
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\mdcheckerwpf_MarkupCompile.cache
@@ -29,4 +29,3 @@ C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\mdcheckerwpf.csp
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\mdcheckerwpf.csproj.CopyComplete
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\mdcheckerwpf.exe
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\mdcheckerwpf.pdb
-C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Gat.Controls.MessageBox.dll

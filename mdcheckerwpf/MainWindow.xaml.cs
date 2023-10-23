@@ -71,10 +71,8 @@ namespace mdcheckerwpf
 
                     check_reflectedview(_currentdrawing1,out string message_reflectedview);
                     listofnames += message_reflectedview;
-
-
+                   
                     listofnames += "\n";
-
 
                 }
                 
@@ -93,21 +91,19 @@ namespace mdcheckerwpf
                 {
                     message_checkprecision = "";
 
-                    Tekla.Structures.Drawing.Drawing checkdrawing = drawing as Tekla.Structures.Drawing.Drawing;
-
                     if (drawing == null)
                     {
                         return;
                     }
 
-                    ContainerView sheet = checkdrawing.GetSheet();
+                    ContainerView sheet = drawing.GetSheet();
                     DrawingObjectEnumerator allviews = sheet.GetAllViews();
 
                     foreach (var view1 in allviews)
                     {
                         Tekla.Structures.Drawing.ViewBase view3 = view1 as Tekla.Structures.Drawing.ViewBase;
                         DrawingObjectEnumerator viewallobjects = view3.GetAllObjects();
-
+                        
                         foreach (var obj in viewallobjects)
                         {
                             if (obj.GetType() == typeof(StraightDimensionSet))
@@ -159,12 +155,13 @@ namespace mdcheckerwpf
                 {
                     message_reflectedview = "";
 
-                    Tekla.Structures.Drawing.Drawing checkdrawing = drawing as Tekla.Structures.Drawing.Drawing;
+                    
                     if (drawing == null)
                     {
                         return;
                     }
-                    ContainerView sheet = checkdrawing.GetSheet();
+
+                    ContainerView sheet = drawing.GetSheet();
                     DrawingObjectEnumerator allviews = sheet.GetAllViews();
 
                     string views = "";
@@ -217,8 +214,6 @@ namespace mdcheckerwpf
                     throw;
                 }
             }
-
-
 
         }
 
