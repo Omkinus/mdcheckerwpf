@@ -31,9 +31,9 @@ namespace mdcheckerwpf
         public MainWindow()
         {
 
-            drawingcheck();
+            drawingcheck(); //главная функция проверки чертежей
 
-            this.Close();
+            this.Close(); //закрывает главное окно
 
             InitializeComponent();
         }
@@ -59,21 +59,24 @@ namespace mdcheckerwpf
                    
                     Tekla.Structures.Drawing.Drawing _currentdrawing1 = _currentdrawing as Tekla.Structures.Drawing.Drawing;
                     
-                    string _currentdrawing1name = _currentdrawing1.Mark;
+                    string drawingnumber = _currentdrawing1.Mark;
                     
-                    listofnames += _currentdrawing1name;
+                    listofnames += drawingnumber;
 
                     //Вызываем поочередно функции проверок
 
 
                     check_precision(_currentdrawing1,out string message_checkprecision);
-                    listofnames += message_checkprecision;
+                   
 
                     check_reflectedview(_currentdrawing1,out string message_reflectedview);
-                    listofnames += message_reflectedview;
-                   
-                    listofnames += "\n";
-
+                    
+                    listofnames += 
+                        message_reflectedview +
+                        message_checkprecision +
+                        "\n"
+                        ;
+                    
                 }
                 
                 MessageBox.Show(listofnames, "АЛЕРТ");
@@ -110,6 +113,7 @@ namespace mdcheckerwpf
                             {
                                 StraightDimensionSet _dimensionforcheck = obj as Tekla.Structures.Drawing.StraightDimensionSet;
                                 StraightDimensionSetAttributes _dimattributes = _dimensionforcheck.Attributes as StraightDimensionSetAttributes;
+
                                 DimensionSetBaseAttributes.DimensionFormatAttributes _dimensionformat = _dimattributes.Format;
                                 DimensionSetBaseAttributes.DimensionValuePrecisions _dimprecision = _dimensionformat.Precision;
 
@@ -126,6 +130,7 @@ namespace mdcheckerwpf
                             {
                                 AngleDimension _angulardimensionforcheck = obj as Tekla.Structures.Drawing.AngleDimension;
                                 AngleDimensionAttributes _angulardimattributes = _angulardimensionforcheck.Attributes as AngleDimensionAttributes;
+
                                 AngleDimensionAttributes.DimensionFormatAttributes _angdimensionformat = _angulardimattributes.Format;
                                 AngleDimensionAttributes.DimensionValuePrecisions _angledimprecision = _angdimensionformat.Precision;
 
