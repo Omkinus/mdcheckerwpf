@@ -30,7 +30,8 @@ namespace mdcheckerwpf
     {
         public MainWindow()
         {
-            testfunction();
+
+            drawingcheck();
 
             this.Close();
 
@@ -38,135 +39,11 @@ namespace mdcheckerwpf
         }
 
         tsm.Model _model = new tsm.Model();
-        DrawingHandler _drawinghandler = new DrawingHandler();
-        
 
-        void check_precision()
+        void drawingcheck()
         {
-            try
-            {
-                if (!_model.GetConnectionStatus() || !_drawinghandler.GetConnectionStatus())
-                    return;
-
-                Tekla.Structures.Drawing.Drawing _currentdrawing = _drawinghandler.GetActiveDrawing();
-                Tekla.Structures.Drawing.UI.Picker picker = _drawinghandler.GetPicker();
-
-                ContainerView sheet = _currentdrawing.GetSheet();
-                DrawingObjectEnumerator allviews = sheet.GetAllViews();
-
-                foreach (var view1 in allviews)
-                {
-                    Tekla.Structures.Drawing.ViewBase view3 = view1 as Tekla.Structures.Drawing.ViewBase;
-                    DrawingObjectEnumerator viewallobjects = view3.GetAllObjects();
-
-                    foreach (var obj in viewallobjects)
-                    {
-                        if (obj.GetType() == typeof(StraightDimensionSet))
-                        {
-                            StraightDimensionSet _dimensionforcheck = obj as Tekla.Structures.Drawing.StraightDimensionSet;
-                            StraightDimensionSetAttributes _dimattributes = _dimensionforcheck.Attributes as StraightDimensionSetAttributes;
-                            DimensionSetBaseAttributes.DimensionFormatAttributes _dimensionformat = _dimattributes.Format;
-                            DimensionSetBaseAttributes.DimensionValuePrecisions _dimprecision = _dimensionformat.Precision;
-
-
-                            if (_dimprecision.ToString() != "OnePerSixteen")
-                            {
-                                MessageBox.Show("Присутствует размер округленный не на 1/16", "АЛЕРТ");
-                                break;
-                            }
-
-                        } //проверка обычных размеров на правильное округление 1/16
-
-                        if (obj.GetType() == typeof(AngleDimension))
-                        {
-                            AngleDimension _angulardimensionforcheck = obj as Tekla.Structures.Drawing.AngleDimension;
-                            AngleDimensionAttributes _angulardimattributes = _angulardimensionforcheck.Attributes as AngleDimensionAttributes;
-                            AngleDimensionAttributes.DimensionFormatAttributes _angdimensionformat = _angulardimattributes.Format;
-                            AngleDimensionAttributes.DimensionValuePrecisions _angledimprecision = _angdimensionformat.Precision;
-
-                            if (_angledimprecision.ToString() != "OnePerHundred")
-                            {
-                                MessageBox.Show("Присутствует угловой размер округленный не на 1/100", "АЛЕРТ");
-                                break;
-                            }
-
-                        } //проверка угловых размеров на правильное округление 1/100
-                    }
-                }
-
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        void check_reflectedview()
-        {
-            try
-            {
-                if (!_model.GetConnectionStatus() || !_drawinghandler.GetConnectionStatus())
-                    return;
-
-                Tekla.Structures.Drawing.Drawing _currentdrawing = _drawinghandler.GetActiveDrawing();
-                Tekla.Structures.Drawing.UI.Picker picker = _drawinghandler.GetPicker();
-
-                ContainerView sheet = _currentdrawing.GetSheet();
-                DrawingObjectEnumerator allviews = sheet.GetAllViews();
-
-                string views = "";
-
-                foreach (var view1 in allviews)
-                {
-                    Tekla.Structures.Drawing.View view2 = view1 as Tekla.Structures.Drawing.View;
-
-                    if (view2.Attributes.ReflectedView == true)
-                    {
-
-                        Tekla.Structures.Drawing.ContainerElement view2name = view2.Attributes.TagsAttributes.TagA1.TagContent;
-
-                        views += "(";
-
-                        foreach (var textitems in view2name)
-                        {
-                            if (textitems is Tekla.Structures.Drawing.TextElement)
-                            {
-                                Tekla.Structures.Drawing.TextElement item = textitems as Tekla.Structures.Drawing.TextElement;
-                                string itemstring = item.Value.ToString();
-
-                                views += itemstring;
-
-                            };
-
-                            if (textitems is Tekla.Structures.Drawing.PropertyElement)
-                            {
-                                Tekla.Structures.Drawing.PropertyElement item = textitems as PropertyElement;
-                                string itemstring = item.Value.ToString();
-
-                                views += itemstring;
-
-                            };
-                        }
-
-                        views += ")";
-                    }
-
-                }
-                if (views != "")
-                {
-                    MessageBox.Show("Присутствует вид c включенным Reflected View (" + views + ")", "АЛЕРТ");
-
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        void testfunction()
-        {
-
+            DrawingHandler _drawinghandler = new DrawingHandler();
+            
             try
             {
                 if (!_model.GetConnectionStatus() || !_drawinghandler.GetConnectionStatus())
@@ -175,18 +52,34 @@ namespace mdcheckerwpf
                 Tekla.Structures.Drawing.UI.DrawingSelector _currentdrawings = _drawinghandler.GetDrawingSelector();
                 Tekla.Structures.Drawing.DrawingEnumerator _selecteddrawings = _currentdrawings.GetSelected();
 
-                string listofnames = null;
+                string listofnames = "";
 
                 foreach (var _currentdrawing in _selecteddrawings)
                 {
-                    check_precision();
+                   
                     Tekla.Structures.Drawing.Drawing _currentdrawing1 = _currentdrawing as Tekla.Structures.Drawing.Drawing;
+                    
                     string _currentdrawing1name = _currentdrawing1.Mark;
+                    
                     listofnames += _currentdrawing1name;
-                    listofnames += "\n";
-                }
 
+                    //Вызываем поочередно функции проверок
+
+
+                    check_precision(_currentdrawing1,out string message_checkprecision);
+                    listofnames += message_checkprecision;
+
+                    check_reflectedview(_currentdrawing1,out string message_reflectedview);
+                    listofnames += message_reflectedview;
+
+
+                    listofnames += "\n";
+
+
+                }
+                
                 MessageBox.Show(listofnames, "АЛЕРТ");
+
             }
             catch (Exception)
             {
@@ -194,9 +87,142 @@ namespace mdcheckerwpf
                 throw;
             }
 
+            void check_precision(Tekla.Structures.Drawing.Drawing drawing, out string message_checkprecision)
+            {
+                try
+                {
+                    message_checkprecision = "";
+
+                    Tekla.Structures.Drawing.Drawing checkdrawing = drawing as Tekla.Structures.Drawing.Drawing;
+
+                    if (drawing == null)
+                    {
+                        return;
+                    }
+
+                    ContainerView sheet = checkdrawing.GetSheet();
+                    DrawingObjectEnumerator allviews = sheet.GetAllViews();
+
+                    foreach (var view1 in allviews)
+                    {
+                        Tekla.Structures.Drawing.ViewBase view3 = view1 as Tekla.Structures.Drawing.ViewBase;
+                        DrawingObjectEnumerator viewallobjects = view3.GetAllObjects();
+
+                        foreach (var obj in viewallobjects)
+                        {
+                            if (obj.GetType() == typeof(StraightDimensionSet))
+                            {
+                                StraightDimensionSet _dimensionforcheck = obj as Tekla.Structures.Drawing.StraightDimensionSet;
+                                StraightDimensionSetAttributes _dimattributes = _dimensionforcheck.Attributes as StraightDimensionSetAttributes;
+                                DimensionSetBaseAttributes.DimensionFormatAttributes _dimensionformat = _dimattributes.Format;
+                                DimensionSetBaseAttributes.DimensionValuePrecisions _dimprecision = _dimensionformat.Precision;
+
+
+                                if (_dimprecision.ToString() != "OnePerSixteen")
+                                {
+                                    message_checkprecision += "Присутствует размер округленный не на 1/16 \n";
+                                    break;
+                                }
+
+                            } //проверка обычных размеров на правильное округление 1/16
+
+                            if (obj.GetType() == typeof(AngleDimension))
+                            {
+                                AngleDimension _angulardimensionforcheck = obj as Tekla.Structures.Drawing.AngleDimension;
+                                AngleDimensionAttributes _angulardimattributes = _angulardimensionforcheck.Attributes as AngleDimensionAttributes;
+                                AngleDimensionAttributes.DimensionFormatAttributes _angdimensionformat = _angulardimattributes.Format;
+                                AngleDimensionAttributes.DimensionValuePrecisions _angledimprecision = _angdimensionformat.Precision;
+
+                                if (_angledimprecision.ToString() != "OnePerHundred")
+                                {
+                                    message_checkprecision += "Присутствует угловой размер округленный не на 1/100 \n";
+                                    break;
+                                }
+
+                            } //проверка угловых размеров на правильное округление 1/100
+                        }
+
+                        
+                    }
+                    
+                }
+                catch
+                {
+                    throw;
+                }
+
+            }
+
+            void check_reflectedview(Tekla.Structures.Drawing.Drawing drawing,out string message_reflectedview)
+            {
+                try
+                {
+                    message_reflectedview = "";
+
+                    Tekla.Structures.Drawing.Drawing checkdrawing = drawing as Tekla.Structures.Drawing.Drawing;
+                    if (drawing == null)
+                    {
+                        return;
+                    }
+                    ContainerView sheet = checkdrawing.GetSheet();
+                    DrawingObjectEnumerator allviews = sheet.GetAllViews();
+
+                    string views = "";
+
+                    foreach (var view1 in allviews)
+                    {
+                        Tekla.Structures.Drawing.View view2 = view1 as Tekla.Structures.Drawing.View;
+
+                        if (view2.Attributes.ReflectedView == true)
+                        {
+
+                            Tekla.Structures.Drawing.ContainerElement view2name = view2.Attributes.TagsAttributes.TagA1.TagContent;
+
+                            views += "(";
+
+                            foreach (var textitems in view2name)
+                            {
+                                if (textitems is Tekla.Structures.Drawing.TextElement)
+                                {
+                                    Tekla.Structures.Drawing.TextElement item = textitems as Tekla.Structures.Drawing.TextElement;
+                                    string itemstring = item.Value.ToString();
+
+                                    views += itemstring;
+
+                                };
+
+                                if (textitems is Tekla.Structures.Drawing.PropertyElement)
+                                {
+                                    Tekla.Structures.Drawing.PropertyElement item = textitems as PropertyElement;
+                                    string itemstring = item.Value.ToString();
+
+                                    views += itemstring;
+
+                                };
+                            }
+
+                            views += ")";
+                        }
+
+                    }
+                    if (views != "")
+                    {
+
+                        message_reflectedview = "Присутствует вид c включенным Reflected View (" + views + ")";
+
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+
 
 
         }
 
+      
     }
+
 }
