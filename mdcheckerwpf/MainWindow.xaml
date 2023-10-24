@@ -17,8 +17,11 @@
         Background="{x:Null}">
     <Grid>
         
-        <Border CornerRadius="6"  
-                Background="#FF353540"/>
+        <Border CornerRadius="6">
+            <Border.Background>
+                <ImageBrush ImageSource="Resources/backgroundimage.jpg"/>
+            </Border.Background>
+        </Border>
 
         <Grid>
             <Grid.ColumnDefinitions>
@@ -29,29 +32,48 @@
                 <RowDefinition Height="75"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <TextBlock Text="Programname"
+            <TextBlock Text="Athena"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Left"
                        Foreground="White"
-                       FontSize="22"
+                       FontSize="36"
+                       FontWeight="Medium"
                        Margin="20,0,0,0"
                        />
 
             <StackPanel Grid.Row="1">
+                <StackPanel.Background>
+                    <ImageBrush/>
+                </StackPanel.Background>
                 <RadioButton Content="Home"
                              Height ="50"
                              Foreground="White"
                              FontSize="14"
+                             FontWeight="Bold"
                              Style="{StaticResource MenuButtonTheme}"/>
                 <RadioButton Content="Model check"
                              Height ="50"
                              Foreground="White"
                              FontSize="14"
+                             FontWeight="Bold"
                              Style="{StaticResource MenuButtonTheme}"/>
                 <RadioButton Content="Drawings check"
                              Height ="50"
                              Foreground="White"
                              FontSize="14"
+                             FontWeight="Bold"
+                             Style="{StaticResource MenuButtonTheme}"/>
+                <RadioButton Content="Settings"
+                             Height ="50"
+                             Foreground="White"
+                             FontSize="14"
+                             FontWeight="Bold"
+                             Style="{StaticResource MenuButtonTheme}"/>
+                <RadioButton Content="Instructions"
+                             Height ="50"
+                             Foreground="White"
+                             FontSize="14"
+                             FontWeight="Bold"
                              Style="{StaticResource MenuButtonTheme}"/>
                 
             </StackPanel>
