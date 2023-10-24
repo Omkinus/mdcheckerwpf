@@ -41,7 +41,18 @@
                 <RadioButton Content="Home"
                              Height ="50"
                              Foreground="White"
-                             FontSize="14"/>
+                             FontSize="14"
+                             Style="{StaticResource MenuButtonTheme}"/>
+                <RadioButton Content="Model check"
+                             Height ="50"
+                             Foreground="White"
+                             FontSize="14"
+                             Style="{StaticResource MenuButtonTheme}"/>
+                <RadioButton Content="Drawings check"
+                             Height ="50"
+                             Foreground="White"
+                             FontSize="14"
+                             Style="{StaticResource MenuButtonTheme}"/>
                 
             </StackPanel>
         </Grid>

@@ -88,10 +88,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Drawingcheck.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -102,14 +98,11 @@
     </Compile>
     <Compile Include="Core\ObservableObject.cs" />
     <Compile Include="Core\RelayCommand.cs" />
-    <Compile Include="Drawingcheck.xaml.cs">
-      <DependentUpon>Drawingcheck.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Modelcheck.xaml">
+    <Page Include="MVVM\View\HomeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -119,8 +112,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Modelcheck.xaml.cs">
-      <DependentUpon>Modelcheck.xaml</DependentUpon>
+    <Compile Include="MVVM\ViewModel\MainViewModel.cs" />
+    <Compile Include="MVVM\View\HomeView.xaml.cs">
+      <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -199,7 +193,7 @@
   <ItemGroup>
     <Folder Include="Fonts\" />
     <Folder Include="Images\" />
-    <Folder Include="MVVM\" />
+    <Folder Include="MVVM\Model\" />
     <Folder Include="Styles\" />
     <Folder Include="Utilities\" />
     <Folder Include="ViewModel\" />

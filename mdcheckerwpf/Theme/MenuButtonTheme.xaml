@@ -3,16 +3,17 @@
                     xmlns:local="clr-namespace:mdcheckerwpf.Theme">
     <Style BasedOn="{StaticResource {x:Type ToggleButton}}"
            TargetType="{x:Type RadioButton}"
-           x:Key="MenuButtonTHeme">
+           x:Key="MenuButtonTheme">
         <Style.Setters>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate>
+                    <ControlTemplate TargetType="RadioButton">
                         <Grid VerticalAlignment="Stretch"
                               HorizontalAlignment="Stretch"
                               Background="{TemplateBinding Background}">
-                            <TextBlock Text="hello"
-                                       VerticalAlignment="Center"/>
+                            <TextBlock Text="{TemplateBinding Property=Content}"
+                                       VerticalAlignment="Center"
+                                       Margin="50,0,0,0"/>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
