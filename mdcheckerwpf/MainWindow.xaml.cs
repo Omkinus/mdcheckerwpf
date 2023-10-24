@@ -225,20 +225,7 @@ namespace mdcheckerwpf
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Main.Content= new Drawingcheck();
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            Main.Content = new Modelcheck();
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            Main.Content = new MainWindow();
-        }
+       
     }
 
 }

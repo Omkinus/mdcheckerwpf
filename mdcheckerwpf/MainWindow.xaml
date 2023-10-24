@@ -18,20 +18,32 @@
     <Grid>
         
         <Border CornerRadius="6"  
-                Background="White"/>
+                Background="#FF353540"/>
 
         <Grid>
-            <Grid Width="60" HorizontalAlignment="Left"  Height="768">
-                <Border Background="#FF2DA0FF" CornerRadius="6"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="75"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Programname"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       Foreground="White"
+                       FontSize="22"
+                       Margin="20,0,0,0"
+                       />
 
-                <StackPanel Orientation="Vertical" Width="60" HorizontalAlignment="Left">
-                    <Button Content="Г"  Click="Button_Click_2"/>
-                    <Button Content="Ч"  Click="Button_Click" />
-                    <Button Content="М"  Click="Button_Click_1"/>
-                   
-                </StackPanel>
-            </Grid>
-            <Frame x:Name="Main" NavigationUIVisibility="Hidden"/>
+            <StackPanel Grid.Row="1">
+                <RadioButton Content="Home"
+                             Height ="50"
+                             Foreground="White"
+                             FontSize="14"/>
+                
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>
