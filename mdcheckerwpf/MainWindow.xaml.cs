@@ -14,6 +14,7 @@ namespace mdcheckerwpf
         public MainWindow()
         {
             InitializeComponent();
+            
         }
 
         tsm.Model _model = new tsm.Model();
