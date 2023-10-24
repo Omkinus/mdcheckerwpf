@@ -4,14 +4,27 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mdcheckerwpf"
-        mc:Ignorable="d" Title="MainWindow" Height="768" Width="1024" WindowStartupLocation="CenterScreen" WindowStyle="None" Foreground="White">
+        mc:Ignorable="d" 
+        Title="MainWindow" 
+        Height="768" 
+        Width="1024" 
+        WindowStartupLocation="CenterScreen" 
+        WindowStyle="None" 
+        Foreground="White" 
+        AllowsTransparency="True" 
+        ResizeMode="NoResize" 
+        Background="{x:Null}">
     <Grid>
-        <Grid Height="60" VerticalAlignment="Top" Background="#FF65B9EA">
-            <TextBlock Text="Athena" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
-            
-        </Grid>
+        <Border CornerRadius="6"  
+                Background="White"/>
+
         <Grid>
-            <Grid Width="200" HorizontalAlignment="Left" Background="#FF286B93"/>
+
+            <Grid Width="60" HorizontalAlignment="Left"  Height="768">
+                <Border Background="#FF2DA0FF" CornerRadius="6"/>
+
+            </Grid>
+
         </Grid>
     </Grid>
 </Window>
