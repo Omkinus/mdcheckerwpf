@@ -1,25 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Tekla.Structures.Drawing;
-using tsm = Tekla.Structures.Model;
-using Tekla.Structures.Drawing.UI;
-using Tekla.Structures.Model;
-using static Tekla.Structures.Model.ReferenceModel;
 using static Tekla.Structures.Drawing.StraightDimensionSet;
-using Tekla.Structures.Model.UI;
-using System.Collections;
+using tsm = Tekla.Structures.Model;
 
 namespace mdcheckerwpf
 {
@@ -30,20 +13,35 @@ namespace mdcheckerwpf
     {
         public MainWindow()
         {
+           /* DrawingHandler _drawinghandler = new DrawingHandler();
+            Tekla.Structures.Drawing.Drawing curdraw = _drawinghandler.GetActiveDrawing();
+            ContainerView sheet = curdraw.GetSheet();
+            DrawingObjectEnumerator allviews = sheet.GetAllViews();
+
+            foreach (var view in allviews)
+            {
+                Tekla.Structures.Drawing.View view2 = view as View;
+                Tekla.Structures.Drawing.ContainerElement view2name = view2.Attributes.TagsAttributes.TagA1.TagContent;
+                MessageBox.Show(view2name.ToString(), "АЛЕРТ");
+            }*/
+
+
 
             drawingcheck(); //главная функция проверки чертежей
-
+            
             this.Close(); //закрывает главное окно
 
             InitializeComponent();
         }
 
         tsm.Model _model = new tsm.Model();
-
+        
         void drawingcheck()
         {
-            DrawingHandler _drawinghandler = new DrawingHandler();
+           
             
+            DrawingHandler _drawinghandler = new DrawingHandler();
+
             try
             {
                 if (!_model.GetConnectionStatus() || !_drawinghandler.GetConnectionStatus())
@@ -56,29 +54,29 @@ namespace mdcheckerwpf
 
                 foreach (var _currentdrawing in _selecteddrawings)
                 {
-                   
+
                     Tekla.Structures.Drawing.Drawing _currentdrawing1 = _currentdrawing as Tekla.Structures.Drawing.Drawing;
-                    
+
                     string drawingnumber = _currentdrawing1.Mark;
-                    
+
                     listofnames += drawingnumber;
 
                     //Вызываем поочередно функции проверок
 
 
-                    check_precision(_currentdrawing1,out string message_checkprecision);
-                   
+                    check_precision(_currentdrawing1, out string message_checkprecision);
 
-                    check_reflectedview(_currentdrawing1,out string message_reflectedview);
-                    
-                    listofnames += 
+
+                    check_reflectedview(_currentdrawing1, out string message_reflectedview);
+
+                    listofnames +=
                         message_reflectedview +
                         message_checkprecision +
                         "\n"
                         ;
-                    
+
                 }
-                
+
                 MessageBox.Show(listofnames, "АЛЕРТ");
 
             }
@@ -106,7 +104,7 @@ namespace mdcheckerwpf
                     {
                         Tekla.Structures.Drawing.ViewBase view3 = view1 as Tekla.Structures.Drawing.ViewBase;
                         DrawingObjectEnumerator viewallobjects = view3.GetAllObjects();
-                        
+
                         foreach (var obj in viewallobjects)
                         {
                             if (obj.GetType() == typeof(StraightDimensionSet))
@@ -143,9 +141,9 @@ namespace mdcheckerwpf
                             } //проверка угловых размеров на правильное округление 1/100
                         }
 
-                        
+
                     }
-                    
+
                 }
                 catch
                 {
@@ -154,13 +152,12 @@ namespace mdcheckerwpf
 
             }
 
-            void check_reflectedview(Tekla.Structures.Drawing.Drawing drawing,out string message_reflectedview)
+            void check_reflectedview(Tekla.Structures.Drawing.Drawing drawing, out string message_reflectedview)
             {
                 try
                 {
                     message_reflectedview = "";
 
-                    
                     if (drawing == null)
                     {
                         return;
@@ -180,7 +177,8 @@ namespace mdcheckerwpf
 
                             Tekla.Structures.Drawing.ContainerElement view2name = view2.Attributes.TagsAttributes.TagA1.TagContent;
 
-                            views += "(";
+                            string viewname = "";
+                            viewname += "(";
 
                             foreach (var textitems in view2name)
                             {
@@ -189,7 +187,7 @@ namespace mdcheckerwpf
                                     Tekla.Structures.Drawing.TextElement item = textitems as Tekla.Structures.Drawing.TextElement;
                                     string itemstring = item.Value.ToString();
 
-                                    views += itemstring;
+                                    viewname += itemstring;
 
                                 };
 
@@ -198,12 +196,20 @@ namespace mdcheckerwpf
                                     Tekla.Structures.Drawing.PropertyElement item = textitems as PropertyElement;
                                     string itemstring = item.Value.ToString();
 
-                                    views += itemstring;
+                                    viewname += itemstring;
 
                                 };
                             }
 
-                            views += ")";
+                            viewname += ")";
+
+                            if (viewname == "()") 
+                            {
+                                viewname = "(MAIN VIEW)";
+                            }
+
+                            views += viewname;
+
                         }
 
                     }
@@ -219,10 +225,25 @@ namespace mdcheckerwpf
                     throw;
                 }
             }
+            
+            void test() {
+                
+                
+                Tekla.Structures.Drawing.Drawing curdraw = _drawinghandler.GetActiveDrawing();
+                ContainerView sheet = curdraw.GetSheet();
+                DrawingObjectEnumerator allviews = sheet.GetAllViews();
 
+                foreach (var view in allviews)
+                {
+                    Tekla.Structures.Drawing.View view2 = view as View;
+                    Tekla.Structures.Drawing.ContainerElement view2name = view2.Attributes.TagsAttributes.TagA1.TagContent;
+                    MessageBox.Show(view2name.ToString(), "АЛЕРТ");
+                }
+
+            }
         }
+        
 
-      
     }
 
 }
