@@ -13,23 +13,10 @@ namespace mdcheckerwpf
     {
         public MainWindow()
         {
-           /* DrawingHandler _drawinghandler = new DrawingHandler();
-            Tekla.Structures.Drawing.Drawing curdraw = _drawinghandler.GetActiveDrawing();
-            ContainerView sheet = curdraw.GetSheet();
-            DrawingObjectEnumerator allviews = sheet.GetAllViews();
-
-            foreach (var view in allviews)
-            {
-                Tekla.Structures.Drawing.View view2 = view as View;
-                Tekla.Structures.Drawing.ContainerElement view2name = view2.Attributes.TagsAttributes.TagA1.TagContent;
-                MessageBox.Show(view2name.ToString(), "АЛЕРТ");
-            }*/
-
-
-
+          
             drawingcheck(); //главная функция проверки чертежей
             
-            this.Close(); //закрывает главное окно
+            //this.Close(); //закрывает главное окно
 
             InitializeComponent();
         }
