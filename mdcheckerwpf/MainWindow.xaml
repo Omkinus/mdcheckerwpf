@@ -16,16 +16,22 @@
         ResizeMode="NoResize" 
         Background="{x:Null}">
     <Grid>
+        
         <Border CornerRadius="6"  
                 Background="White"/>
 
         <Grid>
-
             <Grid Width="60" HorizontalAlignment="Left"  Height="768">
                 <Border Background="#FF2DA0FF" CornerRadius="6"/>
-                
-            </Grid>
 
+                <StackPanel Orientation="Vertical" Width="60" HorizontalAlignment="Left">
+                    <Button Content="Г"  Click="Button_Click_2"/>
+                    <Button Content="Ч"  Click="Button_Click" />
+                    <Button Content="М"  Click="Button_Click_1"/>
+                   
+                </StackPanel>
+            </Grid>
+            <Frame x:Name="Main" NavigationUIVisibility="Hidden"/>
         </Grid>
     </Grid>
 </Window>

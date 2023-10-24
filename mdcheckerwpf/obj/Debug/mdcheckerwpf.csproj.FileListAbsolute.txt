@@ -39,3 +39,7 @@ C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\MaterialDesignTh
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Microsoft.Xaml.Behaviors.pdb
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Microsoft.Xaml.Behaviors.xml
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\App.baml
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\Drawingcheck.g.cs
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\Modelcheck.g.cs
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\Drawingcheck.baml
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\Modelcheck.baml
