@@ -68,7 +68,7 @@
                              FontSize="14"
                              FontWeight="Bold"
                              Style="{StaticResource MenuButtonTheme}" HorizontalAlignment="Center" Margin="0,0,25,0" VerticalAlignment="Center" RenderTransformOrigin="-0.027,0.5"/>
-                <RadioButton Content="О программе"
+                <RadioButton Content="Помощь"
                              Height ="40"
                              Width="100"
                              Foreground="Black"
