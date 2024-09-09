@@ -226,10 +226,7 @@ namespace mdcheckerwpf
             }
         }
 
-        private void RadioButton_Checked()
-        {
-
-        }
+       
     }
 
 }

@@ -133,6 +133,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="Fonts\InterVariable-Italic.ttf" />
+    <Resource Include="Fonts\InterVariable.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -191,7 +193,6 @@
     <Resource Include="Resources\element_catalog_cross_section.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Fonts\" />
     <Folder Include="Images\" />
     <Folder Include="MVVM\Model\" />
     <Folder Include="Styles\" />
