@@ -133,8 +133,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Resource Include="Fonts\InterVariable-Italic.ttf" />
-    <Resource Include="Fonts\InterVariable.ttf" />
+    <Resource Include="Fonts\Inter-Bold.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -145,6 +144,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Fonts\InterVariable-Italic.ttf" />
+    <Resource Include="Fonts\InterVariable.ttf" />
     <Resource Include="Resources\prtyp_tree_9.bmp" />
   </ItemGroup>
   <ItemGroup>
@@ -203,7 +204,7 @@
     <Resource Include="Resources\223.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\backgroundimage.jpg" />
+    <Resource Include="Resources\background2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

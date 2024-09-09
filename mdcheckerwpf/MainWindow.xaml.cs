@@ -14,8 +14,10 @@ namespace mdcheckerwpf
         public MainWindow()
         {
             InitializeComponent();
-            
+            this.MouseDown += delegate { DragMove(); };
+
         }
+
 
         tsm.Model _model = new tsm.Model();
         
@@ -209,7 +211,9 @@ namespace mdcheckerwpf
                 }
             }
             
+#pragma warning disable CS8321 // Локальная функция "test" объявлена, но не используется.
             void test() {
+#pragma warning restore CS8321 // Локальная функция "test" объявлена, но не используется.
                 
                 
                 Tekla.Structures.Drawing.Drawing curdraw = _drawinghandler.GetActiveDrawing();
