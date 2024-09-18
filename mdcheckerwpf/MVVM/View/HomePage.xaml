@@ -1,8 +1,9 @@
-﻿<UserControl x:Class="mdcheckerwpf.MVVM.Views.DrawingsPage"
+﻿<UserControl x:Class="mdcheckerwpf.MVVM.View.HomePage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
-        <TextBlock Text="Чертежи"
+        <TextBlock Text="Домашняя страница"
+                   Foreground="Black"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    FontSize="24"/>

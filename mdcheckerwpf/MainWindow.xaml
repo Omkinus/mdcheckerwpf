@@ -21,10 +21,12 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="80"/>
-                <RowDefinition/>
+                <!-- Для меню -->
+                <RowDefinition Height="*"/>
+                <!-- Для содержимого страниц -->
             </Grid.RowDefinitions>
 
-            <!-- Радио-кнопки для переключения вкладок -->
+            <!-- Меню с RadioButton -->
             <StackPanel Orientation="Horizontal"  
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center" 
@@ -36,12 +38,13 @@
                         MaxHeight="40" 
                         MinWidth="100" 
                         MinHeight="40">
+
                 <StackPanel.Background>
                     <ImageBrush Stretch="None"/>
                 </StackPanel.Background>
 
                 <RadioButton Content="Начало"
-                             IsChecked="True"
+                             Checked="RadioButton_Checked"
                              Foreground="Black"
                              Style="{StaticResource MenuButtonTheme}"  
                              FontFamily="./#Inter Thin"
@@ -51,6 +54,7 @@
 
                 <RadioButton Content="Модель"   
                              Foreground="Black"
+                             Checked="RadioButton_Checked"
                              Style="{StaticResource MenuButtonTheme}"   
                              FontFamily="./#Inter Thin"
                              Margin="0,0,25,0"
@@ -58,6 +62,7 @@
                              Tag="ModelPage"/>
 
                 <RadioButton Content="Чертежи"
+                             Checked="RadioButton_Checked"
                              Foreground="Black"
                              Style="{StaticResource MenuButtonTheme}"  
                              FontFamily="./#Inter 28pt 28pt Light" 
@@ -66,6 +71,7 @@
                              Tag="DrawingsPage"/>
 
                 <RadioButton Content="Настройки"
+                             Checked="RadioButton_Checked"
                              Foreground="Black"
                              Style="{StaticResource MenuButtonTheme}"  
                              FontFamily="./#Inter Thin"
@@ -74,6 +80,7 @@
                              Tag="SettingsPage"/>
 
                 <RadioButton Content="Помощь"
+                             Checked="RadioButton_Checked"
                              Foreground="Black"
                              Style="{StaticResource MenuButtonTheme}" 
                              FontFamily="./#Inter Thin"
@@ -81,12 +88,13 @@
                              Tag="HelpPage"/>
             </StackPanel>
 
-            <!-- ContentControl для отображения контента выбранной страницы -->
+            <!-- Область для отображения содержимого страниц -->
             <ContentControl x:Name="ContentArea"
                             Grid.Row="1"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             Content="{Binding SelectedPage}"/>
+
         </Grid>
     </Grid>
 </Window>

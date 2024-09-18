@@ -1,8 +1,9 @@
-﻿<UserControl x:Class="mdcheckerwpf.MVVM.Views.SettingsPage"
+﻿<UserControl x:Class="mdcheckerwpf.MVVM.View.HelpPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
-        <TextBlock Text="Настройки"
+        <TextBlock Text="Помощь"
+                   Foreground="Black"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    FontSize="24"/>

@@ -102,19 +102,23 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MVVM\Views\DrawingsPage.xaml">
+    <Page Include="MVVM\View\DrawingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MVVM\Views\HelpPage.xaml">
+    <Page Include="MVVM\View\HelpPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MVVM\Views\ModelPage.xaml">
+    <Page Include="MVVM\View\HomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MVVM\Views\SettingsPage.xaml">
+    <Page Include="MVVM\View\ModelPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -125,16 +129,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MVVM\ViewModel\MainViewModel.cs" />
-    <Compile Include="MVVM\Views\DrawingsPage.xaml.cs">
+    <Compile Include="MVVM\View\DrawingsPage.xaml.cs">
       <DependentUpon>DrawingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MVVM\Views\HelpPage.xaml.cs">
+    <Compile Include="MVVM\View\HelpPage.xaml.cs">
       <DependentUpon>HelpPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MVVM\Views\ModelPage.xaml.cs">
+    <Compile Include="MVVM\View\HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\ModelPage.xaml.cs">
       <DependentUpon>ModelPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MVVM\Views\SettingsPage.xaml.cs">
+    <Compile Include="MVVM\View\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">

@@ -13,16 +13,18 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace mdcheckerwpf.MVVM.Views
+namespace mdcheckerwpf.MVVM.View
 {
     /// <summary>
-    /// Логика взаимодействия для HomePage.xaml
+    /// Логика взаимодействия для SettingsPage.xaml
     /// </summary>
-    public partial class HomePage : Page
+    public partial class SettingsPage : UserControl
     {
-        public HomePage()
+        public SettingsPage()
         {
             InitializeComponent();
         }
+
+      
     }
 }

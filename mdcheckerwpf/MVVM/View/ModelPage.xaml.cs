@@ -16,18 +16,15 @@ using System.Windows.Shapes;
 namespace mdcheckerwpf.MVVM.View
 {
     /// <summary>
-    /// Логика взаимодействия для SettingsPage.xaml
+    /// Логика взаимодействия для ModelPage.xaml
     /// </summary>
-    public partial class SettingsPage : Page
+    public partial class ModelPage : UserControl
     {
-        public SettingsPage()
+        public ModelPage()
         {
             InitializeComponent();
         }
 
-        private void InitializeComponent()
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

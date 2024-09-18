@@ -18,16 +18,12 @@ namespace mdcheckerwpf.MVVM.View
     /// <summary>
     /// Логика взаимодействия для DrawingsPage.xaml
     /// </summary>
-    public partial class DrawingsPage : Page
+    public partial class DrawingsPage : UserControl
     {
         public DrawingsPage()
         {
             InitializeComponent();
         }
 
-        private void InitializeComponent()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
