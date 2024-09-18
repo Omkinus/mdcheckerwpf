@@ -12,13 +12,11 @@ C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Tekla.Structures
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Tekla.Structures.Model.xml
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Tekla.Structures.Plugins.xml
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MainWindow.g.cs
-C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\HomeView.g.cs
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\App.g.cs
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\mdcheckerwpf_MarkupCompile.cache
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\mdcheckerwpf_MarkupCompile.lref
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\App.baml
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MainWindow.baml
-C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\HomeView.baml
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\Theme\MenuButtonTheme.baml
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\mdcheckerwpf.g.resources
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\mdcheckerwpf.Properties.Resources.resources
@@ -36,4 +34,11 @@ C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Tekla.Structures
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Tekla.Structures.Drawing.dll
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Tekla.Structures.Model.dll
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\bin\Debug\Tekla.Structures.Plugins.dll
-C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\mdcheckerwpf.csprojAssemblyReference.cache
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\Views\DrawingsPage.baml
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\Views\HelpPage.baml
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\Views\ModelPage.baml
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\Views\SettingsPage.baml
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\Views\DrawingsPage.g.cs
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\Views\HelpPage.g.cs
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\Views\ModelPage.g.cs
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\Views\SettingsPage.g.cs

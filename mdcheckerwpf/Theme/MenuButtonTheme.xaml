@@ -7,27 +7,63 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="RadioButton">
-                        <Grid VerticalAlignment="Stretch"
-                              HorizontalAlignment="Center"
-                              Background="{TemplateBinding Background}">
-                            <TextBlock Text="{TemplateBinding Property=Content}"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center"
-                                       Margin="0,0,0,0" FontSize="18"/>
-                        </Grid>
+                        <Border x:Name="border"
+                                CornerRadius="20"
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}">
+
+                            <Grid VerticalAlignment="Stretch"
+                                  HorizontalAlignment="Center"
+                                  Height="40"
+                                  Width="100">
+                                <TextBlock Text="{TemplateBinding Property=Content}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           Padding="25,0,25,0" 
+                                           FontSize="16"
+                                           x:Name="textBlock"/>
+                            </Grid>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <!-- Триггер для изменения цвета текста при наведении -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="textBlock" Property="Foreground" Value="White"/>
+                                <Setter TargetName="border" Property="Background" Value="#FF4C557D"/>
+                            </Trigger>
+
+                            <!-- Триггер для изменения цвета текста и фона при выборе -->
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="textBlock" Property="Foreground" Value="White"/>
+                                <Setter TargetName="border" Property="Background" Value="#FF191919"/>
+                                <Setter TargetName="border" Property="CornerRadius" Value="20"/>
+                                <!-- Радиус при выборе -->
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <!-- Цвет текста по умолчанию -->
             <Setter Property="BorderThickness" Value="0"/>
         </Style.Setters>
 
         <Style.Triggers>
+            <!-- Фон и скругление при наведении -->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#FF283851"/>
+                <Setter Property="Border.CornerRadius" Value="20"/>
+                <!-- Радиус при наведении -->
+            </Trigger>
+
+            <!-- Фон и скругление при выборе -->
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Background" Value="#FF191919"/>
-                
+                <Setter Property="Border.CornerRadius" Value="20"/>
+                <!-- Радиус при выборе -->
             </Trigger>
         </Style.Triggers>
     </Style>
-
 </ResourceDictionary>
