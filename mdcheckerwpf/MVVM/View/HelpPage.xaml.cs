@@ -1,23 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace mdcheckerwpf.MVVM.View
 {
-    /// <summary>
-    /// Логика взаимодействия для HelpPage.xaml
-    /// </summary>
     public partial class HelpPage : UserControl
     {
         public HelpPage()
@@ -25,6 +13,49 @@ namespace mdcheckerwpf.MVVM.View
             InitializeComponent();
         }
 
-    
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            // Навигация к секциям на странице
+            var sectionName = e.Uri.ToString().TrimStart('#');
+            var targetElement = (TextBlock)FindName(sectionName);
+            if (targetElement != null)
+            {
+                // Перемещение к элементу
+                ScrollToElement(targetElement);
+            }
+        }
+
+        private void ScrollToElement(UIElement element)
+        {
+            if (element != null)
+            {
+                var scrollViewer = GetScrollViewer(this);
+                if (scrollViewer != null)
+                {
+                    scrollViewer.ScrollToVerticalOffset(0); // Сброс позиции
+                    var transform = element.TransformToAncestor(scrollViewer);
+                    var offset = transform.Transform(new Point(0, 0)).Y;
+                    scrollViewer.ScrollToVerticalOffset(offset);
+                }
+            }
+        }
+
+        private ScrollViewer GetScrollViewer(DependencyObject parent)
+        {
+            if (parent is ScrollViewer)
+            {
+                return (ScrollViewer)parent;
+            }
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                var result = GetScrollViewer(child);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+            return null;
+        }
     }
 }

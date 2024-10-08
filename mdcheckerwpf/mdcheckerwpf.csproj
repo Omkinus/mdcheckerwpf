@@ -222,7 +222,6 @@
     <Resource Include="Resources\element_catalog_cross_section.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Images\" />
     <Folder Include="MVVM\Model\" />
     <Folder Include="Styles\" />
     <Folder Include="Utilities\" />
@@ -239,6 +238,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\closebutton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\crayon.png" />
+    <Resource Include="Images\play.png" />
+    <Resource Include="Images\question.png" />
+    <Resource Include="Images\settings.png" />
+    <Resource Include="Images\tech.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,7 +4,7 @@
     <Grid>
         <TextBlock HorizontalAlignment="Left" 
                    Height="83" 
-                   Margin="80,190,0,0" 
+                   Margin="30,180,0,0" 
                    Grid.Row="1" 
                    TextWrapping="Wrap" 
                    Text="Preview" 
@@ -14,7 +14,7 @@
                    FontFamily="/mdcheckerwpf;component/Fonts/#Inter" 
                    LineHeight="14"/>
         <TextBlock HorizontalAlignment="Left" 
-                   Margin="80,292,0,0" 
+                   Margin="30,280,0,0" 
                    Grid.Row="1" 
                    TextWrapping="Wrap" 
                    VerticalAlignment="Top" 
@@ -26,6 +26,6 @@
             <Run Text="Добро пожаловать в Preview — ваш помощник для удобной проверки моделей и чертежей созданных в Tekla Structures." FontFamily="Helvetica"/></TextBlock>
 
         <!-- Упростим Image для проверки -->
-        <Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="1024" Height="688" Source="/mdcheckerwpf;component/Resources/background3.png"/>
+        <Image HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="874" Height="688" Source="/mdcheckerwpf;component/Resources/background3.png"/>
     </Grid>
 </UserControl>

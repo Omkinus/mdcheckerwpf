@@ -5,26 +5,42 @@
         <!-- Стиль для DataGrid -->
         <Style TargetType="DataGrid" x:Key="ModernDataGridStyle">
             <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="RowHeight" Value="40"/>
+            <Setter Property="RowHeight" Value="30"/>
             <Setter Property="AlternatingRowBackground" Value="#F7F7F7"/>
             <Setter Property="GridLinesVisibility" Value="None"/>
-            <Setter Property="ColumnHeaderHeight" Value="40"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="ColumnHeaderHeight" Value="35"/>
+            <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="Margin" Value="0,20,0,0"/>
+            <Setter Property="Margin" Value="0,10,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGrid">
+                        <Border CornerRadius="5" Background="{TemplateBinding Background}">
+                            <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <ItemsPresenter Grid.Row="1"/>
+                                    <DataGridColumnHeadersPresenter Grid.Row="0"/>
+                                </Grid>
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <!-- Стиль для заголовков колонок -->
         <Style TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="#FF1D6279"/>
+            <Setter Property="Background" Value="#FF717FC0"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+          
             <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="Height" Value="40"/>
+            <Setter Property="Height" Value="35"/>
         </Style>
 
         <!-- Стиль для строк таблицы -->
@@ -35,7 +51,7 @@
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
             <Setter Property="Background" Value="White"/>
-            <Setter Property="Height" Value="40"/>
+            <Setter Property="Height" Value="30"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="IsSelected" Value="False"/>
             <Style.Triggers>
@@ -43,78 +59,77 @@
                     <Setter Property="Background" Value="#FFEBEBEB"/>
                 </Trigger>
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="#FFBFD0D8"/>
+                    <Setter Property="Background" Value="#FF4A90E2"/>
+                    <Setter Property="Foreground" Value="White"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
-        <!-- Стиль для разделителей строк -->
+        <!-- Стиль для ячеек таблицы -->
         <Style TargetType="DataGridCell">
             <Setter Property="BorderThickness" Value="0,0,1,0"/>
             <Setter Property="BorderBrush" Value="#E0E0E0"/>
             <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid x:Name="DrawingGrid" Width="874" Height="688">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0*"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="119*"/>
+            <ColumnDefinition Width="352*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="64"/>
-            <RowDefinition Height="512"/>
-            <RowDefinition Height="104"/>
+            <RowDefinition Height="560"/>
+            <RowDefinition Height="54"/>
         </Grid.RowDefinitions>
 
         <TextBlock Text="Проверка чертежей"
-                   Foreground="#FF1D6279"
+                   Foreground="#FF2B3460"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Top"
                    FontSize="48"
                    FontWeight="Bold"
                    TextAlignment="Center"
-                   Margin="234,0,236,0"
-                   Grid.Row="0" Grid.Column="1" Height="64" Width="472"/>
+                   Margin="-220,0,0,0"
+                   Grid.Row="0" Grid.Column="1"/>
 
         <DataGrid HorizontalAlignment="Center"
                   VerticalAlignment="Center"
-                  Width="942"
-                  Height="492"
+                  Width="842" 
+                  Height="522"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserResizeColumns="True"
                   HeadersVisibility="Column"
                   ItemsSource="{Binding DataItems}"
                   Style="{StaticResource ModernDataGridStyle}"
-                  Grid.Row="1" Grid.ColumnSpan="2">
-
+                  Grid.Row="1" Grid.ColumnSpan="2"
+                  >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Имя чертежа" Width="*" Binding="{Binding DrawingName}" />
-                <DataGridTextColumn Header="Подробности" Width="*" Binding="{Binding Details}" />
-                <DataGridTextColumn Header="GUID чертежа" Width="*" Binding="{Binding Guid}" />
+                <DataGridTextColumn Header="Имя чертежа" Width="100" Binding="{Binding DrawingName}" />
+                <DataGridTextColumn Header="Подробности" Width="342" Binding="{Binding Details}" />
+                <DataGridTextColumn Header="GUID чертежа" Width="400" Binding="{Binding Guid}" />
             </DataGrid.Columns>
+
         </DataGrid>
 
         <Grid Grid.Row="2" Margin="0,5,0,0" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="534*" />
-                <ColumnDefinition Width="23*" />
-                <ColumnDefinition Width="385*"/>
+                <ColumnDefinition Width="517*" />
+                <ColumnDefinition Width="357*"/>
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Left"
-                        Margin="30,0,0,0"
-                        Grid.Column="0">
-                <Button Content="Загрузить" Style="{StaticResource LoadButtonStyle}" Margin="10,0,0,0"/>
+                        Margin="10,-10,0,0"
+                        Grid.Column="0" Grid.ColumnSpan="2">
+                <Button Content="Загрузить" Style="{StaticResource LoadButtonStyle}" Margin="7,9,0,9"/>
                 <Button Content="Сохранить" Style="{StaticResource SaveButtonStyle}" Margin="10,0,0,0"/>
+                <Button Content="Новая проверка" Style="{StaticResource NewCheckButtonStyle}" Margin="327,0,0,0"/>
             </StackPanel>
-
-            <Button Content="Новая проверка" Style="{StaticResource NewCheckButtonStyle}"
-                    HorizontalAlignment="Right"
-                    Margin="0,0,40,0"
-                    Grid.Column="2"/>
         </Grid>
     </Grid>
 </UserControl>

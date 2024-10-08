@@ -1,11 +1,63 @@
 ﻿<UserControl x:Class="mdcheckerwpf.MVVM.View.HelpPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid>
+    <Grid Margin="20">
         <TextBlock Text="Помощь"
                    Foreground="Black"
                    HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   FontSize="24"/>
+                   VerticalAlignment="Top"
+                   FontSize="24"
+                   Margin="0,20,0,20"/>
+
+        <StackPanel>
+            <TextBlock Text="Содержание" 
+                       FontSize="20" 
+                       FontWeight="Bold" 
+                       Margin="0,0,0,10"/>
+
+            <StackPanel>
+                <TextBlock>
+                    <Hyperlink NavigateUri="#Introduction" 
+                               RequestNavigate="Hyperlink_RequestNavigate" 
+                               Foreground="Blue">
+                        Введение
+                    </Hyperlink>
+                </TextBlock>
+                <TextBlock>
+                    <Hyperlink NavigateUri="#Features" 
+                               RequestNavigate="Hyperlink_RequestNavigate" 
+                               Foreground="Blue">
+                        Функции
+                    </Hyperlink>
+                </TextBlock>
+                <TextBlock>
+                    <Hyperlink NavigateUri="#FAQ" 
+                               RequestNavigate="Hyperlink_RequestNavigate" 
+                               Foreground="Blue">
+                        Часто задаваемые вопросы
+                    </Hyperlink>
+                </TextBlock>
+                <TextBlock>
+                    <Hyperlink NavigateUri="#Contact" 
+                               RequestNavigate="Hyperlink_RequestNavigate" 
+                               Foreground="Blue">
+                        Контакты
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Секции для навигации -->
+        <TextBlock x:Name="Introduction" Text="Введение" FontSize="24" FontWeight="Bold" Margin="0,30,0,10"/>
+        <TextBlock Text="Общие сведения о программе..." FontSize="16" Margin="0,0,0,20"/>
+
+        <TextBlock x:Name="Features" Text="Функции" FontSize="24" FontWeight="Bold" Margin="0,30,0,10"/>
+        <TextBlock Text="Описание функций программы..." FontSize="16" Margin="0,0,0,20"/>
+
+        <TextBlock x:Name="FAQ" Text="Часто задаваемые вопросы" FontSize="24" FontWeight="Bold" Margin="0,30,0,10"/>
+        <TextBlock Text="Ответы на часто задаваемые вопросы..." FontSize="16" Margin="0,0,0,20"/>
+
+        <TextBlock x:Name="Contact" Text="Контакты" FontSize="24" FontWeight="Bold" Margin="0,30,0,10"/>
+        <TextBlock Text="Контактная информация..." FontSize="16" Margin="0,0,0,20"/>
     </Grid>
 </UserControl>

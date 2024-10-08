@@ -7,33 +7,30 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <Border x:Name="border"
-                            CornerRadius="20"
-                            Background="{TemplateBinding Background}" 
-                            BorderBrush="{TemplateBinding BorderBrush}" 
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                        <Grid VerticalAlignment="Stretch"
-                              HorizontalAlignment="Center"
-                              Height="40"
-                              Width="100">
-                            <TextBlock Text="{TemplateBinding Property=Content}"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center"
-                                       Padding="25,0,25,0" 
-                                       FontSize="16"
-                                       x:Name="textBlock"/>
-                        </Grid>
-                    </Border>
+                    <Grid>
+                        <Path x:Name="BackgroundPath"
+                              Stroke="Transparent"
+                              Fill="{TemplateBinding Background}" 
+                              Data="M 25,0 L 145,-40 L 130,40 L 20,40 Z"
+                              />
+
+                        <TextBlock Text="{TemplateBinding Property=Content}"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
+                                   Padding="40,0,0,0"
+                                   FontSize="16"
+                                   FontFamily="Roboto"
+                                   x:Name="textBlock"/>
+                    </Grid>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="textBlock" Property="Foreground" Value="White"/>
-                            <Setter TargetName="border" Property="Background" Value="#FF4C557D"/>
+                            <Setter TargetName="BackgroundPath" Property="Fill" Value="#FF213280"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="textBlock" Property="Foreground" Value="White"/>
-                            <Setter TargetName="border" Property="Background" Value="#FF191919"/>
-                            <Setter TargetName="border" Property="CornerRadius" Value="20"/>
+                            <Setter TargetName="BackgroundPath" Property="Fill" Value="#FF191919"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -48,7 +45,7 @@
         <Setter Property="Width" Value="168"/>
         <Setter Property="Height" Value="42"/>
         <Setter Property="FontFamily" Value="Helvetica"/>
-        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontSize" Value="14"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="Background" Value="Transparent"/>
@@ -94,40 +91,34 @@
         <Setter Property="FontFamily" Value="Segoe UI"/>
         <Setter Property="Background" Value="White"/>
         <Setter Property="Height" Value="35"/>
-        <!-- Уменьшенная высота строк -->
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="IsSelected" Value="False"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <!-- Вертикальное выравнивание -->
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="#FFEBEBEB"/>
-                <!-- Цвет при наведении -->
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="#FF1D6279"/>
-                <!-- Цвет выделенной строки -->
                 <Setter Property="Foreground" Value="White"/>
-                <!-- Цвет текста выделенной строки -->
             </Trigger>
         </Style.Triggers>
     </Style>
 
-
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CustomButtonStyle}" x:Key="LoadButtonStyle">
-        <Setter Property="Background" Value="#FF58A2BB"/>
+        <Setter Property="Background" Value="#FF5568C0"/>
     </Style>
 
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CustomButtonStyle}" x:Key="SaveButtonStyle">
-        <Setter Property="Background" Value="#FF58A2BB"/>
+        <Setter Property="Background" Value="#FF5568C0"/>
     </Style>
 
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CustomButtonStyle}" x:Key="ClashCheckButtonStyle">
-        <Setter Property="Background" Value="#FF58A2BB"/>
+        <Setter Property="Background" Value="#FF5568C0"/>
     </Style>
 
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CustomButtonStyle}" x:Key="NewCheckButtonStyle">
-        <Setter Property="Background" Value="#FF58A2BB"/>
+        <Setter Property="Background" Value="#FF5568C0"/>
     </Style>
 
 </ResourceDictionary>

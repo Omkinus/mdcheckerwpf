@@ -5,12 +5,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace mdcheckerwpf.MVVM.View
 {
-    /// <summary>
-    /// Логика взаимодействия для ModelPage.xaml
-    /// </summary>
     public partial class ModelPage : UserControl, INotifyPropertyChanged
     {
         public ModelPage()
@@ -18,6 +16,7 @@ namespace mdcheckerwpf.MVVM.View
             InitializeComponent();
             this.DataContext = this;
             LoadData();
+            Loaded += ModelPage_Loaded; // Подписываемся на событие загрузки
         }
 
         private ObservableCollection<ModelData> _dataItems;
@@ -41,6 +40,18 @@ namespace mdcheckerwpf.MVVM.View
             };
         }
 
+        private void ModelPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Запускаем анимацию при загрузке страницы
+            StartAnimation();
+        }
+
+        private void StartAnimation()
+        {
+            var fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.15));
+            ModelGrid.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation); // Анимируем изменение прозрачности
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -58,7 +69,6 @@ namespace mdcheckerwpf.MVVM.View
             }
         }
 
-        // Метод для поиска родителя нужного типа
         private static T FindAncestor<T>(DependencyObject current) where T : DependencyObject
         {
             while (current != null)
@@ -70,6 +80,11 @@ namespace mdcheckerwpf.MVVM.View
                 current = VisualTreeHelper.GetParent(current);
             }
             return null;
+        }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 

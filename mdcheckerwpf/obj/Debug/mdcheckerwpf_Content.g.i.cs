@@ -8,6 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/closebutton.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/crayon.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/play.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/question.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/settings.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/tech.png")]
 
 
