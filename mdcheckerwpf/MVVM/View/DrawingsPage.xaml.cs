@@ -45,7 +45,7 @@ namespace mdcheckerwpf.MVVM.View
 
         private void StartAnimation()
         {
-            var fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.15));
+            var fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.1));
             this.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
         }
 

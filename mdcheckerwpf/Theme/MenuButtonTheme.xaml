@@ -30,7 +30,7 @@
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="textBlock" Property="Foreground" Value="White"/>
-                            <Setter TargetName="BackgroundPath" Property="Fill" Value="#FF191919"/>
+                            <Setter TargetName="BackgroundPath" Property="Fill" Value="#FF2B3460"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
