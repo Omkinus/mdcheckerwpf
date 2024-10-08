@@ -13,7 +13,7 @@
         Foreground="White" 
         AllowsTransparency="True" 
         ResizeMode="NoResize" 
-        Background="{x:Null}">
+        Background="{x:Null}" FontFamily="Script MT Bold">
 
     <Grid>
         <Border CornerRadius="6" Background="#FFF7F7F7"/>
@@ -49,6 +49,7 @@
                              Style="{StaticResource MenuButtonTheme}"  
                              FontFamily="./#Inter Thin"
                              Margin="0,0,25,0"
+                             Cursor="Hand"
                              GroupName="MenuButtons"
                              Tag="HomePage"/>
 
@@ -58,6 +59,7 @@
                              Style="{StaticResource MenuButtonTheme}"   
                              FontFamily="./#Inter Thin"
                              Margin="0,0,25,0"
+                             Cursor="Hand"
                              GroupName="MenuButtons"
                              Tag="ModelPage"/>
 
@@ -67,6 +69,7 @@
                              Style="{StaticResource MenuButtonTheme}"  
                              FontFamily="./#Inter 28pt 28pt Light" 
                              Margin="0,0,25,0"
+                             Cursor="Hand"
                              GroupName="MenuButtons"
                              Tag="DrawingsPage"/>
 
@@ -76,6 +79,7 @@
                              Style="{StaticResource MenuButtonTheme}"  
                              FontFamily="./#Inter Thin"
                              Margin="0,0,25,0"
+                             Cursor="Hand"
                              GroupName="MenuButtons"
                              Tag="SettingsPage"/>
 
@@ -85,15 +89,30 @@
                              Style="{StaticResource MenuButtonTheme}" 
                              FontFamily="./#Inter Thin"
                              GroupName="MenuButtons"
-                             Tag="HelpPage"/>
+                             Cursor="Hand"
+                             Tag="HelpPage" />
             </StackPanel>
 
             <!-- Область для отображения содержимого страниц -->
             <ContentControl x:Name="ContentArea"
                             Grid.Row="1"
                             HorizontalAlignment="Stretch"
+                            Margin="0,0,0,0"
                             VerticalAlignment="Stretch"
                             Content="{Binding SelectedPage}"/>
+            <Button Content=" " 
+                    HorizontalAlignment="Left" 
+                    Margin="962,20,0,0" 
+                    VerticalAlignment="Top" 
+                    Width="40" 
+                    Height="40" 
+                    BorderBrush="{x:Null}" 
+                    Click="Button_Click" 
+                    Cursor="Hand">
+                <Button.Background>
+                    <ImageBrush ImageSource="Resources/closebutton.png"/>
+                </Button.Background>
+            </Button>
 
         </Grid>
     </Grid>

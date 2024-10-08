@@ -11,6 +11,7 @@ namespace mdcheckerwpf
         {
             InitializeComponent();
             SetInitialPage();
+            this.MouseDown += delegate { DragMove(); };
         }
 
         private void SetInitialPage()
@@ -44,5 +45,18 @@ namespace mdcheckerwpf
                 }
             }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+    }
+
+    public class ModelData
+    {
+        public string Number { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Guid { get; set; }
     }
 }
