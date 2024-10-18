@@ -2,32 +2,79 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <UserControl.Resources>
-        <!-- Стиль для кнопок переключателей -->
-        <Style x:Key="ToggleButtonStyle" TargetType="ToggleButton">
-            <Setter Property="Background" Value="#FF717FC0"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="Margin" Value="5"/>
+        <!-- Стиль для слайдера-переключателя с анимацией -->
+        <Style x:Key="ToggleSwitchStyle" TargetType="ToggleButton">
+            <Setter Property="Width" Value="60"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Background" Value="#CCCCCC"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ToggleButton">
-                        <Border x:Name="Border"
-                                Background="{TemplateBinding Background}"
-                                BorderThickness="2"
-                                CornerRadius="5"
-                                BorderBrush="{TemplateBinding BorderBrush}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
+                        <Grid>
+                            <!-- Фон слайдера -->
+                            <Border x:Name="SwitchBackground"
+                                    CornerRadius="15"
+                                    Background="{TemplateBinding Background}"/>
+
+                            <!-- Круглый переключатель -->
+                            <Ellipse x:Name="SwitchKnob"
+                                     Width="25" Height="25"
+                                     Fill="White"
+                                     HorizontalAlignment="Left"
+                                     Margin="2"/>
+                        </Grid>
+
+                        <!-- Анимация переключения -->
                         <ControlTemplate.Triggers>
+                            <!-- Если кнопка включена (анимированный переход вправо) -->
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#FF4A90E2"/>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="SwitchKnob"
+                                                             Storyboard.TargetProperty="(Ellipse.RenderTransform).(TranslateTransform.X)"
+                                                             To="30" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Setter TargetName="SwitchBackground" Property="Background" Value="#4CAF50"/>
+                                <Setter TargetName="SwitchKnob" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <TranslateTransform X="30"/>
+                                    </Setter.Value>
+                                </Setter>
                             </Trigger>
+
+                            <!-- Если кнопка выключена (анимированный переход влево) -->
+                            <Trigger Property="IsChecked" Value="False">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="SwitchKnob"
+                                                             Storyboard.TargetProperty="(Ellipse.RenderTransform).(TranslateTransform.X)"
+                                                             To="0" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Setter TargetName="SwitchBackground" Property="Background" Value="#CCCCCC"/>
+                                <Setter TargetName="SwitchKnob" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <TranslateTransform X="0"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+
+                            <!-- Если мышь над кнопкой -->
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#FF5B9BD5"/>
+                                <Setter TargetName="SwitchBackground" Property="Background" Value="#AAAAAA"/>
+                            </Trigger>
+
+                            <!-- Если кнопка нажата -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="SwitchBackground" Property="Background" Value="#4CAF50"/>
+                                <Setter TargetName="SwitchKnob" Property="Fill" Value="White"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -37,11 +84,28 @@
     </UserControl.Resources>
 
     <Grid>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,50,0,0">
-            <ToggleButton Content="Настройка 1" Style="{StaticResource ToggleButtonStyle}"/>
-            <ToggleButton Content="Настройка 2" Style="{StaticResource ToggleButtonStyle}"/>
-            <ToggleButton Content="Настройка 3" Style="{StaticResource ToggleButtonStyle}"/>
-            <ToggleButton Content="Настройка 4" Style="{StaticResource ToggleButtonStyle}"/>
+        <!-- Стек с вертикальным расположением переключателей -->
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,20,0,0">
+            <!-- Строка с подписью и переключателем -->
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <TextBlock Text="Настройка 1" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <ToggleButton Style="{StaticResource ToggleSwitchStyle}" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <TextBlock Text="Настройка 2" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <ToggleButton Style="{StaticResource ToggleSwitchStyle}" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <TextBlock Text="Настройка 3" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <ToggleButton Style="{StaticResource ToggleSwitchStyle}" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <TextBlock Text="Настройка 4" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <ToggleButton Style="{StaticResource ToggleSwitchStyle}" />
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>

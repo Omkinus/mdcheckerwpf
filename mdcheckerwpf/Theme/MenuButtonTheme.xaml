@@ -1,6 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+
+    <!-- Стиль для RadioButton -->
     <Style BasedOn="{StaticResource {x:Type ToggleButton}}"
            TargetType="{x:Type RadioButton}"
            x:Key="MenuButtonTheme">
@@ -11,9 +13,8 @@
                         <Path x:Name="BackgroundPath"
                               Stroke="Transparent"
                               Fill="{TemplateBinding Background}" 
-                              Data="M 25,0 L 145,-40 L 130,40 L 20,40 Z"
-                              />
-
+                              Data="M 0,0 L 210,0 L 210,40 L 0,40 Z"
+                              Margin="-50,0,-150,0"/>
                         <TextBlock Text="{TemplateBinding Property=Content}"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
@@ -22,7 +23,6 @@
                                    FontFamily="Roboto"
                                    x:Name="textBlock"/>
                     </Grid>
-
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="textBlock" Property="Foreground" Value="White"/>
@@ -41,6 +41,7 @@
         <Setter Property="BorderThickness" Value="0"/>
     </Style>
 
+    <!-- Базовый стиль для кнопок -->
     <Style TargetType="{x:Type Button}" x:Key="CustomButtonStyle">
         <Setter Property="Width" Value="168"/>
         <Setter Property="Height" Value="42"/>
@@ -71,7 +72,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-
         <Setter Property="Effect">
             <Setter.Value>
                 <DropShadowEffect Color="Black"
@@ -80,6 +80,23 @@
                                   ShadowDepth="0"/>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <!-- Специфические стили для кнопок -->
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CustomButtonStyle}" x:Key="LoadButtonStyle">
+        <Setter Property="Background" Value="#FF5568C0"/>
+    </Style>
+
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CustomButtonStyle}" x:Key="SaveButtonStyle">
+        <Setter Property="Background" Value="#FF5568C0"/>
+    </Style>
+
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CustomButtonStyle}" x:Key="ClashCheckButtonStyle">
+        <Setter Property="Background" Value="#FF5568C0"/>
+    </Style>
+
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CustomButtonStyle}" x:Key="NewCheckButtonStyle">
+        <Setter Property="Background" Value="#FF5568C0"/>
     </Style>
 
     <!-- Стиль для строк таблицы -->
@@ -104,21 +121,4 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-
-    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CustomButtonStyle}" x:Key="LoadButtonStyle">
-        <Setter Property="Background" Value="#FF5568C0"/>
-    </Style>
-
-    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CustomButtonStyle}" x:Key="SaveButtonStyle">
-        <Setter Property="Background" Value="#FF5568C0"/>
-    </Style>
-
-    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CustomButtonStyle}" x:Key="ClashCheckButtonStyle">
-        <Setter Property="Background" Value="#FF5568C0"/>
-    </Style>
-
-    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CustomButtonStyle}" x:Key="NewCheckButtonStyle">
-        <Setter Property="Background" Value="#FF5568C0"/>
-    </Style>
-
 </ResourceDictionary>
