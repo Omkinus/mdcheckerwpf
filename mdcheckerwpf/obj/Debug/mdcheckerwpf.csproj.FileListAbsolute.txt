@@ -44,3 +44,8 @@ C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\mdcheckerwpf.csp
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\mdcheckerwpf.csproj.CopyComplete
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\mdcheckerwpf.exe
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\mdcheckerwpf.pdb
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\mdcheckerwpf.csprojAssemblyReference.cache
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\Question1.baml
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\Question2.baml
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\Question1.g.cs
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\Question2.g.cs

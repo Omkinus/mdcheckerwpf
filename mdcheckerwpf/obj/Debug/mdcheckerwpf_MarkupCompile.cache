@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\App.xaml
-72041293173
+9-433725632
 
-131052357485
+15555043076
 241221993426
-MainWindow.xaml;MVVM\View\DrawingsPage.xaml;MVVM\View\HelpPage.xaml;MVVM\View\HomePage.xaml;MVVM\View\ModelPage.xaml;MVVM\View\SettingsPage.xaml;Theme\MenuButtonTheme.xaml;
+MainWindow.xaml;MVVM\View\DrawingsPage.xaml;MVVM\View\HelpPage.xaml;MVVM\View\HomePage.xaml;MVVM\View\ModelPage.xaml;MVVM\View\Question1.xaml;MVVM\View\Question2.xaml;MVVM\View\SettingsPage.xaml;Theme\MenuButtonTheme.xaml;
 
 False
 

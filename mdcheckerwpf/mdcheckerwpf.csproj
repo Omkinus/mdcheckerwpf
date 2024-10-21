@@ -118,6 +118,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\Question1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\Question2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -140,6 +148,12 @@
     </Compile>
     <Compile Include="MVVM\View\ModelPage.xaml.cs">
       <DependentUpon>ModelPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\Question1.xaml.cs">
+      <DependentUpon>Question1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\Question2.xaml.cs">
+      <DependentUpon>Question2.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>

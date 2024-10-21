@@ -1,8 +1,5 @@
-﻿using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Media;
 
 namespace mdcheckerwpf.MVVM.View
 {
@@ -13,49 +10,34 @@ namespace mdcheckerwpf.MVVM.View
             InitializeComponent();
         }
 
-        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        private void HelpList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Навигация к секциям на странице
-            var sectionName = e.Uri.ToString().TrimStart('#');
-            var targetElement = (TextBlock)FindName(sectionName);
-            if (targetElement != null)
+            if (HelpList.SelectedItem is ListViewItem selectedItem)
             {
-                // Перемещение к элементу
-                ScrollToElement(targetElement);
+                string page = selectedItem.Tag.ToString();
+                LoadPage(page);
             }
         }
 
-        private void ScrollToElement(UIElement element)
+        private void LoadPage(string pageName)
         {
-            if (element != null)
-            {
-                var scrollViewer = GetScrollViewer(this);
-                if (scrollViewer != null)
-                {
-                    scrollViewer.ScrollToVerticalOffset(0); // Сброс позиции
-                    var transform = element.TransformToAncestor(scrollViewer);
-                    var offset = transform.Transform(new Point(0, 0)).Y;
-                    scrollViewer.ScrollToVerticalOffset(offset);
-                }
-            }
-        }
+            UserControl newPage = null;
 
-        private ScrollViewer GetScrollViewer(DependencyObject parent)
-        {
-            if (parent is ScrollViewer)
+            switch (pageName)
             {
-                return (ScrollViewer)parent;
+                case "IntroductionPage":
+                    newPage = new Question1(); // Создайте этот UserControl
+                    break;
+                case "FeaturesPage":
+                    newPage = new Question2(); // Создайте этот UserControl
+                    break;
+            
             }
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+
+            if (newPage != null)
             {
-                var child = VisualTreeHelper.GetChild(parent, i);
-                var result = GetScrollViewer(child);
-                if (result != null)
-                {
-                    return result;
-                }
+                ContentArea.Content = newPage; // Отображаем выбранную страницу
             }
-            return null;
         }
     }
 }

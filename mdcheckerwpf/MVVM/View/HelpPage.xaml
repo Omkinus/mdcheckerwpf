@@ -9,55 +9,18 @@
                    FontSize="24"
                    Margin="0,20,0,20"/>
 
-        <StackPanel>
-            <TextBlock Text="Содержание" 
-                       FontSize="20" 
-                       FontWeight="Bold" 
-                       Margin="0,0,0,10"/>
+        <TextBlock Text="Содержание" 
+                   FontSize="20" 
+                   FontWeight="Bold" 
+                   Margin="0,0,0,10"/>
 
-            <StackPanel>
-                <TextBlock>
-                    <Hyperlink NavigateUri="#Introduction" 
-                               RequestNavigate="Hyperlink_RequestNavigate" 
-                               Foreground="Blue">
-                        Введение
-                    </Hyperlink>
-                </TextBlock>
-                <TextBlock>
-                    <Hyperlink NavigateUri="#Features" 
-                               RequestNavigate="Hyperlink_RequestNavigate" 
-                               Foreground="Blue">
-                        Функции
-                    </Hyperlink>
-                </TextBlock>
-                <TextBlock>
-                    <Hyperlink NavigateUri="#FAQ" 
-                               RequestNavigate="Hyperlink_RequestNavigate" 
-                               Foreground="Blue">
-                        Часто задаваемые вопросы
-                    </Hyperlink>
-                </TextBlock>
-                <TextBlock>
-                    <Hyperlink NavigateUri="#Contact" 
-                               RequestNavigate="Hyperlink_RequestNavigate" 
-                               Foreground="Blue">
-                        Контакты
-                    </Hyperlink>
-                </TextBlock>
-            </StackPanel>
-        </StackPanel>
+        <ListView x:Name="HelpList" SelectionChanged="HelpList_SelectionChanged">
+            <ListViewItem Content="Введение" Tag="Question1"/>
+            <ListViewItem Content="Функции" Tag="Question2"/>
+           
+        </ListView>
 
-        <!-- Секции для навигации -->
-        <TextBlock x:Name="Introduction" Text="Введение" FontSize="24" FontWeight="Bold" Margin="0,30,0,10"/>
-        <TextBlock Text="Общие сведения о программе..." FontSize="16" Margin="0,0,0,20"/>
-
-        <TextBlock x:Name="Features" Text="Функции" FontSize="24" FontWeight="Bold" Margin="0,30,0,10"/>
-        <TextBlock Text="Описание функций программы..." FontSize="16" Margin="0,0,0,20"/>
-
-        <TextBlock x:Name="FAQ" Text="Часто задаваемые вопросы" FontSize="24" FontWeight="Bold" Margin="0,30,0,10"/>
-        <TextBlock Text="Ответы на часто задаваемые вопросы..." FontSize="16" Margin="0,0,0,20"/>
-
-        <TextBlock x:Name="Contact" Text="Контакты" FontSize="24" FontWeight="Bold" Margin="0,30,0,10"/>
-        <TextBlock Text="Контактная информация..." FontSize="16" Margin="0,0,0,20"/>
+        <!-- Площадка для отображения содержимого страниц -->
+        <ContentControl x:Name="ContentArea" Margin="0,20,0,0"/>
     </Grid>
 </UserControl>

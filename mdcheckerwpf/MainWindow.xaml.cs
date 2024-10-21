@@ -59,4 +59,6 @@ namespace mdcheckerwpf
         public string Description { get; set; }
         public string Guid { get; set; }
     }
+
+   
 }
