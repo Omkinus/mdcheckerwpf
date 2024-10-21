@@ -88,22 +88,22 @@
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,20,0,0">
             <!-- Строка с подписью и переключателем -->
             <StackPanel Orientation="Horizontal" Margin="0,5">
-                <TextBlock Text="Настройка 1" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <TextBlock Text="Настройка 1" VerticalAlignment="Center" FontSize="16" FontFamily="Roboto" Margin="0,0,20,0"/>
                 <ToggleButton Style="{StaticResource ToggleSwitchStyle}" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0,5">
-                <TextBlock Text="Настройка 2" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <TextBlock Text="Настройка 2" FontSize="16" FontFamily="Roboto" VerticalAlignment="Center" Margin="0,0,20,0"/>
                 <ToggleButton Style="{StaticResource ToggleSwitchStyle}" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0,5">
-                <TextBlock Text="Настройка 3" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <TextBlock Text="Настройка 3" FontSize="16" FontFamily="Roboto" VerticalAlignment="Center" Margin="0,0,20,0"/>
                 <ToggleButton Style="{StaticResource ToggleSwitchStyle}" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0,5">
-                <TextBlock Text="Настройка 4" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <TextBlock Text="Настройка 4" FontSize="16" FontFamily="Roboto" VerticalAlignment="Center" Margin="0,0,20,0"/>
                 <ToggleButton Style="{StaticResource ToggleSwitchStyle}" />
             </StackPanel>
         </StackPanel>

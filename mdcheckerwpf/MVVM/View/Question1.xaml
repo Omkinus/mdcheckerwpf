@@ -5,8 +5,57 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:mdcheckerwpf.MVVM.View"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="Transparent">
+    <Grid Margin="20">
+        <!-- Заголовок статьи -->
+        <TextBlock Text="Как проверить элементы в модели?"
+                   FontSize="24"
+                   FontFamily="Roboto"
+                   Foreground="Black"
+                   HorizontalAlignment="Center"
+                   Margin="0,10,0,20"/>
+
+        <StackPanel>
+            <!-- Место под картинку -->
+            <Border 
+                    BorderThickness="2" 
+                    CornerRadius="10" 
+                    HorizontalAlignment="Center"
+                    Background="Transparent" Margin="0,50,0,20">
+                <Image Source="C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\Images\selectmodelexample.png"
+                        Width="500">
+                    <Image.Effect>
+                        <DropShadowEffect ShadowDepth="10" BlurRadius="10" Opacity="0.5" />
+                    </Image.Effect>
+                </Image>
+
+            </Border>
+
+            <!-- Текст статьи -->
+            <TextBlock TextWrapping="Wrap" 
+                       FontSize="16" 
+                       HorizontalAlignment="Left"
+                       FontFamily="Roboto"
+                       Margin="0,0,0,10">
+                <Run Text="Для того, чтобы проверить необходимые элементы в модели, выберите их как показано на картинке сверху, перейдите на вкладку Model"/>
+            </TextBlock>
+            <Image Source="C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\Images\modeltabexample.png"
+                 Width="150"
+                 HorizontalAlignment="Left">
+                <Image.Effect>
+                    <DropShadowEffect ShadowDepth="5" BlurRadius="10" Opacity="0.5" />
+                </Image.Effect>
+            </Image>
+
+            <TextBlock TextWrapping="Wrap" 
+                       FontSize="16" 
+                       HorizontalAlignment="Left"
+                       FontFamily="Roboto"
+                       Margin="0,10,0,20">
+                <Run Text="и нажмите на кнопку Новая проверка. Результаты проверки отобразятся в таблице."/>
+            </TextBlock>
+
+        </StackPanel>
     </Grid>
 </UserControl>

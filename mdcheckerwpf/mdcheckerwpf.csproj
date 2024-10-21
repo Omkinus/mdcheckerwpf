@@ -126,6 +126,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\Question3.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\Question4.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\Question5.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\Question6.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -154,6 +170,18 @@
     </Compile>
     <Compile Include="MVVM\View\Question2.xaml.cs">
       <DependentUpon>Question2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\Question3.xaml.cs">
+      <DependentUpon>Question3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\Question4.xaml.cs">
+      <DependentUpon>Question4.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\Question5.xaml.cs">
+      <DependentUpon>Question5.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\Question6.xaml.cs">
+      <DependentUpon>Question6.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
@@ -259,6 +287,22 @@
     <Resource Include="Images\question.png" />
     <Resource Include="Images\settings.png" />
     <Resource Include="Images\tech.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\selectdrawingsexample.png" />
+    <Resource Include="Images\selectmodelexample.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\modeltabexample.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\sadcat.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\drawingstabexample.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\okpic.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

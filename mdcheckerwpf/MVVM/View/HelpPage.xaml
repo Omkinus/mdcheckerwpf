@@ -1,26 +1,44 @@
 ﻿<UserControl x:Class="mdcheckerwpf.MVVM.View.HelpPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid Margin="20">
-        <TextBlock Text="Помощь"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Background="Transparent">
+    <Grid>
+        <!-- Разметка интерфейса -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="350"/>
+            <!-- Для списка -->
+            <ColumnDefinition Width="500"/>
+            <!-- Для контента -->
+        </Grid.ColumnDefinitions>
+
+        <!-- Заголовок FAQ в первой колонке -->
+        <TextBlock Text="FAQ (Frequently Asked Questions)"
+                   FontSize="20"
+                   FontFamily="Roboto"
                    Foreground="Black"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Top"
-                   FontSize="24"
-                   Margin="0,20,0,20"/>
+                   HorizontalAlignment="Left"
+                   Margin="10,10,0,20"
+                   Grid.Column="0"/>
 
-        <TextBlock Text="Содержание" 
-                   FontSize="20" 
-                   FontWeight="Bold" 
-                   Margin="0,0,0,10"/>
-
-        <ListView x:Name="HelpList" SelectionChanged="HelpList_SelectionChanged">
-            <ListViewItem Content="Введение" Tag="Question1"/>
-            <ListViewItem Content="Функции" Tag="Question2"/>
-           
+        <!-- ListView для пунктов меню -->
+        <ListView x:Name="HelpList" SelectionChanged="HelpList_SelectionChanged" 
+                  Grid.Column="0" Background="Transparent" 
+                  BorderBrush="Transparent" BorderThickness="0"
+                  Margin="0,50,0,0"
+                  >
+            
+            <ListViewItem Content="Как проверить элементы в модели?" Tag="Question1" BorderThickness="0" Padding="10" FontSize="14" FontFamily="Roboto"/>
+            <ListViewItem Content="Как проверить чертежи?" Tag="Question2" BorderThickness="0" Padding="10" FontSize="14" FontFamily="Roboto"/>
+            <ListViewItem Content="У меня есть предложение по программе!" Tag="Question3" BorderThickness="0" Padding="10" FontSize="14" FontFamily="Roboto"/>
+            <ListViewItem Content="Я обнаружил ошибку в программе!" Tag="Question4" BorderThickness="0" Padding="10" FontSize="14" FontFamily="Roboto"/>
+            <ListViewItem Content="Какие ошибки находит проверка модели?" Tag="Question5" BorderThickness="0" Padding="10" FontSize="14" FontFamily="Roboto"/>
+            <ListViewItem Content="Какие ошибки находит проверка чертежей?" Tag="Question6" BorderThickness="0" Padding="10" FontSize="14" FontFamily="Roboto"/>
         </ListView>
 
-        <!-- Площадка для отображения содержимого страниц -->
-        <ContentControl x:Name="ContentArea" Margin="0,20,0,0"/>
+        <!-- Область для контента -->
+        <ContentControl x:Name="ContentArea" Grid.Column="1" Background="Transparent"/>
     </Grid>
 </UserControl>

@@ -42,15 +42,11 @@ namespace mdcheckerwpf.MVVM.View
 
         private void ModelPage_Loaded(object sender, RoutedEventArgs e)
         {
-            // Запускаем анимацию при загрузке страницы
-            StartAnimation();
+           
+           
         }
 
-        private void StartAnimation()
-        {
-            var fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.15));
-            ModelGrid.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation); // Анимируем изменение прозрачности
-        }
+       
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -15,7 +15,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="DataGrid">
-                        <Border CornerRadius="5" Background="{TemplateBinding Background}">
+                        <Border CornerRadius="10" Background="{TemplateBinding Background}">
                             <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -86,12 +86,12 @@
             <RowDefinition Height="54"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Проверка чертежей"
+        <TextBlock Text="Drawings Check"
                    Foreground="#FF2B3460"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Top"
                    FontSize="48"
-                   FontWeight="Bold"
+                   FontFamily="Yu Gothic UI Semilight"
                    TextAlignment="Center"
                    Margin="-220,0,0,0"
                    Grid.Row="0" Grid.Column="1"/>

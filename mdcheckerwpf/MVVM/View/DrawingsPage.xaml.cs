@@ -19,7 +19,7 @@ namespace mdcheckerwpf.MVVM.View
             InitializeComponent();
             this.DataContext = this;
             LoadData();
-            StartAnimation();
+           
         }
 
         private ObservableCollection<DrawingData> _dataItems;
@@ -43,11 +43,7 @@ namespace mdcheckerwpf.MVVM.View
             };
         }
 
-        private void StartAnimation()
-        {
-            var fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.1));
-            this.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
-        }
+       
 
         public event PropertyChangedEventHandler PropertyChanged;
 

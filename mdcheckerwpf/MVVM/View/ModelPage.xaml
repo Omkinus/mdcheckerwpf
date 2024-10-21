@@ -19,6 +19,7 @@
         <!-- Стиль для заголовков колонок -->
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="#FF717FC0"/>
+            
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -72,12 +73,12 @@
             <RowDefinition Height="54"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Проверка модели"
+        <TextBlock Text="Model Check"
                    Foreground="#FF2B3460"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Top"
                    FontSize="48"
-                   FontWeight="Bold"
+                   FontFamily="Yu Gothic UI Semilight"
                    TextAlignment="Center"
                    Margin="-220,0,0,0"
                    Grid.Row="0" Grid.Column="1"/>
@@ -96,7 +97,7 @@
                   PreviewMouseDown="DataGrid_PreviewMouseDown" SelectionChanged="DataGrid_SelectionChanged">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Марка детали" Width="110" Binding="{Binding Number}" />
+                <DataGridTextColumn Header="Марка детали"  Width="110" Binding="{Binding Number}" />
                 <DataGridTextColumn Header="Имя детали" Width="190" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="Текущее значение" Width="142" Binding="{Binding Description}" />
                 <DataGridTextColumn Header="GUID детали" Width="400*" Binding="{Binding Guid}" />

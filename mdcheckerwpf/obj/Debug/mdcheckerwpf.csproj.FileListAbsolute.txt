@@ -49,3 +49,11 @@ C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\Questi
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\Question2.baml
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\Question1.g.cs
 C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\Question2.g.cs
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\Question3.g.cs
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\Question4.g.cs
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\Question3.baml
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\Question4.baml
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\Question5.g.cs
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\Question6.g.cs
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\Question5.baml
+C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\MVVM\View\Question6.baml

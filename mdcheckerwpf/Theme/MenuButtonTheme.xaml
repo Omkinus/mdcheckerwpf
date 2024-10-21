@@ -4,33 +4,40 @@
 
     <!-- Стиль для RadioButton -->
     <Style BasedOn="{StaticResource {x:Type ToggleButton}}"
-           TargetType="{x:Type RadioButton}"
-           x:Key="MenuButtonTheme">
+       TargetType="{x:Type RadioButton}"
+       x:Key="MenuButtonTheme">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <Grid>
-                        <Path x:Name="BackgroundPath"
+                    <Border x:Name="border"
+                        CornerRadius="0,20,20,0"
+                        Background="{TemplateBinding Background}"
+                        Margin="0"
+                        Padding="0">
+                        <Grid>
+                            <!-- Обновленный Path для ширины 150 -->
+                            <Path x:Name="BackgroundPath"
                               Stroke="Transparent"
-                              Fill="{TemplateBinding Background}" 
-                              Data="M 0,0 L 210,0 L 210,40 L 0,40 Z"
-                              Margin="-50,0,-150,0"/>
-                        <TextBlock Text="{TemplateBinding Property=Content}"
+                              Fill="{TemplateBinding Background}"
+                              Data="M 20,0 L 130,0 Q 150,0 150,20 L 150,80 Q 150,100 130,100 L 20,100 Q 0,100 0,80 L 0,20 Q 0,0 20,0 Z"
+                              Margin="0"/>
+                            <TextBlock Text="{TemplateBinding Property=Content}"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
-                                   Padding="40,0,0,0"
-                                   FontSize="16"
-                                   FontFamily="Roboto"
-                                   x:Name="textBlock"/>
-                    </Grid>
+                                   Padding="30,0,0,0"
+                                   FontSize="18"
+                                   FontFamily="Yu Gothic UI Semilight"
+                                   x:Name="textBlock" FontWeight="Bold"/>
+                        </Grid>
+                    </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#FF213280"/>
                             <Setter TargetName="textBlock" Property="Foreground" Value="White"/>
-                            <Setter TargetName="BackgroundPath" Property="Fill" Value="#FF213280"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#FF2B3460"/>
                             <Setter TargetName="textBlock" Property="Foreground" Value="White"/>
-                            <Setter TargetName="BackgroundPath" Property="Fill" Value="#FF2B3460"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -39,14 +46,19 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="BorderThickness" Value="0"/>
+        <!-- Задание ширины кнопки 150 и высоты 40 -->
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Height" Value="40"/>
     </Style>
+
+
 
     <!-- Базовый стиль для кнопок -->
     <Style TargetType="{x:Type Button}" x:Key="CustomButtonStyle">
         <Setter Property="Width" Value="168"/>
         <Setter Property="Height" Value="42"/>
         <Setter Property="FontFamily" Value="Helvetica"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="16"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="Background" Value="Transparent"/>
