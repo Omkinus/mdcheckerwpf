@@ -82,6 +82,11 @@ namespace mdcheckerwpf.MVVM.View
         {
 
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 
     public class ModelData

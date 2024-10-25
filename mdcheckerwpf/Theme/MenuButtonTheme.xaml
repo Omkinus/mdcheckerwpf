@@ -15,7 +15,7 @@
                         Margin="0"
                         Padding="0">
                         <Grid>
-                            <!-- Обновленный Path для ширины 150 -->
+                           
                             <Path x:Name="BackgroundPath"
                               Stroke="Transparent"
                               Fill="{TemplateBinding Background}"
@@ -32,11 +32,25 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#FF213280"/>
+                            <Setter TargetName="border" Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                                        <GradientStop Color="#FF3F7BE4" Offset="0"/>
+                                        <GradientStop Color="#FF2B3460" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
                             <Setter TargetName="textBlock" Property="Foreground" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#FF2B3460"/>
+                            <Setter TargetName="border" Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                                        <GradientStop Color="#FF3F7BE4" Offset="0"/>
+                                        <GradientStop Color="#FF2B3460" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
                             <Setter TargetName="textBlock" Property="Foreground" Value="White"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -46,7 +60,6 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <!-- Задание ширины кнопки 150 и высоты 40 -->
         <Setter Property="Width" Value="150"/>
         <Setter Property="Height" Value="40"/>
     </Style>

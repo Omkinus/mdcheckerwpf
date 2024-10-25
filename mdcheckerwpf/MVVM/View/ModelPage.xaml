@@ -5,28 +5,41 @@
         <!-- Стиль для DataGrid -->
         <Style TargetType="DataGrid" x:Key="ModernDataGridStyle">
             <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="RowHeight" Value="30"/>
-            <!-- Уменьшенная высота строки -->
             <Setter Property="AlternatingRowBackground" Value="#F7F7F7"/>
             <Setter Property="GridLinesVisibility" Value="None"/>
             <Setter Property="ColumnHeaderHeight" Value="35"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="Segoe UI Semibold"/>
             <Setter Property="Margin" Value="0,10,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGrid">
+                        <Border CornerRadius="10" Background="{TemplateBinding Background}">
+                            <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <ItemsPresenter Grid.Row="1"/>
+                                    <DataGridColumnHeadersPresenter Grid.Row="0"/>
+                                </Grid>
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <!-- Стиль для заголовков колонок -->
         <Style TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="#FF717FC0"/>
-            
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#FFE8E8E8"/>
+            <Setter Property="Foreground" Value="#FF323232"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="BorderBrush" Value="#E0E0E0"/>
             <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="Height" Value="35"/>
+            <Setter Property="Height" Value="40"/>
         </Style>
 
         <!-- Стиль для строк таблицы -->
@@ -38,7 +51,6 @@
             <Setter Property="FontFamily" Value="Segoe UI"/>
             <Setter Property="Background" Value="White"/>
             <Setter Property="Height" Value="30"/>
-            <!-- Высота строки немного уменьшена -->
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="IsSelected" Value="False"/>
             <Style.Triggers>
@@ -74,14 +86,14 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="Model Check"
-                   Foreground="#FF2B3460"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Top"
-                   FontSize="48"
-                   FontFamily="Yu Gothic UI Semilight"
-                   TextAlignment="Center"
-                   Margin="-220,0,0,0"
-                   Grid.Row="0" Grid.Column="1"/>
+               Foreground="#FF2B3460"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Top"
+               FontSize="48"
+               FontFamily="Yu Gothic UI Semilight"
+               TextAlignment="Center"
+               Margin="-220,0,0,0"
+               Grid.Row="0" Grid.Column="1"/>
 
         <DataGrid HorizontalAlignment="Center"
                   VerticalAlignment="Center"
@@ -93,37 +105,63 @@
                   HeadersVisibility="Column"
                   ItemsSource="{Binding DataItems}"
                   Style="{StaticResource ModernDataGridStyle}"
-                  Grid.Row="1" Grid.ColumnSpan="2"
-                  PreviewMouseDown="DataGrid_PreviewMouseDown" SelectionChanged="DataGrid_SelectionChanged">
-
+                  Grid.Row="1" Grid.ColumnSpan="2">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Марка детали"  Width="110" Binding="{Binding Number}" />
-                <DataGridTextColumn Header="Имя детали" Width="190" Binding="{Binding Name}" />
-                <DataGridTextColumn Header="Текущее значение" Width="142" Binding="{Binding Description}" />
-                <DataGridTextColumn Header="GUID детали" Width="400*" Binding="{Binding Guid}" />
+                <DataGridTextColumn Header="Марка" Width="110" Binding="{Binding Number}" />
+                <DataGridTextColumn Header="Имя" Width="190" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Значение" Width="142" Binding="{Binding Description}" />
+                <DataGridTextColumn Header="GUID" Width="400*" Binding="{Binding Guid}" />
             </DataGrid.Columns>
-
         </DataGrid>
 
         <Grid Grid.Row="2" Margin="0,5,0,0" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="517*" />
+                <ColumnDefinition Width="263*" />
+                <ColumnDefinition Width="254*"/>
                 <ColumnDefinition Width="357*"/>
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Left"
                         Margin="10,-10,0,0"
-                        Grid.Column="0" Grid.ColumnSpan="2">
-                <Button Content="Загрузить" Style="{StaticResource LoadButtonStyle}" Margin="7,9,0,9"/>
-                <Button Content="Сохранить" Style="{StaticResource SaveButtonStyle}" Margin="10,0,0,0"/>
-                <Button Content="Clash check" Style="{StaticResource ClashCheckButtonStyle}" Margin="10,0,0,0"/>
+                        Grid.Column="0" Grid.ColumnSpan="3">
+                <Button Content="Загрузить" Style="{StaticResource LoadButtonStyle}" Margin="7,9,0,9">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">
+                            <GradientStop Color="#FF5D86D1" Offset="0.003"/>
+                            <GradientStop Color="#FF9BA7E4" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
+                <Button Content="Сохранить" Style="{StaticResource SaveButtonStyle}" Margin="10,0,0,0">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">
+                            <GradientStop Color="#FF5D86D1" Offset="0.003"/>
+                            <GradientStop Color="#FF9BA7E4" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
+                <Button Content="Clash check" Style="{StaticResource ClashCheckButtonStyle}" Margin="10,0,0,0">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">
+                            <GradientStop Color="#FF5D86D1" Offset="0.003"/>
+                            <GradientStop Color="#FF9BA7E4" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
             </StackPanel>
 
             <Button Content="Новая проверка" Style="{StaticResource NewCheckButtonStyle}"
                     HorizontalAlignment="Right"
-                    Margin="0,-10,16,0"
-                    Grid.Column="1"/>
+                    Margin="0,-1,16,9"
+                    Grid.Column="2">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">
+                        <GradientStop Color="#FF5D86D1" Offset="0.003"/>
+                        <GradientStop Color="#FF9BA7E4" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
         </Grid>
     </Grid>
 </UserControl>

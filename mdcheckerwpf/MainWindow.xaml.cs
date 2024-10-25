@@ -42,6 +42,7 @@ namespace mdcheckerwpf
                     case "HelpPage":
                         ContentArea.Content = new HelpPage();
                         break;
+
                 }
             }
         }
