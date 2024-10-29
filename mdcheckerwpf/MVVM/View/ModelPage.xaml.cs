@@ -6,6 +6,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using Tekla.Structures.Drawing;
+using static Tekla.Structures.Drawing.StraightDimensionSet;
+using tsm = Tekla.Structures.Model;
 
 namespace mdcheckerwpf.MVVM.View
 {
@@ -84,6 +87,11 @@ namespace mdcheckerwpf.MVVM.View
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
         {
 
         }

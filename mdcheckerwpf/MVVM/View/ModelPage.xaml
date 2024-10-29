@@ -154,7 +154,7 @@
             <Button Content="Новая проверка" Style="{StaticResource NewCheckButtonStyle}"
                     HorizontalAlignment="Right"
                     Margin="0,-1,16,9"
-                    Grid.Column="2">
+                    Grid.Column="2" Click="Button_Click_1">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">
                         <GradientStop Color="#FF5D86D1" Offset="0.003"/>
