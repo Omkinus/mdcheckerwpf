@@ -4,10 +4,9 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
 using Tekla.Structures.Drawing;
-using static Tekla.Structures.Drawing.StraightDimensionSet;
+using Tekla.Structures.Model;
+using Part = Tekla.Structures.Model.Part;
 using tsm = Tekla.Structures.Model;
 
 namespace mdcheckerwpf.MVVM.View
@@ -17,9 +16,9 @@ namespace mdcheckerwpf.MVVM.View
         public ModelPage()
         {
             InitializeComponent();
-            this.DataContext = this;
+            DataContext = this;
             LoadData();
-            Loaded += ModelPage_Loaded; // Подписываемся на событие загрузки
+            Loaded += ModelPage_Loaded;
         }
 
         private ObservableCollection<ModelData> _dataItems;
@@ -37,70 +36,58 @@ namespace mdcheckerwpf.MVVM.View
         {
             DataItems = new ObservableCollection<ModelData>
             {
-                new ModelData { Number = "1", Name = "Деталь 1", Description = "Описание 1", Guid = Guid.NewGuid().ToString() },
-                new ModelData { Number = "2", Name = "Деталь 2", Description = "Описание 2", Guid = Guid.NewGuid().ToString() }
-                // Добавьте дополнительные элементы по мере необходимости
+                
             };
         }
 
-        private void ModelPage_Loaded(object sender, RoutedEventArgs e)
-        {
-           
-           
-        }
-
-       
+        private void ModelPage_Loaded(object sender, RoutedEventArgs e) { }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
+        protected virtual void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
-        private void DataGrid_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            // Прекращаем дальнейшую обработку события для предотвращения выделения текста
-            var dataGridRow = FindAncestor<DataGridRow>((DependencyObject)e.OriginalSource);
-            if (dataGridRow != null)
-            {
-                e.Handled = true;
-            }
-        }
-
-        private static T FindAncestor<T>(DependencyObject current) where T : DependencyObject
-        {
-            while (current != null)
-            {
-                if (current is T)
-                {
-                    return (T)current;
-                }
-                current = VisualTreeHelper.GetParent(current);
-            }
-            return null;
-        }
-
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) { }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            var model = new tsm.Model();
+            ModelObjectEnumerator selectedModelObjects = new Tekla.Structures.Model.UI.ModelObjectSelector().GetSelectedObjects();
 
+            if (!model.GetConnectionStatus()) return;
+
+            DataItems.Clear(); // Очистка таблицы перед новой проверкой
+
+            foreach (var item in selectedModelObjects)
+            {
+                if (item is Part part)
+                {
+                    string objectName = part.Name;
+                    string objectNumber = part.GetPartMark();
+                    string guid = part.Identifier.GUID.ToString();
+
+                    DataItems.Add(new ModelData
+                    {
+                        ObjectName = objectName,
+                        ObjectNumber = objectNumber,
+                        Guid = guid,
+                        Description = "Описание детали" // Замените на подходящее описание, если нужно
+                    });
+                }
+            }
+        }
+
+
+        private void CheckSinglePartsWithoutDrawing()
+        { 
+            
         }
     }
 
     public class ModelData
     {
-        public string Number { get; set; }
-        public string Name { get; set; }
+        public string ObjectNumber { get; set; }
+        public string ObjectName { get; set; }
         public string Description { get; set; }
         public string Guid { get; set; }
     }

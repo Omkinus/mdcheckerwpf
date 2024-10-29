@@ -107,8 +107,8 @@
                   Style="{StaticResource ModernDataGridStyle}"
                   Grid.Row="1" Grid.ColumnSpan="2">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Марка" Width="110" Binding="{Binding Number}" />
-                <DataGridTextColumn Header="Имя" Width="190" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Марка" Width="110" Binding="{Binding ObjectNumber}" />
+                <DataGridTextColumn Header="Имя" Width="190" Binding="{Binding ObjectName}" />
                 <DataGridTextColumn Header="Значение" Width="142" Binding="{Binding Description}" />
                 <DataGridTextColumn Header="GUID" Width="400*" Binding="{Binding Guid}" />
             </DataGrid.Columns>
