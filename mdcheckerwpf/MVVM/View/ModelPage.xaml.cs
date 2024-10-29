@@ -62,26 +62,53 @@ namespace mdcheckerwpf.MVVM.View
             {
                 if (item is Part part)
                 {
+                    
                     string objectName = part.Name;
                     string objectNumber = part.GetPartMark();
                     string guid = part.Identifier.GUID.ToString();
 
-                    DataItems.Add(new ModelData
-                    {
-                        ObjectName = objectName,
-                        ObjectNumber = objectNumber,
-                        Guid = guid,
-                        Description = "Описание детали" // Замените на подходящее описание, если нужно
-                    });
+
+                    CheckSinglePartsWithoutDrawing(part, objectName, objectNumber, guid);
+
                 }
             }
         }
 
 
-        private void CheckSinglePartsWithoutDrawing()
-        { 
-            
+        private void CheckSinglePartsWithoutDrawing(Part part, string objectName, string objectNumber, string guid)
+        {
+            var drawingHandler = new DrawingHandler();
+            var drawings = drawingHandler.GetDrawings();
+            bool drawingFound = false;
+
+            while (drawings.MoveNext())
+            {
+                if (drawings.Current is SinglePartDrawing singlePartDrawing)
+                {
+                    if (singlePartDrawing.Mark.Trim('[', ']') == part.GetPartMark())
+                    {
+                        drawingFound = true;
+                        break;
+                    }
+
+                }
+            }
+
+            if (!drawingFound)
+            {
+                AddModelError(objectName, objectNumber, "Отсутствует Single Part чертёж", guid);
+            }
         }
+
+
+        private void AddModelError(string objectName, string objectNumber, string errorMessage, string guid) =>
+            DataItems.Add(new ModelData
+            {
+                ObjectNumber = objectNumber,
+                ObjectName = objectName,
+                Description = errorMessage,
+                Guid = guid
+            });
     }
 
     public class ModelData
