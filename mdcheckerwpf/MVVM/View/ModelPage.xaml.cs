@@ -68,37 +68,60 @@ namespace mdcheckerwpf.MVVM.View
                     string guid = part.Identifier.GUID.ToString();
 
 
-                    CheckSinglePartsWithoutDrawing(part, objectName, objectNumber, guid);
+                    CheckDrawingsForPart(part, objectName, objectNumber, guid);
 
                 }
             }
         }
 
 
-        private void CheckSinglePartsWithoutDrawing(Part part, string objectName, string objectNumber, string guid)
+        private void CheckDrawingsForPart(Part part, string objectName, string objectNumber, string guid)
         {
             var drawingHandler = new DrawingHandler();
             var drawings = drawingHandler.GetDrawings();
-            bool drawingFound = false;
+            bool singlePartDrawingFound = false;
+            bool assemblyDrawingFound = false;
+
+            string partMark = part.GetPartMark().Trim('[', ']');
+
+            // Проверка, является ли деталь главной в сборке
+            bool isMainPart = part.GetAssembly().GetMainPart().Identifier.Equals(part.Identifier);
 
             while (drawings.MoveNext())
             {
                 if (drawings.Current is SinglePartDrawing singlePartDrawing)
                 {
-                    if (singlePartDrawing.Mark.Trim('[', ']') == part.GetPartMark())
+                    if (singlePartDrawing.Mark.Trim('[', ']') == partMark)
                     {
-                        drawingFound = true;
-                        break;
+                        singlePartDrawingFound = true;
                     }
+                }
+                else if (isMainPart && drawings.Current is AssemblyDrawing assemblyDrawing) // Проверка AssemblyDrawing только если деталь - главная
+                {
+                    if (assemblyDrawing.Mark.Trim('[', ']') == partMark)
+                    {
+                        assemblyDrawingFound = true;
+                    }
+                }
 
+                if (singlePartDrawingFound && (assemblyDrawingFound || !isMainPart))
+                {
+                    break; // Остановим цикл, если все нужные чертежи найдены
                 }
             }
 
-            if (!drawingFound)
+            if (!singlePartDrawingFound)
             {
                 AddModelError(objectName, objectNumber, "Отсутствует Single Part чертёж", guid);
             }
+
+            if (isMainPart && !assemblyDrawingFound)
+            {
+                AddModelError(objectName, objectNumber, "Отсутствует Assembly чертёж", guid);
+            }
         }
+
+
 
 
         private void AddModelError(string objectName, string objectNumber, string errorMessage, string guid) =>
