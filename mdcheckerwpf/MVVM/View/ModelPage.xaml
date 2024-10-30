@@ -52,7 +52,6 @@
             <Setter Property="Background" Value="White"/>
             <Setter Property="Height" Value="30"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="IsSelected" Value="False"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="#FFEBEBEB"/>
@@ -107,11 +106,12 @@
                   Style="{StaticResource ModernDataGridStyle}"
                   Grid.Row="1" Grid.ColumnSpan="2">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Марка" Width="110" Binding="{Binding ObjectNumber}" />
-                <DataGridTextColumn Header="Имя" Width="190" Binding="{Binding ObjectName}" />
-                <DataGridTextColumn Header="Значение" Width="142" Binding="{Binding Description}" />
-                <DataGridTextColumn Header="GUID" Width="400*" Binding="{Binding Guid}" />
+                <DataGridTextColumn Header="Марка" Width="100" Binding="{Binding ObjectNumber}" />
+                <DataGridTextColumn Header="Имя" Width="150" Binding="{Binding ObjectName}" />
+                <DataGridTextColumn Header="Значение" Width="250" Binding="{Binding Description}" />
+                <DataGridTextColumn Header="GUID" Width="342" Binding="{Binding Guid}" />
             </DataGrid.Columns>
+
         </DataGrid>
 
         <Grid Grid.Row="2" Margin="0,5,0,0" Grid.ColumnSpan="2">

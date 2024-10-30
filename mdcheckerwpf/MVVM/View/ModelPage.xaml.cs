@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using Tekla.Structures.Drawing;
 using Tekla.Structures.Model;
 using Part = Tekla.Structures.Model.Part;
@@ -17,63 +17,43 @@ namespace mdcheckerwpf.MVVM.View
         {
             InitializeComponent();
             DataContext = this;
-            LoadData();
-            Loaded += ModelPage_Loaded;
+            DataItems = new ObservableCollection<ModelData>();
         }
 
-        private ObservableCollection<ModelData> _dataItems;
-        public ObservableCollection<ModelData> DataItems
-        {
-            get => _dataItems;
-            set
-            {
-                _dataItems = value;
-                OnPropertyChanged(nameof(DataItems));
-            }
-        }
+        public ObservableCollection<ModelData> DataItems { get; set; }
 
-        private void LoadData()
-        {
-            DataItems = new ObservableCollection<ModelData>
-            {
-                
-            };
-        }
-
-        private void ModelPage_Loaded(object sender, RoutedEventArgs e) { }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) { }
-
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            DataItems.Clear();
             var model = new tsm.Model();
+            
             ModelObjectEnumerator selectedModelObjects = new Tekla.Structures.Model.UI.ModelObjectSelector().GetSelectedObjects();
 
             if (!model.GetConnectionStatus()) return;
 
-            DataItems.Clear(); // Очистка таблицы перед новой проверкой
+
 
             foreach (var item in selectedModelObjects)
             {
                 if (item is Part part)
                 {
-                    
                     string objectName = part.Name;
                     string objectNumber = part.GetPartMark();
                     string guid = part.Identifier.GUID.ToString();
 
+                    //Список проверок
 
                     CheckDrawingsForPart(part, objectName, objectNumber, guid);
 
                 }
             }
         }
-
 
         private void CheckDrawingsForPart(Part part, string objectName, string objectNumber, string guid)
         {
@@ -83,8 +63,6 @@ namespace mdcheckerwpf.MVVM.View
             bool assemblyDrawingFound = false;
 
             string partMark = part.GetPartMark().Trim('[', ']');
-
-            // Проверка, является ли деталь главной в сборке
             bool isMainPart = part.GetAssembly().GetMainPart().Identifier.Equals(part.Identifier);
 
             while (drawings.MoveNext())
@@ -106,7 +84,7 @@ namespace mdcheckerwpf.MVVM.View
 
                 if (singlePartDrawingFound && (assemblyDrawingFound || !isMainPart))
                 {
-                    break; // Остановим цикл, если все нужные чертежи найдены
+                    break;
                 }
             }
 
@@ -121,7 +99,84 @@ namespace mdcheckerwpf.MVVM.View
             }
         }
 
+        private void CheckMaterialPart(Part part, string objectName, string objectNumber, string guid)
+        {
+            string profileType = string.Empty;
+            part.GetReportProperty("PROFILE_TYPE", ref profileType);
+            string material = part.Material.MaterialString;
+            string partName = string.Empty;
+            string partProfile = string.Empty;
 
+            part.GetReportProperty("NAME", ref partName);
+            part.GetReportProperty("PROFILE", ref partProfile);
+
+            var userFields = new Dictionary<string, string>();
+
+            // Метод для добавления значений user-defined полей проекта в словарь
+            void AddUserField(Dictionary<string, string> dictionary, string key, string reportPropertyName)
+            {
+                string value = string.Empty;
+                var model = new Model();
+                ProjectInfo projectInfo = model.GetProjectInfo();
+                projectInfo.GetUserProperty(reportPropertyName, ref value);
+                dictionary[key] = value;
+            }
+
+            AddUserField(userFields, "PROJECT_USERFIELD_1", "PROJECT.USERDEFINED.PROJECT_USERFIELD_1");
+            AddUserField(userFields, "PROJECT_USERFIELD_2", "PROJECT.USERDEFINED.PROJECT_USERFIELD_2");
+            AddUserField(userFields, "PROJECT_USERFIELD_3", "PROJECT.USERDEFINED.PROJECT_USERFIELD_3");
+            AddUserField(userFields, "PROJECT_USERFIELD_4", "PROJECT.USERDEFINED.PROJECT_USERFIELD_4");
+            AddUserField(userFields, "PROJECT_USERFIELD_5", "PROJECT.USERDEFINED.PROJECT_USERFIELD_5");
+            AddUserField(userFields, "PROJECT_USERFIELD_6", "PROJECT.USERDEFINED.PROJECT_USERFIELD_6");
+            AddUserField(userFields, "PROJECT_USERFIELD_7", "PROJECT.USERDEFINED.PROJECT_USERFIELD_7");
+
+            bool isMaterialCorrect = true;
+
+           
+            switch (profileType)
+            {
+                case "I":
+                    isMaterialCorrect = material == userFields["PROJECT_USERFIELD_1"];
+                    break;
+                case "L":
+                case "C":
+                    isMaterialCorrect = material == userFields["PROJECT_USERFIELD_2"];
+                    break;
+                case "U":
+                    isMaterialCorrect = material == userFields["PROJECT_USERFIELD_3"];
+                    break;
+                case "B":
+                    isMaterialCorrect = material == userFields["PROJECT_USERFIELD_4"];
+                    break;
+                case "RU":
+                    if (partName.Contains("ANCHOR"))
+                        isMaterialCorrect = material == userFields["PROJECT_USERFIELD_7"];
+                    else
+                        isMaterialCorrect = material == userFields["PROJECT_USERFIELD_4"];
+                    break;
+                case "RO":
+                    if (partProfile.Contains("HSS"))
+                        isMaterialCorrect = material == userFields["PROJECT_USERFIELD_6"];
+                    else
+                        isMaterialCorrect = material == userFields["PROJECT_USERFIELD_5"];
+                    break;
+                case "M":
+                    isMaterialCorrect = material == userFields["PROJECT_USERFIELD_5"];
+                    break;
+                case "T":
+                    isMaterialCorrect = material == userFields["PROJECT_USERFIELD_1"];
+                    break;
+                default:
+                    isMaterialCorrect = true;
+                    break;
+            }
+
+           
+            if (!isMaterialCorrect)
+            {
+                AddModelError(objectName, objectNumber, guid, $"Неверный материал для типа профиля {profileType}: ожидалось {userFields[$"PROJECT_USERFIELD_{profileType}"]}, но задано {material}");
+            }
+        }
 
 
         private void AddModelError(string objectName, string objectNumber, string errorMessage, string guid) =>

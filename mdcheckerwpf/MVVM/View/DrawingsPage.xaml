@@ -109,8 +109,8 @@
                   >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Номер" Width="100" Binding="{Binding DrawingMark}" />
-                <DataGridTextColumn Header="Подробности" Width="542" Binding="{Binding Details}" />
-                <DataGridTextColumn Header="Название чертежа" Width="200" Binding="{Binding DrawingName}" />
+                <DataGridTextColumn Header="Подробности" Width="442" Binding="{Binding Details}" />
+                <DataGridTextColumn Header="Название чертежа" Width="300" Binding="{Binding DrawingName}" />
             </DataGrid.Columns>
 
         </DataGrid>
