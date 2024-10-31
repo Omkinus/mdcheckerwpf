@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using mdcheckerwpf.MVVM.Model;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace mdcheckerwpf.MVVM.View
 {
@@ -20,11 +10,30 @@ namespace mdcheckerwpf.MVVM.View
     /// </summary>
     public partial class SettingsPage : UserControl
     {
+        private readonly SettingsService _settingsService;
+        private mdcheckerwpf.MVVM.Model.SettingsModel _settings;
+
         public SettingsPage()
         {
             InitializeComponent();
-        }
+            _settingsService = new SettingsService();
 
-      
+            // Подгружаем настройки при загрузке страницы
+            Loaded += async (s, e) =>
+            {
+                _settings = await _settingsService.LoadSettingsAsync();
+                DataContext = _settings ?? new SettingsModel(); // Устанавливаем DataContext только после загрузки
+            };
+
+            // Сохраняем настройки при выгрузке страницы
+            Unloaded += async (s, e) =>
+            {
+                if (_settings != null)
+                {
+                    await _settingsService.SaveSettingsAsync(_settings);
+                }
+            };
+        }
     }
+ 
 }

@@ -112,7 +112,7 @@ namespace mdcheckerwpf.MVVM.View
             void AddUserField(Dictionary<string, string> dictionary, string key, string reportPropertyName)
             {
                 string value = string.Empty;
-                var model = new Model();
+                var model = new tsm.Model();
                 ProjectInfo projectInfo = model.GetProjectInfo();
                 projectInfo.GetUserProperty(reportPropertyName, ref value);
                 dictionary[key] = value;
