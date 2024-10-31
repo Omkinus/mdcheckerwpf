@@ -70,7 +70,7 @@
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
                     <StackPanel Orientation="Horizontal" Margin="0,5">
                         <CheckBox Margin="30,0,20,0" Style="{StaticResource CheckboxStyle}" 
-          IsChecked="{Binding IsMainPartsCheckEnabled, Mode=TwoWay}" />
+                                    IsChecked="{Binding IsMainPartsCheckEnabled, Mode=TwoWay}" />
                         <TextBlock Text="Проверять Main Parts в модели на наличие Single Part Drawing" 
                                    VerticalAlignment="Center" FontSize="16" FontFamily="Roboto" FontWeight="DemiBold"/>
                     </StackPanel>

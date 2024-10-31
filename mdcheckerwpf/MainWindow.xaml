@@ -6,115 +6,129 @@
         xmlns:local="clr-namespace:mdcheckerwpf"
         mc:Ignorable="d" 
         Title="MainWindow" 
-        Height="768" 
-        Width="1024" 
+        Height="788" 
+        Width="1044" 
         WindowStartupLocation="CenterScreen" 
         WindowStyle="None" 
         Foreground="#FF1B2627" 
         AllowsTransparency="True" 
         ResizeMode="NoResize" 
+        
         FontFamily="Script MT Bold" Background="{x:Null}">
 
     <Grid>
-        <Border CornerRadius="20">
-            <Border.Background>
-                <LinearGradientBrush EndPoint="1,1" MappingMode="RelativeToBoundingBox" StartPoint="0,0">
-                    <GradientStop Color="White"/>
-                    <GradientStop Color="#FFE2E5FF" Offset="1"/>
-                </LinearGradientBrush>
-            </Border.Background>
-        </Border>
+        <Border CornerRadius="20" Background="Transparent" Padding="0" Margin="10">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="0" BlurRadius="5" Color="#80000000"/>
+            </Border.Effect>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150"/>
-                <ColumnDefinition Width="2"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="80"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+            <Border CornerRadius="20">
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="0,0" MappingMode="RelativeToBoundingBox" StartPoint="1,1">
+                        <GradientStop Color="#FFE1E9FF"/>
+                        <GradientStop Color="#FF8DBBFF" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
 
-            <StackPanel 
-                Orientation="Vertical"  
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="2"/>
+                        <ColumnDefinition Width="275*"/>
+                        <ColumnDefinition Width="161*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel 
+                Orientation="Vertical"
             HorizontalAlignment="Left"
             VerticalAlignment="Stretch" 
             Grid.Column="0" 
             Grid.Row="0" 
             Grid.RowSpan="2"  
-            Margin="10">
+            Margin="10,10,0,10" >
 
 
-                <Border CornerRadius="20" Padding="10" Margin="0,0,0,40" Height="40">
-                    <Border.Background>
-                        <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
-                            <GradientStop Color="#FF3F7BE4" Offset="0"/>
-                            <GradientStop Color="#FF2B3460" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Border.Background>
-                    <Grid>
-                        <Path Data="M 0,0 L 150,-50 L 130,50 L 0,50 Z"/>
-                        <TextBlock HorizontalAlignment="Center" 
+                        <Border CornerRadius="20" Padding="10" Margin="0,0,0,40" Height="40">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                                    <GradientStop Color="#FF3F7BE4" Offset="0"/>
+                                    <GradientStop Color="#FF2B3460" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Grid>
+                                <Path Data="M 0,0 L 150,-50 L 130,50 L 0,50 Z"/>
+                                <TextBlock HorizontalAlignment="Center" 
                        VerticalAlignment="Center"
                        Text="Preview" 
                        FontSize="24" 
                        Foreground="White" 
                        FontFamily="/mdcheckerwpf;component/Fonts/#Inter" 
                        LineHeight="14"/>
-                    </Grid>
-                </Border>
+                            </Grid>
+                        </Border>
 
 
-                <RadioButton Content="Model" Foreground="Black" Checked="RadioButton_Checked" Style="{StaticResource MenuButtonTheme}" FontFamily="./#Inter Thin" Margin="-25,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="ModelPage" HorizontalContentAlignment="Left"/>
-                <RadioButton Content="Drawings" Checked="RadioButton_Checked" Foreground="Black" Style="{StaticResource MenuButtonTheme}" FontFamily="./#Inter 28pt 28pt Light" Margin="-25,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="DrawingsPage" HorizontalContentAlignment="Left"/>
+                        <RadioButton Content="Model" Foreground="Black" Checked="RadioButton_Checked" Style="{StaticResource MenuButtonTheme}"  Margin="-25,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="ModelPage" HorizontalContentAlignment="Left"/>
+                        <RadioButton Content="Drawings" Checked="RadioButton_Checked" Foreground="Black" Style="{StaticResource MenuButtonTheme}" Margin="-25,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="DrawingsPage" HorizontalContentAlignment="Left"/>
 
-                <StackPanel VerticalAlignment="Bottom" Margin="-25,450,0,10">
-                    <RadioButton Content="Settings" Checked="RadioButton_Checked" Foreground="Black" Style="{StaticResource MenuButtonTheme}" FontFamily="./#Inter Thin" Margin="0,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="SettingsPage" HorizontalContentAlignment="Left"/>
-                    <RadioButton Content="About" Checked="RadioButton_Checked" Foreground="Black" Style="{StaticResource MenuButtonTheme}" FontFamily="./#Inter Thin" Margin="0,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="HelpPage" HorizontalContentAlignment="Left"/>
-                </StackPanel>
-            </StackPanel>
+                        <StackPanel VerticalAlignment="Bottom" Margin="-25,450,0,10">
+                            <RadioButton Content="Settings" Checked="RadioButton_Checked" Foreground="Black" Style="{StaticResource MenuButtonTheme}"  Margin="0,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="SettingsPage" HorizontalContentAlignment="Left"/>
+                            <RadioButton Content="About" Checked="RadioButton_Checked" Foreground="Black" Style="{StaticResource MenuButtonTheme}"  Margin="0,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="HelpPage" HorizontalContentAlignment="Left"/>
+                        </StackPanel>
+                    </StackPanel>
 
 
-            <ContentControl x:Name="ContentArea" 
-                            Grid.Row="0" 
-                            Grid.Column="2" 
-                            Grid.RowSpan="2"  
+                    <ContentControl x:Name="ContentArea" 
+                            Grid.Row="1" 
+                            Grid.Column="2"  
                             HorizontalAlignment="Stretch" 
                             VerticalAlignment="Bottom" 
                             Width="874" 
                             Height="688"
-                            Content="{Binding SelectedPage}"/>
+                            Content="{Binding SelectedPage}" Grid.ColumnSpan="2" Margin="0,0,-2,0">
+                        <ContentControl.Background>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="Black" Offset="0"/>
+                                <GradientStop Color="White" Offset="1"/>
+                            </LinearGradientBrush>
+                        </ContentControl.Background>
+                    </ContentControl>
 
-            <Button x:Name="CloseButton" 
+                    <Button x:Name="CloseButton" 
                     HorizontalAlignment="Right" 
-                    Margin="10" 
+                    Margin="0,10,10,0" 
                     VerticalAlignment="Top" 
                     Width="40" 
                     Height="40" 
                     BorderBrush="{x:Null}" 
                     Click="Button_Click" 
-                    Cursor="Hand"
-                    Grid.ColumnSpan="3">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="Transparent" CornerRadius="20">
-                            <Border x:Name="CloseBorder" Background="Transparent">
-                                <Image x:Name="CloseImage" Source="Resources/closebutton.png"/>
-                            </Border>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="CloseBorder" Property="Background" Value="#FF8F0101"/>
-                                <Setter TargetName="CloseImage" Property="Opacity" Value="0.8"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="CloseImage" Property="Opacity" Value="0.6"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-        </Grid>
+                    Cursor="Hand" Grid.Column="3">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="Transparent" CornerRadius="20">
+                                    <Border x:Name="CloseBorder" Background="Transparent">
+                                        <Image x:Name="CloseImage" Source="Resources/closebutton.png"/>
+                                    </Border>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="CloseBorder" Property="Background" Value="#FF8F0101"/>
+                                        <Setter TargetName="CloseImage" Property="Opacity" Value="0.8"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="CloseImage" Property="Opacity" Value="0.6"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Grid>
+            </Border>
+        </Border>
     </Grid>
 </Window>
