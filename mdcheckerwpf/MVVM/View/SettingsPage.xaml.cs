@@ -18,22 +18,21 @@ namespace mdcheckerwpf.MVVM.View
             InitializeComponent();
             _settingsService = new SettingsService();
 
-            // Подгружаем настройки при загрузке страницы
             Loaded += async (s, e) =>
             {
                 _settings = await _settingsService.LoadSettingsAsync();
-                DataContext = _settings ?? new SettingsModel(); // Устанавливаем DataContext только после загрузки
+                DataContext = _settings;  // Настройки подгружаются в DataContext
             };
 
-            // Сохраняем настройки при выгрузке страницы
             Unloaded += async (s, e) =>
             {
                 if (_settings != null)
                 {
-                    await _settingsService.SaveSettingsAsync(_settings);
+                    await _settingsService.SaveSettingsAsync(_settings);  // Настройки сохраняются
                 }
             };
         }
+
     }
- 
+
 }
