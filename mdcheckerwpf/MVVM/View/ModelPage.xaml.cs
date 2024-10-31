@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using Tekla.Structures.Drawing;
@@ -32,12 +35,9 @@ namespace mdcheckerwpf.MVVM.View
         {
             DataItems.Clear();
             var model = new tsm.Model();
-            
             ModelObjectEnumerator selectedModelObjects = new Tekla.Structures.Model.UI.ModelObjectSelector().GetSelectedObjects();
 
             if (!model.GetConnectionStatus()) return;
-
-
 
             foreach (var item in selectedModelObjects)
             {
@@ -45,17 +45,14 @@ namespace mdcheckerwpf.MVVM.View
                 {
                     string objectName = part.Name;
                     string objectNumber = part.GetPartMark();
-                    string guid = part.Identifier.GUID.ToString();
 
-                    //Список проверок
-
-                    CheckDrawingsForPart(part, objectName, objectNumber, guid);
-
+                    CheckDrawingsForPart(part, objectName, objectNumber);
+                    CheckMaterialPart(part, objectName, objectNumber);
                 }
             }
         }
 
-        private void CheckDrawingsForPart(Part part, string objectName, string objectNumber, string guid)
+        private void CheckDrawingsForPart(Part part, string objectName, string objectNumber)
         {
             var drawingHandler = new DrawingHandler();
             var drawings = drawingHandler.GetDrawings();
@@ -74,7 +71,7 @@ namespace mdcheckerwpf.MVVM.View
                         singlePartDrawingFound = true;
                     }
                 }
-                else if (isMainPart && drawings.Current is AssemblyDrawing assemblyDrawing) // Проверка AssemblyDrawing только если деталь - главная
+                else if (isMainPart && drawings.Current is AssemblyDrawing assemblyDrawing)
                 {
                     if (assemblyDrawing.Mark.Trim('[', ']') == partMark)
                     {
@@ -90,16 +87,16 @@ namespace mdcheckerwpf.MVVM.View
 
             if (!singlePartDrawingFound)
             {
-                AddModelError(objectName, objectNumber, "Отсутствует Single Part чертёж", guid);
+                AddModelError(objectName, objectNumber, "Отсутствует Single Part чертёж");
             }
 
             if (isMainPart && !assemblyDrawingFound)
             {
-                AddModelError(objectName, objectNumber, "Отсутствует Assembly чертёж", guid);
+                AddModelError(objectName, objectNumber, "Отсутствует Assembly чертёж");
             }
         }
 
-        private void CheckMaterialPart(Part part, string objectName, string objectNumber, string guid)
+        private void CheckMaterialPart(Part part, string objectName, string objectNumber)
         {
             string profileType = string.Empty;
             part.GetReportProperty("PROFILE_TYPE", ref profileType);
@@ -112,7 +109,6 @@ namespace mdcheckerwpf.MVVM.View
 
             var userFields = new Dictionary<string, string>();
 
-            // Метод для добавления значений user-defined полей проекта в словарь
             void AddUserField(Dictionary<string, string> dictionary, string key, string reportPropertyName)
             {
                 string value = string.Empty;
@@ -122,78 +118,161 @@ namespace mdcheckerwpf.MVVM.View
                 dictionary[key] = value;
             }
 
-            AddUserField(userFields, "PROJECT_USERFIELD_1", "PROJECT.USERDEFINED.PROJECT_USERFIELD_1");
-            AddUserField(userFields, "PROJECT_USERFIELD_2", "PROJECT.USERDEFINED.PROJECT_USERFIELD_2");
-            AddUserField(userFields, "PROJECT_USERFIELD_3", "PROJECT.USERDEFINED.PROJECT_USERFIELD_3");
-            AddUserField(userFields, "PROJECT_USERFIELD_4", "PROJECT.USERDEFINED.PROJECT_USERFIELD_4");
-            AddUserField(userFields, "PROJECT_USERFIELD_5", "PROJECT.USERDEFINED.PROJECT_USERFIELD_5");
-            AddUserField(userFields, "PROJECT_USERFIELD_6", "PROJECT.USERDEFINED.PROJECT_USERFIELD_6");
-            AddUserField(userFields, "PROJECT_USERFIELD_7", "PROJECT.USERDEFINED.PROJECT_USERFIELD_7");
+            AddUserField(userFields, "PROJECT_USERFIELD_1", "PROJECT_USERFIELD_1");
+            AddUserField(userFields, "PROJECT_USERFIELD_2", "PROJECT_USERFIELD_2");
+            AddUserField(userFields, "PROJECT_USERFIELD_3", "PROJECT_USERFIELD_3");
+            AddUserField(userFields, "PROJECT_USERFIELD_4", "PROJECT_USERFIELD_4");
+            AddUserField(userFields, "PROJECT_USERFIELD_5", "PROJECT_USERFIELD_5");
+            AddUserField(userFields, "PROJECT_USERFIELD_6", "PROJECT_USERFIELD_6");
+            AddUserField(userFields, "PROJECT_USERFIELD_7", "PROJECT_USERFIELD_7");
 
             bool isMaterialCorrect = true;
+            string expectedMaterial = string.Empty;
 
-           
             switch (profileType)
             {
                 case "I":
-                    isMaterialCorrect = material == userFields["PROJECT_USERFIELD_1"];
+                    expectedMaterial = userFields["PROJECT_USERFIELD_1"];
+                    isMaterialCorrect = material == expectedMaterial;
                     break;
                 case "L":
                 case "C":
-                    isMaterialCorrect = material == userFields["PROJECT_USERFIELD_2"];
+                    expectedMaterial = userFields["PROJECT_USERFIELD_2"];
+                    isMaterialCorrect = material == expectedMaterial;
                     break;
                 case "U":
-                    isMaterialCorrect = material == userFields["PROJECT_USERFIELD_3"];
+                    expectedMaterial = userFields["PROJECT_USERFIELD_3"];
+                    isMaterialCorrect = material == expectedMaterial;
                     break;
                 case "B":
-                    isMaterialCorrect = material == userFields["PROJECT_USERFIELD_4"];
+                    expectedMaterial = userFields["PROJECT_USERFIELD_4"];
+                    isMaterialCorrect = material == expectedMaterial;
                     break;
                 case "RU":
-                    if (partName.Contains("ANCHOR"))
-                        isMaterialCorrect = material == userFields["PROJECT_USERFIELD_7"];
-                    else
-                        isMaterialCorrect = material == userFields["PROJECT_USERFIELD_4"];
+                    expectedMaterial = partName.Contains("ANCHOR") ? userFields["PROJECT_USERFIELD_7"] : userFields["PROJECT_USERFIELD_4"];
+                    isMaterialCorrect = material == expectedMaterial;
                     break;
                 case "RO":
-                    if (partProfile.Contains("HSS"))
-                        isMaterialCorrect = material == userFields["PROJECT_USERFIELD_6"];
-                    else
-                        isMaterialCorrect = material == userFields["PROJECT_USERFIELD_5"];
+                    expectedMaterial = partProfile.Contains("HSS") ? userFields["PROJECT_USERFIELD_6"] : userFields["PROJECT_USERFIELD_5"];
+                    isMaterialCorrect = material == expectedMaterial;
                     break;
                 case "M":
-                    isMaterialCorrect = material == userFields["PROJECT_USERFIELD_5"];
+                    expectedMaterial = userFields["PROJECT_USERFIELD_5"];
+                    isMaterialCorrect = material == expectedMaterial;
                     break;
                 case "T":
-                    isMaterialCorrect = material == userFields["PROJECT_USERFIELD_1"];
+                    expectedMaterial = userFields["PROJECT_USERFIELD_1"];
+                    isMaterialCorrect = material == expectedMaterial;
                     break;
                 default:
                     isMaterialCorrect = true;
                     break;
             }
 
-           
             if (!isMaterialCorrect)
             {
-                AddModelError(objectName, objectNumber, guid, $"Неверный материал для типа профиля {profileType}: ожидалось {userFields[$"PROJECT_USERFIELD_{profileType}"]}, но задано {material}");
+                AddModelError(objectName, objectNumber, $"Неверный материал: должно быть'{expectedMaterial}',а сейчас '{material}'");
             }
         }
 
-
-        private void AddModelError(string objectName, string objectNumber, string errorMessage, string guid) =>
+        private void AddModelError(string objectName, string objectNumber, string errorMessage)
+        {
             DataItems.Add(new ModelData
             {
                 ObjectNumber = objectNumber,
                 ObjectName = objectName,
-                Description = errorMessage,
-                Guid = guid
+                Description = errorMessage
             });
-    }
+        }
 
-    public class ModelData
-    {
-        public string ObjectNumber { get; set; }
-        public string ObjectName { get; set; }
-        public string Description { get; set; }
-        public string Guid { get; set; }
+        public class ModelData
+        {
+            public string ObjectNumber { get; set; }
+            public string ObjectName { get; set; }
+            public string Description { get; set; }
+        }
+
+        private void SaveModelReportButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveToTxtFile();
+        }
+
+        private void SaveToTxtFile()
+        {
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Text Files (*.txt)|*.txt",
+                Title = "Сохранить данные",
+                FileName = "DataExport.txt"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var filePath = saveFileDialog.FileName;
+                StringBuilder sb = new StringBuilder();
+
+                // Заголовки столбцов
+                sb.AppendLine("Марка\tИмя\tЗначение");
+
+                // Получаем данные из DataGrid
+                foreach (var item in DataItems)
+                {
+                    if (item is ModelData dataItem)  // Замените DataItem на фактический тип ваших данных
+                    {
+                        sb.AppendLine($"{dataItem.ObjectNumber}\t{dataItem.ObjectName}\t{dataItem.Description}");
+                    }
+                }
+
+                // Запись данных в файл
+                File.WriteAllText(filePath, sb.ToString());
+                MessageBox.Show("Данные успешно сохранены", "Сохранение", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void LoadModelReportButton_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "Text Files (*.txt)|*.txt",
+                Title = "Выберите файл для загрузки"
+            };
+
+            DataItems.Clear();
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string filePath = openFileDialog.FileName;
+                try
+                {
+                    // Читаем все строки из файла
+                    string[] lines = File.ReadAllLines(filePath);
+                    DataItems.Clear(); 
+
+                    for (int i = 1; i < lines.Length; i++)
+                    {
+                        string[] columns = lines[i].Split('\t'); 
+                       
+                        if (columns.Length >= 3)
+                        {
+                            var modelData = new ModelData
+                            {
+                                ObjectNumber = columns[0],
+                                ObjectName = columns[1],
+                                Description = columns[2]
+                            };
+
+                            DataItems.Add(modelData); 
+                        }
+                    }
+
+                    MessageBox.Show("Данные успешно загружены", "Загрузка", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при загрузке данных: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
     }
 }

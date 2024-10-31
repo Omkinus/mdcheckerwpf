@@ -34,7 +34,7 @@
 
         <!-- Стиль для заголовков колонок -->
         <Style TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="#FFE8E8E8"/>
+            <Setter Property="Background" Value="#FFF3F3F3"/>
             <Setter Property="Foreground" Value="#FF323232"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -45,12 +45,13 @@
         <!-- Стиль для строк таблицы -->
         <Style TargetType="DataGridRow">
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="Height" Value="30"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Background" Value="{x:Null}"/>
+            <Setter Property="Height" Value="25"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
@@ -105,11 +106,30 @@
                   ItemsSource="{Binding DataItems}"
                   Style="{StaticResource ModernDataGridStyle}"
                   Grid.Row="1" Grid.ColumnSpan="2">
+            <DataGrid.Background>
+                <SolidColorBrush Color="White" Opacity="0.7"/>
+            </DataGrid.Background>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Марка" Width="100" Binding="{Binding ObjectNumber}" />
                 <DataGridTextColumn Header="Имя" Width="150" Binding="{Binding ObjectName}" />
-                <DataGridTextColumn Header="Значение" Width="250" Binding="{Binding Description}" />
-                <DataGridTextColumn Header="GUID" Width="342" Binding="{Binding Guid}" />
+                <DataGridTextColumn Header="Значение" Width="562" Binding="{Binding Description}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextAlignment" Value="Left"/>
+                            <Setter Property="Margin" Value="10,0,0,0"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="BorderThickness" Value="0,0,0,0"/>
+                            <Setter Property="Padding" Value="10,5"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+
+
+
             </DataGrid.Columns>
 
         </DataGrid>
@@ -125,7 +145,7 @@
                         HorizontalAlignment="Left"
                         Margin="10,-10,0,0"
                         Grid.Column="0" Grid.ColumnSpan="3">
-                <Button Content="Загрузить" Style="{StaticResource LoadButtonStyle}" Margin="7,9,0,9">
+                <Button Content="Загрузить" Style="{StaticResource LoadButtonStyle}" Margin="7,9,0,9" Click="LoadModelReportButton_Click">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">
                             <GradientStop Color="#FF5D86D1" Offset="0.003"/>
@@ -133,7 +153,7 @@
                         </LinearGradientBrush>
                     </Button.Background>
                 </Button>
-                <Button Content="Сохранить" Style="{StaticResource SaveButtonStyle}" Margin="10,0,0,0">
+                <Button x:Name="SaveModelReportButton" Content="Сохранить" Style="{StaticResource SaveButtonStyle}" Margin="10,0,0,0" Click="SaveModelReportButton_Click">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">
                             <GradientStop Color="#FF5D86D1" Offset="0.003"/>

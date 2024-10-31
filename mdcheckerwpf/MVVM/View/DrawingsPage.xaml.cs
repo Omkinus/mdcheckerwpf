@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using Tekla.Structures.Drawing;
@@ -102,7 +104,6 @@ namespace mdcheckerwpf.MVVM.View
             }
         }
 
-
         private void AddDrawingError(string drawingMark, string drawingName, string errorMessage) =>
             DataItems.Add(new DrawingData
             {
@@ -110,6 +111,90 @@ namespace mdcheckerwpf.MVVM.View
                 DrawingName = drawingName,
                 Details = errorMessage
             });
+
+        private void SaveDrawingsReportButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveToTxtFile();
+        }
+
+        private void SaveToTxtFile()
+        {
+            var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+            {
+                Filter = "Text Files (*.txt)|*.txt",
+                Title = "Сохранить данные",
+                FileName = "DrawingsReport.txt"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string filePath = saveFileDialog.FileName;
+                StringBuilder sb = new StringBuilder();
+
+               
+                sb.AppendLine("Марка\tИмя\tПодробности");
+
+               
+                foreach (var item in DataItems)
+                {
+                    sb.AppendLine($"{item.DrawingMark}\t{item.DrawingName}\t{item.Details}");
+                }
+
+                // Запись данных в файл
+                File.WriteAllText(filePath, sb.ToString());
+                MessageBox.Show("Данные успешно сохранены", "Сохранение", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void LoadDrawingsReportButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoadFromTxtFile();
+        }
+
+        private void LoadFromTxtFile()
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "Text Files (*.txt)|*.txt",
+                Title = "Выберите файл для загрузки"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string filePath = openFileDialog.FileName;
+                try
+                {
+                    // Читаем все строки из файла
+                    string[] lines = File.ReadAllLines(filePath);
+                    DataItems.Clear();
+
+                    // Пропустим заголовок и загрузим данные
+                    for (int i = 1; i < lines.Length; i++)
+                    {
+                        string[] columns = lines[i].Split('\t'); 
+
+                       
+                        if (columns.Length >= 3)
+                        {
+                            var drawingData = new DrawingData
+                            {
+                                DrawingMark = columns[0],
+                                DrawingName = columns[1],
+                                Details = columns[2]
+                            };
+
+                            DataItems.Add(drawingData); 
+                        }
+                    }
+
+                    MessageBox.Show("Данные успешно загружены", "Загрузка", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при загрузке данных: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
     }
 
     public class DrawingData
