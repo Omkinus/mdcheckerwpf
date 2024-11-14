@@ -1,8 +1,10 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using Microsoft.Win32;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Text;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Tekla.Structures.Drawing;
@@ -17,6 +19,21 @@ namespace mdcheckerwpf.MVVM.View
             InitializeComponent();
             DataContext = this;
             DataItems = new ObservableCollection<DrawingData>();
+        }
+
+        private string modelName;
+
+        public string ModelName
+        {
+            get { return modelName; }
+            set
+            {
+                if (modelName != value)
+                {
+                    modelName = value;
+                    OnPropertyChanged(nameof(ModelName));
+                }
+            }
         }
 
         public ObservableCollection<DrawingData> DataItems { get; set; }
@@ -34,6 +51,8 @@ namespace mdcheckerwpf.MVVM.View
 
             if (!model.GetConnectionStatus() || !drawingHandler.GetConnectionStatus())
                 return;
+
+            ModelName = model.GetInfo().ModelName.Substring(0, model.GetInfo().ModelName.Length - 4);
 
             var selectedDrawings = drawingHandler.GetDrawingSelector().GetSelected();
 
@@ -114,48 +133,61 @@ namespace mdcheckerwpf.MVVM.View
 
         private void SaveDrawingsReportButton_Click(object sender, RoutedEventArgs e)
         {
-            SaveToTxtFile();
+            SaveToExcelFile();
         }
 
-        private void SaveToTxtFile()
+        private void SaveToExcelFile()
         {
-            var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+            var saveFileDialog = new SaveFileDialog
             {
-                Filter = "Text Files (*.txt)|*.txt",
+                Filter = "Excel Files (*.xlsx)|*.xlsx",
                 Title = "Сохранить данные",
-                FileName = "DrawingsReport.txt"
+                FileName = "DrawingsReport.xlsx"
             };
 
             if (saveFileDialog.ShowDialog() == true)
             {
                 string filePath = saveFileDialog.FileName;
-                StringBuilder sb = new StringBuilder();
 
-               
-                sb.AppendLine("Марка\tИмя\tПодробности");
-
-               
-                foreach (var item in DataItems)
+                using (var workbook = new XLWorkbook())
                 {
-                    sb.AppendLine($"{item.DrawingMark}\t{item.DrawingName}\t{item.Details}");
-                }
+                    var worksheet = workbook.Worksheets.Add("Отчет");
 
-                // Запись данных в файл
-                File.WriteAllText(filePath, sb.ToString());
-                MessageBox.Show("Данные успешно сохранены", "Сохранение", MessageBoxButton.OK, MessageBoxImage.Information);
+                    // Заголовки столбцов
+                    worksheet.Cell(1, 1).Value = "Марка";
+                    worksheet.Cell(1, 2).Value = "Имя";
+                    worksheet.Cell(1, 3).Value = "Подробности";
+
+                    // Заполнение данных из DataItems
+                    int row = 2;
+                    foreach (var item in DataItems)
+                    {
+                        worksheet.Cell(row, 1).Value = item.DrawingMark;
+                        worksheet.Cell(row, 2).Value = item.DrawingName;
+                        worksheet.Cell(row, 3).Value = item.Details;
+                        row++;
+                    }
+
+                    // Установка ширины колонок по содержимому
+                    worksheet.Columns().AdjustToContents();
+
+                    // Сохранение файла
+                    workbook.SaveAs(filePath);
+                    MessageBox.Show("Данные успешно сохранены в Excel", "Сохранение", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
         }
 
         private void LoadDrawingsReportButton_Click(object sender, RoutedEventArgs e)
         {
-            LoadFromTxtFile();
+            LoadFromExcelFile();
         }
 
-        private void LoadFromTxtFile()
+        private void LoadFromExcelFile()
         {
-            var openFileDialog = new Microsoft.Win32.OpenFileDialog
+            var openFileDialog = new OpenFileDialog
             {
-                Filter = "Text Files (*.txt)|*.txt",
+                Filter = "Excel Files (*.xlsx)|*.xlsx",
                 Title = "Выберите файл для загрузки"
             };
 
@@ -164,27 +196,25 @@ namespace mdcheckerwpf.MVVM.View
                 string filePath = openFileDialog.FileName;
                 try
                 {
-                    // Читаем все строки из файла
-                    string[] lines = File.ReadAllLines(filePath);
-                    DataItems.Clear();
-
-                    // Пропустим заголовок и загрузим данные
-                    for (int i = 1; i < lines.Length; i++)
+                    using (var workbook = new XLWorkbook(filePath))
                     {
-                        string[] columns = lines[i].Split('\t'); 
+                        var worksheet = workbook.Worksheets.Worksheet(1); // Открываем первый лист
 
-                       
-                        if (columns.Length >= 3)
+                        // Читаем данные из Excel
+                        var rows = worksheet.RowsUsed();
+                        DataItems.Clear();
+
+                        foreach (var row in rows.Skip(1)) // Пропускаем заголовок
                         {
                             var drawingData = new DrawingData
                             {
-                                DrawingMark = columns[0],
-                                DrawingName = columns[1],
-                                Details = columns[2]
+                                DrawingMark = row.Cell(1).GetString(),
+                                DrawingName = row.Cell(2).GetString(),
+                                Details = row.Cell(3).GetString()
                             };
-
-                            DataItems.Add(drawingData); 
+                            DataItems.Add(drawingData);
                         }
+
                     }
 
                     MessageBox.Show("Данные успешно загружены", "Загрузка", MessageBoxButton.OK, MessageBoxImage.Information);

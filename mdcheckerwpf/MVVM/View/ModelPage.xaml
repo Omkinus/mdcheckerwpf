@@ -89,8 +89,8 @@
                Foreground="#FF2B3460"
                HorizontalAlignment="Center"
                VerticalAlignment="Top"
-               FontSize="48"
-               FontFamily="Yu Gothic UI Semilight"
+               FontSize="32"
+               FontFamily="Yu Gothic UI Semibold"
                TextAlignment="Center"
                Margin="-220,0,0,0"
                Grid.Row="0" Grid.Column="1"/>
@@ -107,7 +107,7 @@
                   Style="{StaticResource ModernDataGridStyle}"
                   Grid.Row="1" Grid.ColumnSpan="2">
             <DataGrid.Background>
-                <SolidColorBrush Color="White" Opacity="0.7"/>
+                <SolidColorBrush Color="White" Opacity="0.4"/>
             </DataGrid.Background>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Марка" Width="100" Binding="{Binding ObjectNumber}" />
@@ -134,7 +134,7 @@
 
         </DataGrid>
 
-        <Grid Grid.Row="2" Margin="0,5,0,0" Grid.ColumnSpan="2">
+        <Grid Grid.Row="1" Margin="0,551,0,-7" Grid.ColumnSpan="2" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="263*" />
                 <ColumnDefinition Width="254*"/>
@@ -143,12 +143,12 @@
 
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Left"
-                        Margin="10,-10,0,0"
+                        Margin="10,-11,0,1"
                         Grid.Column="0" Grid.ColumnSpan="3">
                 <Button Content="Загрузить" Style="{StaticResource LoadButtonStyle}" Margin="7,9,0,9" Click="LoadModelReportButton_Click">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">
-                            <GradientStop Color="#FF5D86D1" Offset="0.003"/>
+                            <GradientStop Color="#FF2D66CF" Offset="0.003"/>
                             <GradientStop Color="#FF9BA7E4" Offset="1"/>
                         </LinearGradientBrush>
                     </Button.Background>
@@ -156,7 +156,7 @@
                 <Button x:Name="SaveModelReportButton" Content="Сохранить" Style="{StaticResource SaveButtonStyle}" Margin="10,0,0,0" Click="SaveModelReportButton_Click">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">
-                            <GradientStop Color="#FF5D86D1" Offset="0.003"/>
+                            <GradientStop Color="#FF2D66CF" Offset="0.003"/>
                             <GradientStop Color="#FF9BA7E4" Offset="1"/>
                         </LinearGradientBrush>
                     </Button.Background>
@@ -164,7 +164,7 @@
                 <Button Content="Clash check" Style="{StaticResource ClashCheckButtonStyle}" Margin="10,0,0,0">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">
-                            <GradientStop Color="#FF5D86D1" Offset="0.003"/>
+                            <GradientStop Color="#FF2D66CF" Offset="0.003"/>
                             <GradientStop Color="#FF9BA7E4" Offset="1"/>
                         </LinearGradientBrush>
                     </Button.Background>
@@ -173,15 +173,33 @@
 
             <Button Content="Новая проверка" Style="{StaticResource NewCheckButtonStyle}"
                     HorizontalAlignment="Right"
-                    Margin="0,-1,16,9"
+                    Margin="0,3,16,15"
                     Grid.Column="2" Click="Button_Click_1">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">
-                        <GradientStop Color="#FF5D86D1" Offset="0.003"/>
-                        <GradientStop Color="#FF9BA7E4" Offset="1"/>
+                        <GradientStop Color="#FF8AD855" Offset="1"/>
+                        <GradientStop Color="#FF43C127"/>
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
         </Grid>
+        <TextBlock Text="Имя модели:"
+            Foreground="#FF2B3460"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            FontSize="20"
+            FontFamily="Yu Gothic UI Semilight"
+            TextAlignment="Center"
+            Margin="16,38,90,0"
+            Grid.Row="0"/>
+        <TextBlock Text="{Binding ModelName}"
+           Foreground="#FF2B3460"
+           HorizontalAlignment="Left"
+           VerticalAlignment="Top"
+           FontSize="20"
+           FontFamily="Yu Gothic UI Semibold"
+           TextAlignment="Center"
+           Margin="136,38,623,0"
+           Grid.Row="0" Grid.ColumnSpan="2"/>
     </Grid>
 </UserControl>

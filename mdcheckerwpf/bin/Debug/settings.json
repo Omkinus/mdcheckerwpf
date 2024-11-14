@@ -1,6 +1,6 @@
 {
-  "IsMainPartsCheckEnabled": false,
-  "IsSetting2Enabled": false,
-  "IsSetting3Enabled": false,
-  "IsSetting4Enabled": false
+  "IsMainPartsCheckEnabled": true,
+  "IsSetting2Enabled": true,
+  "IsSetting3Enabled": true,
+  "IsSetting4Enabled": true
 }

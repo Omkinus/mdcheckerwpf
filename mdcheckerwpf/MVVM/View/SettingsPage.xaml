@@ -58,10 +58,10 @@
 
     <Grid>
         <!-- Блок с фоном и тенью -->
-        <Border Background="White" CornerRadius="1" Margin="0,0,20,20" Padding="20" 
-                Effect="{StaticResource DropShadowEffect}">
+        <Border  CornerRadius="1" Margin="0,0,20,20" Padding="20" 
+                Effect="{StaticResource DropShadowEffect}" >
             <!-- Заголовок и содержимое -->
-            <StackPanel>
+            <StackPanel Background="White">
                 <!-- Заголовок -->
                 <TextBlock Text="Общие настройки" FontSize="20" FontWeight="Bold"
                            HorizontalAlignment="Left" Margin="0,0,0,10"/>

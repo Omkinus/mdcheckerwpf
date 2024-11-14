@@ -25,8 +25,8 @@
             <Border CornerRadius="20">
                 <Border.Background>
                     <LinearGradientBrush EndPoint="0,0" MappingMode="RelativeToBoundingBox" StartPoint="1,1">
-                        <GradientStop Color="#FFE1E9FF"/>
-                        <GradientStop Color="#FF8DBBFF" Offset="1"/>
+                        <GradientStop Color="#FFE6ECFF"/>
+                        <GradientStop Color="White" Offset="1"/>
                     </LinearGradientBrush>
                 </Border.Background>
 

@@ -1,10 +1,10 @@
-﻿using Microsoft.Win32;
+﻿using ClosedXML.Excel;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using Tekla.Structures.Drawing;
@@ -23,8 +23,23 @@ namespace mdcheckerwpf.MVVM.View
             DataItems = new ObservableCollection<ModelData>();
         }
 
-        public ObservableCollection<ModelData> DataItems { get; set; }
+        private string modelName;
 
+        public string ModelName
+        {
+            get { return modelName; }
+            set
+            {
+                if (modelName != value)
+                {
+                    modelName = value;
+                    OnPropertyChanged(nameof(ModelName));
+                }
+            }
+        }
+
+
+        public ObservableCollection<ModelData> DataItems { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -35,6 +50,8 @@ namespace mdcheckerwpf.MVVM.View
         {
             DataItems.Clear();
             var model = new tsm.Model();
+            ModelName = model.GetInfo().ModelName.Substring(0, model.GetInfo().ModelName.Length - 4);
+
             ModelObjectEnumerator selectedModelObjects = new Tekla.Structures.Model.UI.ModelObjectSelector().GetSelectedObjects();
 
             if (!model.GetConnectionStatus()) return;
@@ -45,7 +62,6 @@ namespace mdcheckerwpf.MVVM.View
                 {
                     string objectName = part.Name;
                     string objectNumber = part.GetPartMark();
-
                     CheckDrawingsForPart(part, objectName, objectNumber);
                     CheckMaterialPart(part, objectName, objectNumber);
                 }
@@ -171,7 +187,7 @@ namespace mdcheckerwpf.MVVM.View
 
             if (!isMaterialCorrect)
             {
-                AddModelError(objectName, objectNumber, $"Неверный материал: должно быть'{expectedMaterial}',а сейчас '{material}'");
+                AddModelError(objectName, objectNumber, $"Неверный материал: должно быть '{expectedMaterial}', а сейчас '{material}'");
             }
         }
 
@@ -181,7 +197,8 @@ namespace mdcheckerwpf.MVVM.View
             {
                 ObjectNumber = objectNumber,
                 ObjectName = objectName,
-                Description = errorMessage
+                Description = errorMessage,
+                Guid = Guid.NewGuid().ToString() // Генерация нового GUID
             });
         }
 
@@ -190,42 +207,58 @@ namespace mdcheckerwpf.MVVM.View
             public string ObjectNumber { get; set; }
             public string ObjectName { get; set; }
             public string Description { get; set; }
+            public string Guid { get; set; }
         }
 
         private void SaveModelReportButton_Click(object sender, RoutedEventArgs e)
         {
-            SaveToTxtFile();
+            SaveToExcelFile();
         }
 
-        private void SaveToTxtFile()
+        private void SaveToExcelFile()
         {
             var saveFileDialog = new SaveFileDialog
             {
-                Filter = "Text Files (*.txt)|*.txt",
+                Filter = "Excel Files (*.xlsx)|*.xlsx",
                 Title = "Сохранить данные",
-                FileName = "DataExport.txt"
+                FileName = "DataExport.xlsx"
             };
 
             if (saveFileDialog.ShowDialog() == true)
             {
                 var filePath = saveFileDialog.FileName;
-                StringBuilder sb = new StringBuilder();
 
-                // Заголовки столбцов
-                sb.AppendLine("Марка\tИмя\tЗначение");
-
-                // Получаем данные из DataGrid
-                foreach (var item in DataItems)
+                using (var workbook = new XLWorkbook())
                 {
-                    if (item is ModelData dataItem)  // Замените DataItem на фактический тип ваших данных
-                    {
-                        sb.AppendLine($"{dataItem.ObjectNumber}\t{dataItem.ObjectName}\t{dataItem.Description}");
-                    }
-                }
+                    var worksheet = workbook.Worksheets.Add("Отчет");
 
-                // Запись данных в файл
-                File.WriteAllText(filePath, sb.ToString());
-                MessageBox.Show("Данные успешно сохранены", "Сохранение", MessageBoxButton.OK, MessageBoxImage.Information);
+                    // Заголовки столбцов
+                    worksheet.Cell(1, 1).Value = "Марка";
+                    worksheet.Cell(1, 2).Value = "Имя";
+                    worksheet.Cell(1, 3).Value = "Значение";
+                    worksheet.Cell(1, 4).Value = "Guid"; // Добавляем заголовок для Guid
+
+                    // Заполнение данных из DataGrid
+                    int row = 2; // начинаем со второй строки, так как первая - заголовок
+                    foreach (var item in DataItems)
+                    {
+                        if (item is ModelData dataItem)
+                        {
+                            worksheet.Cell(row, 1).Value = dataItem.ObjectNumber;
+                            worksheet.Cell(row, 2).Value = dataItem.ObjectName;
+                            worksheet.Cell(row, 3).Value = dataItem.Description;
+                            worksheet.Cell(row, 4).Value = dataItem.Guid; // Записываем Guid в Excel
+                            row++;
+                        }
+                    }
+
+                    // Установка ширины колонок по содержимому
+                    worksheet.Columns().AdjustToContents();
+
+                    // Сохранение файла
+                    workbook.SaveAs(filePath);
+                    MessageBox.Show("Данные успешно сохранены в Excel", "Сохранение", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
         }
 
@@ -233,7 +266,7 @@ namespace mdcheckerwpf.MVVM.View
         {
             var openFileDialog = new OpenFileDialog
             {
-                Filter = "Text Files (*.txt)|*.txt",
+                Filter = "Excel Files (*.xlsx)|*.xlsx",
                 Title = "Выберите файл для загрузки"
             };
 
@@ -244,32 +277,40 @@ namespace mdcheckerwpf.MVVM.View
                 string filePath = openFileDialog.FileName;
                 try
                 {
-                    // Читаем все строки из файла
-                    string[] lines = File.ReadAllLines(filePath);
-                    DataItems.Clear(); 
-
-                    for (int i = 1; i < lines.Length; i++)
+                    // Чтение данных из Excel
+                    using (var workbook = new XLWorkbook(filePath))
                     {
-                        string[] columns = lines[i].Split('\t'); 
-                       
-                        if (columns.Length >= 3)
-                        {
-                            var modelData = new ModelData
-                            {
-                                ObjectNumber = columns[0],
-                                ObjectName = columns[1],
-                                Description = columns[2]
-                            };
+                        var worksheet = workbook.Worksheet(1); // Получаем первый лист
 
-                            DataItems.Add(modelData); 
+                        var rows = worksheet.RowsUsed(); // Получаем все использованные строки
+
+                        foreach (var row in rows)
+                        {
+                            // Пропускаем первую строку (заголовки)
+                            if (row.RowNumber() == 1) continue;
+
+                            // Чтение данных из ячеек
+                            string objectNumber = row.Cell(1).GetValue<string>();
+                            string objectName = row.Cell(2).GetValue<string>();
+                            string description = row.Cell(3).GetValue<string>();
+                            string guid = row.Cell(4).GetValue<string>();
+
+                            // Добавляем данные в DataItems
+                            DataItems.Add(new ModelData
+                            {
+                                ObjectNumber = objectNumber,
+                                ObjectName = objectName,
+                                Description = description,
+                                Guid = guid ?? Guid.NewGuid().ToString() // Генерация GUID, если его нет
+                            });
                         }
                     }
 
-                    MessageBox.Show("Данные успешно загружены", "Загрузка", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("Данные успешно загружены из Excel.", "Загрузка", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка при загрузке данных: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Ошибка при загрузке файла: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
