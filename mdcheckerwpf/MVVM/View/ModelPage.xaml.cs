@@ -65,6 +65,12 @@ namespace mdcheckerwpf.MVVM.View
                     CheckDrawingsForPart(part, objectName, objectNumber);
                     CheckMaterialPart(part, objectName, objectNumber);
                 }
+                if (item is BoltGroup bolt) 
+                {
+                    string boltStandard = bolt.BoltStandard;
+                    double boltLength = bolt.Length;
+                    CheckBoltsLength(bolt);
+                }
             }
         }
 
@@ -190,6 +196,25 @@ namespace mdcheckerwpf.MVVM.View
                 AddModelError(objectName, objectNumber, $"Неверный материал: должно быть '{expectedMaterial}', а сейчас '{material}'");
             }
         }
+
+        private void CheckBoltsLength(BoltGroup bolt)
+        {
+            var model = new tsm.Model();
+            ProjectInfo projectInfo = model.GetProjectInfo();
+            
+            double boltLength = bolt.Length;
+
+            string expectedBoltLength = string.Empty;
+            projectInfo.GetUserProperty("ESDBOLTLENGTH", ref expectedBoltLength);
+            double expectedBoltLength2 = Convert.ToDouble(expectedBoltLength);
+
+            if ((bolt.BoltStandard == "A325N" || bolt.BoltStandard == "A490N" || bolt.BoltStandard == "A307") && boltLength < expectedBoltLength2)
+            {
+                AddModelError(bolt.BoltSize.ToString(), bolt.BoltStandard, $"Длина болта меньше ожидаемой: стандарт {bolt.BoltStandard}, длина {boltLength} (ожидаемая длина: {expectedBoltLength2}).");
+            }
+        }
+        
+
 
         private void AddModelError(string objectName, string objectNumber, string errorMessage)
         {
