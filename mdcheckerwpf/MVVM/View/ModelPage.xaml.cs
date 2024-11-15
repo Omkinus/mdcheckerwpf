@@ -212,41 +212,81 @@ namespace mdcheckerwpf.MVVM.View
             var model = new tsm.Model();
             ProjectInfo projectInfo = model.GetProjectInfo();
             projectInfo.GetUserProperty("ANGLES_LENGTH", ref maxAngleLength);
-            projectInfo.GetUserProperty("PLATES_LENGTH", ref maxBentPlateLength);
-            projectInfo.GetUserProperty("BENTPLATES_LENGTH", ref maxPlateLength);
-           
+            projectInfo.GetUserProperty("PLATES_LENGTH", ref maxPlateLength);
+            projectInfo.GetUserProperty("BENTPLATES_LENGTH", ref maxBentPlateLength);
+
             double partLength = double.NaN;
-
             part.GetReportProperty("LENGTH", ref partLength);
-            
-
 
             double maxAngleLengthDouble = Tekla.Structures.Datatype.Distance
-             .FromDecimalString(Convert.ToString(maxAngleLength))
-             .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Millimeter)
-             ;
+                .FromDecimalString(Convert.ToString(maxAngleLength))
+                .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Millimeter);
 
             double maxBentPlateLengthDouble = Tekla.Structures.Datatype.Distance
                 .FromDecimalString(Convert.ToString(maxBentPlateLength))
-                .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Millimeter)
-                ;
+                .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Millimeter);
 
             double maxPlateLengthDouble = Tekla.Structures.Datatype.Distance
                 .FromDecimalString(Convert.ToString(maxPlateLength))
-                .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Millimeter)
-               ;
+                .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Millimeter);
 
+            // Преобразование из миллиметров в дюймы
+            double millimetersToInches = 0.0393701;
 
-            if (
-                (profileType.StartsWith("L") && maxAngleLengthDouble < partLength) ||
-                (profileType.StartsWith("PL") && maxPlateLengthDouble < partLength && (isPolybeam = false)) ||
-                (profileType.StartsWith("PL") && maxBentPlateLengthDouble < partLength && (isPolybeam = true)) 
-               )
+            // Функция для форматирования длины в дюймах с дробными частями
+            string ConvertToInches(double mmLength)
             {
-                AddModelError(objectName, objectNumber, $"Превышена максимальная длина элемента");
+                double inches = mmLength * millimetersToInches;
+                int wholeInches = (int)inches;
+                double fractionalPart = inches - wholeInches;
+
+                int fraction = 0;
+                if (fractionalPart >= 0.75)
+                {
+                    fraction = 3;
+                }
+                else if (fractionalPart >= 0.5)
+                {
+                    fraction = 2;
+                }
+                else if (fractionalPart >= 0.25)
+                {
+                    fraction = 1;
+                }
+
+                if (fraction > 0)
+                {
+                    return $"{wholeInches}\"{fraction}/4";
+                }
+                else
+                {
+                    return $"{wholeInches}\"";
+                }
             }
 
+            string errorMessage = string.Empty;
+
+            // Проверка на превышение длины в зависимости от типа профиля
+            if (profileType.StartsWith("L") && maxAngleLengthDouble < partLength)
+            {
+                errorMessage = $"Превышена максимальная длина элемента. Текущая длина: {ConvertToInches(partLength)} дюймов, максимальная длина: {ConvertToInches(maxAngleLengthDouble)} дюймов.";
+            }
+            else if (profileType.StartsWith("PL") && !isPolybeam && maxPlateLengthDouble < partLength)
+            {
+                errorMessage = $"Превышена максимальная длина элемента. Текущая длина: {ConvertToInches(partLength)} дюймов, максимальная длина: {ConvertToInches(maxPlateLengthDouble)} дюймов.";
+            }
+            else if (profileType.StartsWith("PL") && isPolybeam && maxBentPlateLengthDouble < partLength)
+            {
+                errorMessage = $"Превышена максимальная длина элемента. Текущая длина: {ConvertToInches(partLength)} дюймов, максимальная длина: {ConvertToInches(maxBentPlateLengthDouble)} дюймов.";
+            }
+
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                AddModelError(objectName, objectNumber, errorMessage);
+            }
         }
+
+
 
         private void CheckBoltsLength(BoltGroup bolt)
         {
