@@ -17,12 +17,12 @@
         FontFamily="Script MT Bold" Background="{x:Null}">
 
     <Grid>
-        <Border CornerRadius="20" Background="Transparent" Padding="0" Margin="10">
+        <Border CornerRadius="1" Background="Transparent" Padding="0" Margin="5">
             <Border.Effect>
                 <DropShadowEffect ShadowDepth="0" BlurRadius="5" Color="#80000000"/>
             </Border.Effect>
 
-            <Border CornerRadius="20">
+            <Border CornerRadius="1">
                 <Border.Background>
                     <LinearGradientBrush EndPoint="0,0" MappingMode="RelativeToBoundingBox" StartPoint="1,1">
                         <GradientStop Color="#FFE6ECFF"/>

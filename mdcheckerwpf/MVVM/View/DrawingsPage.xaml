@@ -15,7 +15,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="DataGrid">
-                        <Border CornerRadius="10" Background="{TemplateBinding Background}">
+                        <Border CornerRadius="1" Background="{TemplateBinding Background}">
                             <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
                                 <Grid>
                                     <Grid.RowDefinitions>

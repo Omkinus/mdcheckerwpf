@@ -81,7 +81,7 @@
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="border"
                             Background="{TemplateBinding Background}"
-                            CornerRadius="10"
+                            CornerRadius="1"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="0">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
