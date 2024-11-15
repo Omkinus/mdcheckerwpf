@@ -66,6 +66,7 @@ namespace mdcheckerwpf.MVVM.View
                         string objectNumber = part.GetPartMark();
                         CheckDrawingsForPart(part, objectName, objectNumber);
                         CheckMaterialPart(part, objectName, objectNumber);
+                        CheckPartLength(part, objectName, objectNumber);
                     }
                     if (item is BoltGroup bolt)
                     {
@@ -203,15 +204,47 @@ namespace mdcheckerwpf.MVVM.View
         private void CheckPartLength(Part part, string objectName, string objectNumber)
         {
             string profileType = part.Profile.ProfileString;
-            string minAngleLength = string.Empty;
-            string minBentPlateLength = string.Empty;
-            string minPlateLength = string.Empty;
+            double maxAngleLength = double.NaN;
+            double maxBentPlateLength = double.NaN;
+            double maxPlateLength = double.NaN;
+            bool isPolybeam = part is PolyBeam;
 
             var model = new tsm.Model();
             ProjectInfo projectInfo = model.GetProjectInfo();
-            projectInfo.GetUserProperty("ANGLES_LENGTH", ref minAngleLength);
-            projectInfo.GetUserProperty("PLATES_LENGTH", ref minBentPlateLength);
-            projectInfo.GetUserProperty("BENTPLATES_LENGTH", ref minPlateLength);
+            projectInfo.GetUserProperty("ANGLES_LENGTH", ref maxAngleLength);
+            projectInfo.GetUserProperty("PLATES_LENGTH", ref maxBentPlateLength);
+            projectInfo.GetUserProperty("BENTPLATES_LENGTH", ref maxPlateLength);
+           
+            double partLength = double.NaN;
+
+            part.GetReportProperty("LENGTH", ref partLength);
+            
+
+
+            double maxAngleLengthDouble = Tekla.Structures.Datatype.Distance
+             .FromDecimalString(Convert.ToString(maxAngleLength))
+             .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Millimeter)
+             ;
+
+            double maxBentPlateLengthDouble = Tekla.Structures.Datatype.Distance
+                .FromDecimalString(Convert.ToString(maxBentPlateLength))
+                .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Millimeter)
+                ;
+
+            double maxPlateLengthDouble = Tekla.Structures.Datatype.Distance
+                .FromDecimalString(Convert.ToString(maxPlateLength))
+                .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Millimeter)
+               ;
+
+
+            if (
+                (profileType.StartsWith("L") && maxAngleLengthDouble < partLength) ||
+                (profileType.StartsWith("PL") && maxPlateLengthDouble < partLength && (isPolybeam = false)) ||
+                (profileType.StartsWith("PL") && maxBentPlateLengthDouble < partLength && (isPolybeam = true)) 
+               )
+            {
+                AddModelError(objectName, objectNumber, $"Превышена максимальная длина элемента");
+            }
 
         }
 
