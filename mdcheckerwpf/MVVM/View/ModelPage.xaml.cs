@@ -11,6 +11,7 @@ using Tekla.Structures.Drawing;
 using Tekla.Structures.Model;
 using Part = Tekla.Structures.Model.Part;
 using tsm = Tekla.Structures.Model;
+using System.Threading.Tasks;
 
 namespace mdcheckerwpf.MVVM.View
 {
@@ -56,23 +57,24 @@ namespace mdcheckerwpf.MVVM.View
 
             if (!model.GetConnectionStatus()) return;
 
-            foreach (var item in selectedModelObjects)
-            {
-                if (item is Part part)
+           
+                foreach (var item in selectedModelObjects)
                 {
-                    string objectName = part.Name;
-                    string objectNumber = part.GetPartMark();
-                    CheckDrawingsForPart(part, objectName, objectNumber);
-                    CheckMaterialPart(part, objectName, objectNumber);
+                    if (item is Part part)
+                    {
+                        string objectName = part.Name;
+                        string objectNumber = part.GetPartMark();
+                        CheckDrawingsForPart(part, objectName, objectNumber);
+                        CheckMaterialPart(part, objectName, objectNumber);
+                    }
+                    if (item is BoltGroup bolt)
+                    {
+
+                        CheckBoltsLength(bolt);
+                    }
                 }
-                if (item is BoltGroup bolt) 
-                {
-                    string boltStandard = bolt.BoltStandard;
-                    double boltLength = bolt.Length;
-                    CheckBoltsLength(bolt);
-                }
-            }
         }
+
 
         private void CheckDrawingsForPart(Part part, string objectName, string objectNumber)
         {
@@ -201,19 +203,34 @@ namespace mdcheckerwpf.MVVM.View
         {
             var model = new tsm.Model();
             ProjectInfo projectInfo = model.GetProjectInfo();
-            
-            double boltLength = bolt.Length;
 
-            string expectedBoltLength = string.Empty;
+            double boltLength = double.NaN;
+            bolt.GetReportProperty("LENGTH", ref boltLength);
+            double boltLengthDouble = Convert.ToDouble(boltLength);
+            string boltLengthString = Tekla.Structures.Datatype.Distance
+                .FromDecimalString(Convert.ToString(boltLengthDouble))
+                .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Inch)
+                .ToString();
+
+
+            double expectedBoltLength = double.NaN;
             projectInfo.GetUserProperty("ESDBOLTLENGTH", ref expectedBoltLength);
             double expectedBoltLength2 = Convert.ToDouble(expectedBoltLength);
+            string expectedboltLengthString = Tekla.Structures.Datatype.Distance
+                .FromDecimalString(Convert.ToString(expectedBoltLength))
+                .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Inch)
+                .ToString();
+
+            string boltSizeString = Tekla.Structures.Datatype.Distance
+                .FromDecimalString(Convert.ToString(bolt.BoltSize))
+                .ToFractionalFeetAndInchesString();
 
             if ((bolt.BoltStandard == "A325N" || bolt.BoltStandard == "A490N" || bolt.BoltStandard == "A307") && boltLength < expectedBoltLength2)
             {
-                AddModelError(bolt.BoltSize.ToString(), bolt.BoltStandard, $"Длина болта меньше ожидаемой: стандарт {bolt.BoltStandard}, длина {boltLength} (ожидаемая длина: {expectedBoltLength2}).");
+                AddModelError(bolt.BoltStandard, boltSizeString, $"Длина болта меньше ожидаемой: {boltLengthString} (по полю MINIMALBOLTLENGTH надо: {expectedboltLengthString}\").");
             }
         }
-        
+
 
 
         private void AddModelError(string objectName, string objectNumber, string errorMessage)

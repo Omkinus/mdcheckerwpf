@@ -94,7 +94,7 @@
                TextAlignment="Center"
                Margin="-220,0,0,0"
                Grid.Row="0" Grid.Column="1"/>
-
+       
         <DataGrid HorizontalAlignment="Center"
                   VerticalAlignment="Center"
                   Width="842" 
@@ -192,6 +192,7 @@
             TextAlignment="Center"
             Margin="16,38,90,0"
             Grid.Row="0"/>
+        
         <TextBlock Text="{Binding ModelName}"
            Foreground="#FF2B3460"
            HorizontalAlignment="Left"
@@ -202,4 +203,6 @@
            Margin="136,38,623,0"
            Grid.Row="0" Grid.ColumnSpan="2"/>
     </Grid>
+    
+    
 </UserControl>
