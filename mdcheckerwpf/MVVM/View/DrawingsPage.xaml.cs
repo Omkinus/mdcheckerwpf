@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Tekla.Structures.Drawing;
+using Tekla.Structures.Model;
 using tsm = Tekla.Structures.Model;
 
 namespace mdcheckerwpf.MVVM.View
@@ -63,6 +64,7 @@ namespace mdcheckerwpf.MVVM.View
 
                 CheckPrecision(drawing, drawingMark, drawingName);
                 CheckReflectedView(drawing, drawingMark, drawingName);
+                CheckDrawnByCheckBy(drawing, drawingMark, drawingName);
             }
         }
 
@@ -122,6 +124,36 @@ namespace mdcheckerwpf.MVVM.View
                 AddDrawingError(drawingMark, drawingName, $"Присутствует вид с включенным Reflected View: {reflectedViewNames.Trim()}");
             }
         }
+
+        private void CheckDrawnByCheckBy(Drawing drawing, string drawingMark, string drawingName)
+        {
+            string drawnby = string.Empty;
+            string checkby = string.Empty;
+            string projectdrawnby = string.Empty;
+            string projectcheckby = string.Empty;
+
+            drawing.GetUserProperty("DR_DRAWN_BY", ref drawnby);
+            drawing.GetUserProperty("DR_CHECKED_BY", ref checkby);
+
+            var model = new tsm.Model();
+            ProjectInfo projectInfo = model.GetProjectInfo();
+
+            projectInfo.GetUserProperty("FF_DR_BY", ref projectdrawnby);
+            projectInfo.GetUserProperty("FF_CH_BY", ref projectcheckby);
+
+            // Проверка, если поле в проекте не заполнено, проверяем соответствующее поле на чертеже
+            if (string.IsNullOrEmpty(projectdrawnby) && string.IsNullOrEmpty(drawnby))
+            {
+                AddDrawingError(drawingMark, drawingName, "На чертеже не заполнено поле DrawnBy");
+            }
+
+            if (string.IsNullOrEmpty(projectcheckby) && string.IsNullOrEmpty(checkby))
+            {
+                AddDrawingError(drawingMark, drawingName, "На чертеже не заполнено поле CheckBy");
+            }
+        }
+
+
 
         private void AddDrawingError(string drawingMark, string drawingName, string errorMessage) =>
             DataItems.Add(new DrawingData

@@ -212,8 +212,8 @@ namespace mdcheckerwpf.MVVM.View
             var model = new tsm.Model();
             ProjectInfo projectInfo = model.GetProjectInfo();
             projectInfo.GetUserProperty("ANGLES_LENGTH", ref maxAngleLength);
-            projectInfo.GetUserProperty("PLATES_LENGTH", ref maxPlateLength);
-            projectInfo.GetUserProperty("BENTPLATES_LENGTH", ref maxBentPlateLength);
+            projectInfo.GetUserProperty("PLATES_LENGTH", ref maxBentPlateLength);
+            projectInfo.GetUserProperty("BENTPLATES_LENGTH", ref maxPlateLength);
 
             double partLength = double.NaN;
             part.GetReportProperty("LENGTH", ref partLength);
@@ -230,54 +230,20 @@ namespace mdcheckerwpf.MVVM.View
                 .FromDecimalString(Convert.ToString(maxPlateLength))
                 .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Millimeter);
 
-            // Преобразование из миллиметров в дюймы
-            double millimetersToInches = 0.0393701;
-
-            // Функция для форматирования длины в дюймах с дробными частями
-            string ConvertToInches(double mmLength)
-            {
-                double inches = mmLength * millimetersToInches;
-                int wholeInches = (int)inches;
-                double fractionalPart = inches - wholeInches;
-
-                int fraction = 0;
-                if (fractionalPart >= 0.75)
-                {
-                    fraction = 3;
-                }
-                else if (fractionalPart >= 0.5)
-                {
-                    fraction = 2;
-                }
-                else if (fractionalPart >= 0.25)
-                {
-                    fraction = 1;
-                }
-
-                if (fraction > 0)
-                {
-                    return $"{wholeInches}\"{fraction}/4";
-                }
-                else
-                {
-                    return $"{wholeInches}\"";
-                }
-            }
-
             string errorMessage = string.Empty;
 
             // Проверка на превышение длины в зависимости от типа профиля
             if (profileType.StartsWith("L") && maxAngleLengthDouble < partLength)
             {
-                errorMessage = $"Превышена максимальная длина элемента. Текущая длина: {ConvertToInches(partLength)} дюймов, максимальная длина: {ConvertToInches(maxAngleLengthDouble)} дюймов.";
+                errorMessage = $"Превышена максимальная длина элемента. Текущая длина: {partLength} мм, максимальная длина: {maxAngleLengthDouble} мм.";
             }
             else if (profileType.StartsWith("PL") && !isPolybeam && maxPlateLengthDouble < partLength)
             {
-                errorMessage = $"Превышена максимальная длина элемента. Текущая длина: {ConvertToInches(partLength)} дюймов, максимальная длина: {ConvertToInches(maxPlateLengthDouble)} дюймов.";
+                errorMessage = $"Превышена максимальная длина элемента. Текущая длина: {partLength} мм, максимальная длина: {maxPlateLengthDouble} мм.";
             }
             else if (profileType.StartsWith("PL") && isPolybeam && maxBentPlateLengthDouble < partLength)
             {
-                errorMessage = $"Превышена максимальная длина элемента. Текущая длина: {ConvertToInches(partLength)} дюймов, максимальная длина: {ConvertToInches(maxBentPlateLengthDouble)} дюймов.";
+                errorMessage = $"Превышена максимальная длина элемента. Текущая длина: {partLength} мм, максимальная длина: {maxBentPlateLengthDouble} мм.";
             }
 
             if (!string.IsNullOrEmpty(errorMessage))
@@ -287,38 +253,43 @@ namespace mdcheckerwpf.MVVM.View
         }
 
 
-
         private void CheckBoltsLength(BoltGroup bolt)
         {
             var model = new tsm.Model();
-            ProjectInfo projectInfo = model.GetProjectInfo();
+            var projectInfo = model.GetProjectInfo();
 
+            // Получаем длину болта
             double boltLength = double.NaN;
             bolt.GetReportProperty("LENGTH", ref boltLength);
-            double boltLengthDouble = Convert.ToDouble(boltLength);
+
+            // Конвертируем длину болта в дюймы
             string boltLengthString = Tekla.Structures.Datatype.Distance
-                .FromDecimalString(Convert.ToString(boltLengthDouble))
+                .FromDecimalString(boltLength.ToString())
                 .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Inch)
                 .ToString();
 
-
+            // Получаем ожидаемую длину болта из пользовательского поля
             double expectedBoltLength = double.NaN;
             projectInfo.GetUserProperty("ESDBOLTLENGTH", ref expectedBoltLength);
-            double expectedBoltLength2 = Convert.ToDouble(expectedBoltLength);
-            string expectedboltLengthString = Tekla.Structures.Datatype.Distance
-                .FromDecimalString(Convert.ToString(expectedBoltLength))
+
+            // Конвертируем ожидаемую длину в дюймы
+            string expectedBoltLengthString = Tekla.Structures.Datatype.Distance
+                .FromDecimalString(expectedBoltLength.ToString())
                 .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Inch)
                 .ToString();
 
+            // Проверяем размер болта
             string boltSizeString = Tekla.Structures.Datatype.Distance
-                .FromDecimalString(Convert.ToString(bolt.BoltSize))
+                .FromDecimalString(bolt.BoltSize.ToString())
                 .ToFractionalFeetAndInchesString();
 
-            if ((bolt.BoltStandard == "A325N" || bolt.BoltStandard == "A490N" || bolt.BoltStandard == "A307") && boltLength < expectedBoltLength2)
+           
+            if ((bolt.BoltStandard == "A325N" || bolt.BoltStandard == "A490N" || bolt.BoltStandard == "A307") && boltLength < expectedBoltLength)
             {
-                AddModelError(bolt.BoltStandard, boltSizeString, $"Длина болта меньше ожидаемой: {boltLengthString} (по полю MINIMALBOLTLENGTH надо: {expectedboltLengthString}\").");
+                AddModelError(bolt.BoltStandard, boltSizeString, $"Длина болта меньше ожидаемой: {boltLengthString} (по полю MINIMALBOLTLENGTH надо: {expectedBoltLengthString}\").");
             }
         }
+
 
         private void CheckScrewsWithScrewsAndWashers(BoltGroup bolt)
         {
