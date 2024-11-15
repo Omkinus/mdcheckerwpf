@@ -71,6 +71,7 @@ namespace mdcheckerwpf.MVVM.View
                     {
 
                         CheckBoltsLength(bolt);
+                        CheckScrewsWithScrewsAndWashers(bolt);
                     }
                 }
         }
@@ -199,6 +200,21 @@ namespace mdcheckerwpf.MVVM.View
             }
         }
 
+        private void CheckPartLength(Part part, string objectName, string objectNumber)
+        {
+            string profileType = part.Profile.ProfileString;
+            string minAngleLength = string.Empty;
+            string minBentPlateLength = string.Empty;
+            string minPlateLength = string.Empty;
+
+            var model = new tsm.Model();
+            ProjectInfo projectInfo = model.GetProjectInfo();
+            projectInfo.GetUserProperty("ANGLES_LENGTH", ref minAngleLength);
+            projectInfo.GetUserProperty("PLATES_LENGTH", ref minBentPlateLength);
+            projectInfo.GetUserProperty("BENTPLATES_LENGTH", ref minPlateLength);
+
+        }
+
         private void CheckBoltsLength(BoltGroup bolt)
         {
             var model = new tsm.Model();
@@ -231,7 +247,21 @@ namespace mdcheckerwpf.MVVM.View
             }
         }
 
+        private void CheckScrewsWithScrewsAndWashers(BoltGroup bolt)
+        {
+            var model = new tsm.Model();
+            ProjectInfo projectInfo = model.GetProjectInfo();
 
+            if (bolt.BoltStandard.Contains("SCREW") &&
+            (bolt.Nut1 || bolt.Nut2 || bolt.Washer1 || bolt.Washer2 || bolt.Washer3))
+            {
+                string boltSizeString = Tekla.Structures.Datatype.Distance
+                .FromDecimalString(Convert.ToString(bolt.BoltSize))
+                .ToFractionalFeetAndInchesString();
+
+                AddModelError(bolt.BoltStandard, boltSizeString,"Тип болта - Screw, но в нем есть гайка/шайба");
+            }
+        }
 
         private void AddModelError(string objectName, string objectNumber, string errorMessage)
         {
