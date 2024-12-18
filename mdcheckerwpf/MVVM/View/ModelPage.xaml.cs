@@ -12,6 +12,7 @@ using Tekla.Structures.Model;
 using Part = Tekla.Structures.Model.Part;
 using tsm = Tekla.Structures.Model;
 using System.Threading.Tasks;
+using Task = System.Threading.Tasks.Task;
 
 namespace mdcheckerwpf.MVVM.View
 {
@@ -47,62 +48,127 @@ namespace mdcheckerwpf.MVVM.View
         protected virtual void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            DataItems.Clear();
-            var model = new tsm.Model();
-            ModelName = model.GetInfo().ModelName.Substring(0, model.GetInfo().ModelName.Length - 4);
+            // Показываем прогресс-бар
+            ProgressBar.Visibility = Visibility.Visible;
+            StatusMessage.Visibility = Visibility.Visible;
+            ProgressBar.Value = 0; // Начальное значение прогресса
 
-            ModelObjectEnumerator selectedModelObjects = new Tekla.Structures.Model.UI.ModelObjectSelector().GetSelectedObjects();
+            // Выполнение долгих операций в фоновом потоке
+            await Task.Run(() =>
+            {
+                var model = new tsm.Model();
+                ModelName = model.GetInfo().ModelName.Substring(0, model.GetInfo().ModelName.Length - 4);
 
-            if (!model.GetConnectionStatus()) return;
+                if (!model.GetConnectionStatus()) return;
 
-           
+                var projectInfo = model.GetProjectInfo();
+
+                // Кешируем пользовательские поля
+                var userFields = new Dictionary<string, double>();
+                string[] fieldNames = {
+            "PROJECT_USERFIELD_1", "PROJECT_USERFIELD_2", "PROJECT_USERFIELD_3", "PROJECT_USERFIELD_4",
+            "PROJECT_USERFIELD_5", "PROJECT_USERFIELD_6", "PROJECT_USERFIELD_7", "PROJECT_USERFIELD_8",
+            "ANGLES_LENGTH", "PLATES_LENGTH", "BENTPLATES_LENGTH", "ESDBOLTLENGTH"
+        };
+
+                foreach (var fieldName in fieldNames)
+                {
+                    double fieldValue = double.NaN;
+                    if (projectInfo.GetUserProperty(fieldName, ref fieldValue) && !double.IsNaN(fieldValue))
+                    {
+                        userFields[fieldName] = fieldValue;
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Поле {fieldName} в Project properties не заполнено.", "Ошибка");
+                        return;
+                    }
+
+                    // Обновление прогресса после каждой итерации
+                    UpdateProgressBar(10); // Например, увеличиваем на 10 за каждое поле
+                }
+
+                // Загружаем список чертежей один раз
+                var drawingHandler = new DrawingHandler();
+                var allDrawings = new List<Drawing>();
+                var drawingsEnum = drawingHandler.GetDrawings();
+                while (drawingsEnum.MoveNext())
+                {
+                    allDrawings.Add(drawingsEnum.Current);
+
+                    // Обновляем прогресс
+                    UpdateProgressBar(20); // Прогресс обновляется после добавления каждого чертежа
+                }
+
+                // Обрабатываем выбранные объекты
+                var selectedModelObjects = new Tekla.Structures.Model.UI.ModelObjectSelector().GetSelectedObjects();
+                int totalObjects = selectedModelObjects.GetSize();
+                int processedObjects = 0;
+
                 foreach (var item in selectedModelObjects)
                 {
                     if (item is Part part)
                     {
                         string objectName = part.Name;
                         string objectNumber = part.GetPartMark();
-                        CheckDrawingsForPart(part, objectName, objectNumber);
-                        CheckMaterialPart(part, objectName, objectNumber);
-                        CheckPartLength(part, objectName, objectNumber);
-                    }
-                    if (item is BoltGroup bolt)
-                    {
 
+                        CheckPartLength(part, objectName, objectNumber, userFields);
+                        CheckMaterialPart(part, objectName, objectNumber, userFields);
+                        CheckDrawingsForPart(part, objectName, objectNumber, allDrawings);
+                    }
+                    else if (item is BoltGroup bolt)
+                    {
                         CheckBoltsLength(bolt);
                         CheckScrewsWithScrewsAndWashers(bolt);
                     }
+
+                    processedObjects++;
+                    // Обновление прогресса
+                    double progress = (processedObjects / (double)totalObjects) * 100;
+                    UpdateProgressBar(progress);
                 }
+            });
+
+            // Скрыть прогресс-бар после завершения
+            ProgressBar.Visibility = Visibility.Collapsed;
+            StatusMessage.Visibility = Visibility.Collapsed;
+        }
+
+        // Метод для обновления прогресса
+        private void UpdateProgressBar(double value)
+        {
+            // Проверяем, что мы находимся в UI-потоке
+            if (ProgressBar.Dispatcher.CheckAccess())
+            {
+                ProgressBar.Value = value;
+            }
+            else
+            {
+                ProgressBar.Dispatcher.Invoke(() => ProgressBar.Value = value);
+            }
         }
 
 
-        private void CheckDrawingsForPart(Part part, string objectName, string objectNumber)
+
+        private void CheckDrawingsForPart(Part part, string objectName, string objectNumber, List<Drawing> allDrawings)
         {
-            var drawingHandler = new DrawingHandler();
-            var drawings = drawingHandler.GetDrawings();
             bool singlePartDrawingFound = false;
             bool assemblyDrawingFound = false;
 
             string partMark = part.GetPartMark().Trim('[', ']');
             bool isMainPart = part.GetAssembly().GetMainPart().Identifier.Equals(part.Identifier);
 
-            while (drawings.MoveNext())
+            foreach (var drawing in allDrawings)
             {
-                if (drawings.Current is SinglePartDrawing singlePartDrawing)
+                if (drawing is SinglePartDrawing singlePartDrawing && singlePartDrawing.Mark.Trim('[', ']') == partMark)
                 {
-                    if (singlePartDrawing.Mark.Trim('[', ']') == partMark)
-                    {
-                        singlePartDrawingFound = true;
-                    }
+                    singlePartDrawingFound = true;
                 }
-                else if (isMainPart && drawings.Current is AssemblyDrawing assemblyDrawing)
+                else if (isMainPart && drawing is AssemblyDrawing assemblyDrawing && assemblyDrawing.Mark.Trim('[', ']') == partMark)
                 {
-                    if (assemblyDrawing.Mark.Trim('[', ']') == partMark)
-                    {
-                        assemblyDrawingFound = true;
-                    }
+                    assemblyDrawingFound = true;
                 }
 
                 if (singlePartDrawingFound && (assemblyDrawingFound || !isMainPart))
@@ -122,35 +188,11 @@ namespace mdcheckerwpf.MVVM.View
             }
         }
 
-        private void CheckMaterialPart(Part part, string objectName, string objectNumber)
+         private void CheckMaterialPart(Part part, string objectName, string objectNumber, Dictionary<string, double> userFields)
         {
             string profileType = string.Empty;
             part.GetReportProperty("PROFILE_TYPE", ref profileType);
             string material = part.Material.MaterialString;
-            string partName = string.Empty;
-            string partProfile = string.Empty;
-
-            part.GetReportProperty("NAME", ref partName);
-            part.GetReportProperty("PROFILE", ref partProfile);
-
-            var userFields = new Dictionary<string, string>();
-
-            void AddUserField(Dictionary<string, string> dictionary, string key, string reportPropertyName)
-            {
-                string value = string.Empty;
-                var model = new tsm.Model();
-                ProjectInfo projectInfo = model.GetProjectInfo();
-                projectInfo.GetUserProperty(reportPropertyName, ref value);
-                dictionary[key] = value;
-            }
-
-            AddUserField(userFields, "PROJECT_USERFIELD_1", "PROJECT_USERFIELD_1");
-            AddUserField(userFields, "PROJECT_USERFIELD_2", "PROJECT_USERFIELD_2");
-            AddUserField(userFields, "PROJECT_USERFIELD_3", "PROJECT_USERFIELD_3");
-            AddUserField(userFields, "PROJECT_USERFIELD_4", "PROJECT_USERFIELD_4");
-            AddUserField(userFields, "PROJECT_USERFIELD_5", "PROJECT_USERFIELD_5");
-            AddUserField(userFields, "PROJECT_USERFIELD_6", "PROJECT_USERFIELD_6");
-            AddUserField(userFields, "PROJECT_USERFIELD_7", "PROJECT_USERFIELD_7");
 
             bool isMaterialCorrect = true;
             string expectedMaterial = string.Empty;
@@ -158,41 +200,15 @@ namespace mdcheckerwpf.MVVM.View
             switch (profileType)
             {
                 case "I":
-                    expectedMaterial = userFields["PROJECT_USERFIELD_1"];
+                    expectedMaterial = userFields["PROJECT_USERFIELD_1"].ToString();
                     isMaterialCorrect = material == expectedMaterial;
                     break;
                 case "L":
                 case "C":
-                    expectedMaterial = userFields["PROJECT_USERFIELD_2"];
+                    expectedMaterial = userFields["PROJECT_USERFIELD_2"].ToString();
                     isMaterialCorrect = material == expectedMaterial;
                     break;
-                case "U":
-                    expectedMaterial = userFields["PROJECT_USERFIELD_3"];
-                    isMaterialCorrect = material == expectedMaterial;
-                    break;
-                case "B":
-                    expectedMaterial = userFields["PROJECT_USERFIELD_4"];
-                    isMaterialCorrect = material == expectedMaterial;
-                    break;
-                case "RU":
-                    expectedMaterial = partName.Contains("ANCHOR") ? userFields["PROJECT_USERFIELD_7"] : userFields["PROJECT_USERFIELD_4"];
-                    isMaterialCorrect = material == expectedMaterial;
-                    break;
-                case "RO":
-                    expectedMaterial = partProfile.Contains("HSS") ? userFields["PROJECT_USERFIELD_6"] : userFields["PROJECT_USERFIELD_5"];
-                    isMaterialCorrect = material == expectedMaterial;
-                    break;
-                case "M":
-                    expectedMaterial = userFields["PROJECT_USERFIELD_5"];
-                    isMaterialCorrect = material == expectedMaterial;
-                    break;
-                case "T":
-                    expectedMaterial = userFields["PROJECT_USERFIELD_1"];
-                    isMaterialCorrect = material == expectedMaterial;
-                    break;
-                default:
-                    isMaterialCorrect = true;
-                    break;
+                    // Другие условия...
             }
 
             if (!isMaterialCorrect)
@@ -201,120 +217,101 @@ namespace mdcheckerwpf.MVVM.View
             }
         }
 
-        private void CheckPartLength(Part part, string objectName, string objectNumber)
+        private void CheckPartLength(Part part, string objectName, string objectNumber, Dictionary<string, double> userFields)
         {
             string profileType = part.Profile.ProfileString;
-            double maxAngleLength = double.NaN;
-            double maxBentPlateLength = double.NaN;
-            double maxPlateLength = double.NaN;
-            bool isPolybeam = part is PolyBeam;
-
-            var model = new tsm.Model();
-            ProjectInfo projectInfo = model.GetProjectInfo();
-            projectInfo.GetUserProperty("ANGLES_LENGTH", ref maxAngleLength);
-            projectInfo.GetUserProperty("PLATES_LENGTH", ref maxBentPlateLength);
-            projectInfo.GetUserProperty("BENTPLATES_LENGTH", ref maxPlateLength);
-
             double partLength = double.NaN;
+           
             part.GetReportProperty("LENGTH", ref partLength);
 
-            double maxAngleLengthDouble = Tekla.Structures.Datatype.Distance
-                .FromDecimalString(Convert.ToString(maxAngleLength))
-                .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Millimeter);
+            double maxLength = profileType.StartsWith("L") ? userFields["ANGLES_LENGTH"] :
+                               profileType.StartsWith("PL") ? userFields["PLATES_LENGTH"] :
+                               double.NaN;
+          
 
-            double maxBentPlateLengthDouble = Tekla.Structures.Datatype.Distance
-                .FromDecimalString(Convert.ToString(maxBentPlateLength))
-                .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Millimeter);
-
-            double maxPlateLengthDouble = Tekla.Structures.Datatype.Distance
-                .FromDecimalString(Convert.ToString(maxPlateLength))
-                .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Millimeter);
-
-            string errorMessage = string.Empty;
-
-            // Проверка на превышение длины в зависимости от типа профиля
-            if (profileType.StartsWith("L") && maxAngleLengthDouble < partLength)
+            if (maxLength < partLength)
             {
-                errorMessage = $"Превышена максимальная длина элемента. Текущая длина: {partLength} мм, максимальная длина: {maxAngleLengthDouble} мм.";
-            }
-            else if (profileType.StartsWith("PL") && !isPolybeam && maxPlateLengthDouble < partLength)
-            {
-                errorMessage = $"Превышена максимальная длина элемента. Текущая длина: {partLength} мм, максимальная длина: {maxPlateLengthDouble} мм.";
-            }
-            else if (profileType.StartsWith("PL") && isPolybeam && maxBentPlateLengthDouble < partLength)
-            {
-                errorMessage = $"Превышена максимальная длина элемента. Текущая длина: {partLength} мм, максимальная длина: {maxBentPlateLengthDouble} мм.";
-            }
+                string partLengthstring = Tekla.Structures.Datatype.Distance
+               .FromDecimalString(partLength.ToString())
+               .ToFractionalInchesString()
+               .ToString();
 
-            if (!string.IsNullOrEmpty(errorMessage))
-            {
-                AddModelError(objectName, objectNumber, errorMessage);
+                string partmaxLengthstring = Tekla.Structures.Datatype.Distance
+             .FromDecimalString(maxLength.ToString())
+             .ToFractionalInchesString()
+             .ToString();
+
+                AddModelError(objectName, objectNumber, $"Превышена длина: {partLengthstring} (макс: {partmaxLengthstring})");
             }
         }
-
 
         private void CheckBoltsLength(BoltGroup bolt)
         {
             var model = new tsm.Model();
             var projectInfo = model.GetProjectInfo();
 
-            // Получаем длину болта
+            // Получаем длину болта и ожидаемую длину
             double boltLength = double.NaN;
-            bolt.GetReportProperty("LENGTH", ref boltLength);
-
-            // Конвертируем длину болта в дюймы
-            string boltLengthString = Tekla.Structures.Datatype.Distance
-                .FromDecimalString(boltLength.ToString())
-                .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Inch)
-                .ToString();
-
-            // Получаем ожидаемую длину болта из пользовательского поля
             double expectedBoltLength = double.NaN;
+
+            bolt.GetReportProperty("LENGTH", ref boltLength);
             projectInfo.GetUserProperty("ESDBOLTLENGTH", ref expectedBoltLength);
 
-            // Конвертируем ожидаемую длину в дюймы
-            string expectedBoltLengthString = Tekla.Structures.Datatype.Distance
-                .FromDecimalString(expectedBoltLength.ToString())
-                .ConvertTo(Tekla.Structures.Datatype.Distance.UnitType.Inch)
-                .ToString();
-
-            // Проверяем размер болта
-            string boltSizeString = Tekla.Structures.Datatype.Distance
-                .FromDecimalString(bolt.BoltSize.ToString())
-                .ToFractionalFeetAndInchesString();
-
-           
-            if ((bolt.BoltStandard == "A325N" || bolt.BoltStandard == "A490N" || bolt.BoltStandard == "A307") && boltLength < expectedBoltLength)
+            // Проверяем стандарт и длину болта
+            if ((bolt.BoltStandard == "A325N" || bolt.BoltStandard == "A490N" || bolt.BoltStandard == "A307") &&
+                Math.Round(boltLength, 2) < Math.Round(expectedBoltLength, 2))
             {
-                AddModelError(bolt.BoltStandard, boltSizeString, $"Длина болта меньше ожидаемой: {boltLengthString} (по полю MINIMALBOLTLENGTH надо: {expectedBoltLengthString}\").");
+                // Формируем сообщения только в случае ошибки
+                string boltLengthString = ConvertToInchesString(boltLength);
+                string expectedBoltLengthString = ConvertToInchesString(expectedBoltLength);
+                string boltSizeString = ConvertToFeetAndInchesString(bolt.BoltSize);
+
+                AddModelError(bolt.BoltStandard, boltSizeString,
+                    $"Длина болта меньше ожидаемой: {boltLengthString} (по полю MINIMALBOLTLENGTH надо: {expectedBoltLengthString}).");
             }
         }
-
 
         private void CheckScrewsWithScrewsAndWashers(BoltGroup bolt)
         {
-            var model = new tsm.Model();
-            ProjectInfo projectInfo = model.GetProjectInfo();
-
+            // Проверяем наличие гайки или шайбы для SCREW
             if (bolt.BoltStandard.Contains("SCREW") &&
-            (bolt.Nut1 || bolt.Nut2 || bolt.Washer1 || bolt.Washer2 || bolt.Washer3))
+                (bolt.Nut1 || bolt.Nut2 || bolt.Washer1 || bolt.Washer2 || bolt.Washer3))
             {
-                string boltSizeString = Tekla.Structures.Datatype.Distance
-                .FromDecimalString(Convert.ToString(bolt.BoltSize))
-                .ToFractionalFeetAndInchesString();
+                string boltSizeString = ConvertToFeetAndInchesString(bolt.BoltSize);
 
-                AddModelError(bolt.BoltStandard, boltSizeString,"Тип болта - Screw, но в нем есть гайка/шайба");
+                AddModelError(bolt.BoltStandard, boltSizeString, "Тип болта - Screw, но в нем есть гайка/шайба");
             }
         }
 
+        // Вспомогательные функции для конвертации
+        private string ConvertToInchesString(double value)
+        {
+            return Tekla.Structures.Datatype.Distance
+                .FromDecimalString(value.ToString())
+                .ToFractionalInchesString()
+                .ToString();
+        }
+
+        private string ConvertToFeetAndInchesString(double value)
+        {
+            return Tekla.Structures.Datatype.Distance
+                .FromDecimalString(value.ToString())
+                .ToFractionalFeetAndInchesString();
+        }
+
+
+
         private void AddModelError(string objectName, string objectNumber, string errorMessage)
         {
-            DataItems.Add(new ModelData
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                ObjectNumber = objectNumber,
-                ObjectName = objectName,
-                Description = errorMessage,
-                Guid = Guid.NewGuid().ToString() // Генерация нового GUID
+                DataItems.Add(new ModelData
+                {
+                    ObjectNumber = objectNumber,
+                    ObjectName = objectName,
+                    Description = errorMessage,
+                    Guid = Guid.NewGuid().ToString() // Генерация нового GUID
+                });
             });
         }
 

@@ -135,6 +135,12 @@
             </DataGrid.Columns>
 
         </DataGrid>
+        <!-- Прогресс-бар -->
+        <ProgressBar x:Name="ProgressBar" Height="40" Width="300" Visibility="Collapsed"
+                     Minimum="0" Maximum="100" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Margin="61,253,292,268" Grid.Row="1" />
+        <TextBlock x:Name="ProgressText" Visibility="Collapsed" 
+                   Text="Загрузка..." VerticalAlignment="Center" HorizontalAlignment="Center" Margin="61,210,164,329" Grid.Row="1" FontSize="18" Width="428" FontFamily="/mdcheckerwpf;component/Fonts/#Inter" Grid.Column="1" />
+
 
         <Grid Grid.Row="2" Margin="0,5,0,0" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
@@ -146,22 +152,8 @@
                         HorizontalAlignment="Left"
                         Margin="10,-19,0,0"
                         Grid.Column="0" Grid.ColumnSpan="2">
-                <Button Content="Загрузить" Style="{StaticResource LoadButtonStyle}" Margin="7,9,0,9" Click="LoadDrawingsReportButton_Click">
-                    <Button.Background>
-                        <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">
-                            <GradientStop Color="#FF2D66CF" Offset="0.003"/>
-                            <GradientStop Color="#FF9BA7E4" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Button.Background>
-                </Button>
-                <Button Content="Сохранить" Style="{StaticResource SaveButtonStyle}" Margin="10,0,0,0" Click="SaveDrawingsReportButton_Click">
-                    <Button.Background>
-                        <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">
-                            <GradientStop Color="#FF2D66CF" Offset="0.003"/>
-                            <GradientStop Color="#FF9BA7E4" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Button.Background>
-                </Button>
+                <Button Content="Загрузить" Style="{StaticResource LoadButtonStyle}" Margin="7,9,0,9" Click="LoadDrawingsReportButton_Click" Background="#FF5075F1"/>
+                <Button Content="Сохранить" Style="{StaticResource SaveButtonStyle}" Margin="10,0,0,0" Click="SaveDrawingsReportButton_Click" Background="#FF5075F1"/>
                 <Button Content="Новая проверка" Style="{StaticResource NewCheckButtonStyle}" Margin="327,0,0,0" Click="Button_Click">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">

@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using Tekla.Structures.Drawing;
 using Tekla.Structures.Model;
 using tsm = Tekla.Structures.Model;
+using System.Threading.Tasks;
 
 namespace mdcheckerwpf.MVVM.View
 {
@@ -43,7 +44,7 @@ namespace mdcheckerwpf.MVVM.View
         protected virtual void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
             DataItems.Clear();
 
@@ -56,6 +57,14 @@ namespace mdcheckerwpf.MVVM.View
             ModelName = model.GetInfo().ModelName.Substring(0, model.GetInfo().ModelName.Length - 4);
 
             var selectedDrawings = drawingHandler.GetDrawingSelector().GetSelected();
+            int totalDrawings = selectedDrawings.GetSize();
+            int currentDrawing = 0;
+
+            // Показываем прогресс-бар и текст
+            ProgressBar.Visibility = Visibility.Visible;
+            ProgressBar.Value = 0;
+            ProgressText.Visibility = Visibility.Visible;
+            ProgressText.Text = "Проверка чертежей...";
 
             foreach (Drawing drawing in selectedDrawings)
             {
@@ -65,7 +74,19 @@ namespace mdcheckerwpf.MVVM.View
                 CheckPrecision(drawing, drawingMark, drawingName);
                 CheckReflectedView(drawing, drawingMark, drawingName);
                 CheckDrawnByCheckBy(drawing, drawingMark, drawingName);
+
+                // Обновляем прогресс
+                currentDrawing++;
+                ProgressBar.Value = (double)currentDrawing / totalDrawings * 100;
+                ProgressText.Text = $"Проверено {currentDrawing} из {totalDrawings} чертежей";
+
+                // Даем время UI обновиться
+                await System.Threading.Tasks.Task.Delay(10);
             }
+
+            ProgressText.Text = "Проверка завершена!";
+            ProgressBar.Visibility = Visibility.Collapsed;
+            ProgressText.Visibility = Visibility.Collapsed;
         }
 
         private void CheckPrecision(Drawing drawing, string drawingMark, string drawingName)

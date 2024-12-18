@@ -10,7 +10,7 @@
                    Text="Preview" 
                    VerticalAlignment="Top" 
                    Width="376" FontSize="72" 
-                   Foreground="#FF213280" 
+                   Foreground="#FF2B51D1" 
                    FontFamily="/mdcheckerwpf;component/Fonts/#Inter" 
                    LineHeight="14"/>
         <TextBlock HorizontalAlignment="Left" 

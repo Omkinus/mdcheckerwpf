@@ -94,7 +94,7 @@
                TextAlignment="Center"
                Margin="-220,0,0,0"
                Grid.Row="0" Grid.Column="1"/>
-       
+
         <DataGrid HorizontalAlignment="Center"
                   VerticalAlignment="Center"
                   Width="842" 
@@ -126,12 +126,9 @@
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
+
                 </DataGridTextColumn>
-
-
-
             </DataGrid.Columns>
-
         </DataGrid>
 
         <Grid Grid.Row="1" Margin="0,551,0,-7" Grid.ColumnSpan="2" Grid.RowSpan="2">
@@ -145,30 +142,9 @@
                         HorizontalAlignment="Left"
                         Margin="10,-11,0,1"
                         Grid.Column="0" Grid.ColumnSpan="3">
-                <Button Content="Загрузить" Style="{StaticResource LoadButtonStyle}" Margin="7,9,0,9" Click="LoadModelReportButton_Click">
-                    <Button.Background>
-                        <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">
-                            <GradientStop Color="#FF2D66CF" Offset="0.003"/>
-                            <GradientStop Color="#FF9BA7E4" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Button.Background>
-                </Button>
-                <Button x:Name="SaveModelReportButton" Content="Сохранить" Style="{StaticResource SaveButtonStyle}" Margin="10,0,0,0" Click="SaveModelReportButton_Click">
-                    <Button.Background>
-                        <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">
-                            <GradientStop Color="#FF2D66CF" Offset="0.003"/>
-                            <GradientStop Color="#FF9BA7E4" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Button.Background>
-                </Button>
-                <Button Content="Clash check" Style="{StaticResource ClashCheckButtonStyle}" Margin="10,0,0,0">
-                    <Button.Background>
-                        <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">
-                            <GradientStop Color="#FF2D66CF" Offset="0.003"/>
-                            <GradientStop Color="#FF9BA7E4" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Button.Background>
-                </Button>
+                <Button Content="Загрузить" Style="{StaticResource LoadButtonStyle}" Margin="7,9,0,9" Click="LoadModelReportButton_Click" Background="#FF5075F1"/>
+                <Button x:Name="SaveModelReportButton" Content="Сохранить" Style="{StaticResource SaveButtonStyle}" Margin="10,0,0,0" Click="SaveModelReportButton_Click" Background="#FF5075F1"/>
+                <Button Content="Clash check" Style="{StaticResource ClashCheckButtonStyle}" Margin="10,0,0,0" Background="#FF5075F1"/>
             </StackPanel>
 
             <Button Content="Новая проверка" Style="{StaticResource NewCheckButtonStyle}"
@@ -183,6 +159,7 @@
                 </Button.Background>
             </Button>
         </Grid>
+
         <TextBlock Text="Имя модели:"
             Foreground="#FF2B3460"
             HorizontalAlignment="Center"
@@ -192,7 +169,7 @@
             TextAlignment="Center"
             Margin="16,38,90,0"
             Grid.Row="0"/>
-        
+
         <TextBlock Text="{Binding ModelName}"
            Foreground="#FF2B3460"
            HorizontalAlignment="Left"
@@ -202,7 +179,13 @@
            TextAlignment="Center"
            Margin="136,38,623,0"
            Grid.Row="0" Grid.ColumnSpan="2"/>
+
+        <!-- Прогресс-бар -->
+        <ProgressBar x:Name="ProgressBar" Height="40" Width="300" Visibility="Collapsed"
+                     Minimum="0" Maximum="100" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Margin="61,253,292,268" Grid.Row="1" />
+        <TextBlock x:Name="StatusMessage" Visibility="Collapsed" 
+                   Text="Загрузка..." VerticalAlignment="Center" HorizontalAlignment="Center" Margin="171,219,398,318" Grid.Column="1" Grid.Row="1" FontSize="18" Width="84" FontFamily="/mdcheckerwpf;component/Fonts/#Inter" />
+
+        
     </Grid>
-    
-    
 </UserControl>

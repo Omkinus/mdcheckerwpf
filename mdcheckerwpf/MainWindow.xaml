@@ -22,13 +22,7 @@
                 <DropShadowEffect ShadowDepth="0" BlurRadius="5" Color="#80000000"/>
             </Border.Effect>
 
-            <Border CornerRadius="1">
-                <Border.Background>
-                    <LinearGradientBrush EndPoint="0,0" MappingMode="RelativeToBoundingBox" StartPoint="1,1">
-                        <GradientStop Color="#FFE6ECFF"/>
-                        <GradientStop Color="White" Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>
+            <Border CornerRadius="1" Background="White">
 
 
                 <Grid>
@@ -78,7 +72,7 @@
 
                         <StackPanel VerticalAlignment="Bottom" Margin="-25,450,0,10">
                             <RadioButton Content="Settings" Checked="RadioButton_Checked" Foreground="Black" Style="{StaticResource MenuButtonTheme}"  Margin="0,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="SettingsPage" HorizontalContentAlignment="Left"/>
-                            <RadioButton Content="About" Checked="RadioButton_Checked" Foreground="Black" Style="{StaticResource MenuButtonTheme}"  Margin="0,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="HelpPage" HorizontalContentAlignment="Left"/>
+                            <RadioButton Content="About" Checked="RadioButton_Checked" Style="{StaticResource MenuButtonTheme}"  Margin="0,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="HelpPage" HorizontalContentAlignment="Left" Foreground="Black"/>
                         </StackPanel>
                     </StackPanel>
 
@@ -127,7 +121,11 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
+
+
                 </Grid>
+
+
             </Border>
         </Border>
     </Grid>
