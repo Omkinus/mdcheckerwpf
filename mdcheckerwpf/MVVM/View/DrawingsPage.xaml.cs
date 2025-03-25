@@ -4,13 +4,13 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Tekla.Structures.Drawing;
 using Tekla.Structures.Model;
 using tsm = Tekla.Structures.Model;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace mdcheckerwpf.MVVM.View
 {
@@ -54,13 +54,12 @@ namespace mdcheckerwpf.MVVM.View
             if (!model.GetConnectionStatus() || !drawingHandler.GetConnectionStatus())
                 return;
 
-            ModelName = model.GetInfo().ModelName.Substring(0, model.GetInfo().ModelName.Length - 4);
+            ModelName = model.GetInfo().ModelName.TrimEnd(".db1".ToCharArray());
 
             var selectedDrawings = drawingHandler.GetDrawingSelector().GetSelected();
             int totalDrawings = selectedDrawings.GetSize();
             int currentDrawing = 0;
 
-            // Показываем прогресс-бар и текст
             ProgressBar.Visibility = Visibility.Visible;
             ProgressBar.Value = 0;
             ProgressText.Visibility = Visibility.Visible;
@@ -75,12 +74,10 @@ namespace mdcheckerwpf.MVVM.View
                 CheckReflectedView(drawing, drawingMark, drawingName);
                 CheckDrawnByCheckBy(drawing, drawingMark, drawingName);
 
-                // Обновляем прогресс
                 currentDrawing++;
                 ProgressBar.Value = (double)currentDrawing / totalDrawings * 100;
                 ProgressText.Text = $"Проверено {currentDrawing} из {totalDrawings} чертежей";
 
-                // Даем время UI обновиться
                 await System.Threading.Tasks.Task.Delay(10);
             }
 
@@ -93,34 +90,23 @@ namespace mdcheckerwpf.MVVM.View
         {
             if (drawing == null) return;
 
-            string errorMessage = string.Empty;
-
             foreach (Tekla.Structures.Drawing.ViewBase view in drawing.GetSheet().GetAllViews())
             {
                 foreach (var obj in view.GetAllObjects())
                 {
-                    if (obj is StraightDimensionSet dimensionSet)
+                    if (obj is StraightDimensionSet dimensionSet &&
+                        dimensionSet.Attributes.Format.Precision != DimensionSetBaseAttributes.DimensionValuePrecisions.OnePerSixteen)
                     {
-                        if (dimensionSet.Attributes.Format.Precision != DimensionSetBaseAttributes.DimensionValuePrecisions.OnePerSixteen)
-                        {
-                            errorMessage = "Присутствует размер округленный не на 1/16";
-                            break;
-                        }
+                        AddDrawingError(drawingMark, drawingName, "Присутствует размер округленный не на 1/16");
+                        return;
                     }
-                    else if (obj is AngleDimension angleDimension)
-                    {
-                        if (angleDimension.Attributes.Format.Precision != AngleDimensionAttributes.DimensionValuePrecisions.OnePerHundred)
-                        {
-                            errorMessage = "Присутствует угловой размер округленный не на 1/100";
-                            break;
-                        }
-                    }
-                }
 
-                if (!string.IsNullOrEmpty(errorMessage))
-                {
-                    AddDrawingError(drawingMark, drawingName, errorMessage);
-                    break;
+                    if (obj is AngleDimension angleDimension &&
+                        angleDimension.Attributes.Format.Precision != AngleDimensionAttributes.DimensionValuePrecisions.OnePerHundred)
+                    {
+                        AddDrawingError(drawingMark, drawingName, "Присутствует угловой размер округленный не на 1/100");
+                        return;
+                    }
                 }
             }
         }
@@ -129,67 +115,42 @@ namespace mdcheckerwpf.MVVM.View
         {
             if (drawing == null) return;
 
-            string reflectedViewNames = string.Empty;
-
             foreach (Tekla.Structures.Drawing.View view in drawing.GetSheet().GetAllViews())
             {
                 if (view.Attributes.ReflectedView)
                 {
                     string viewName = string.IsNullOrWhiteSpace(view.Name) ? "Главный вид" : view.Name;
-                    reflectedViewNames += $"{viewName} ";
+                    AddDrawingError(drawingMark, drawingName, $"Присутствует вид с включенным Reflected View: {viewName}");
                 }
-            }
-
-            if (!string.IsNullOrEmpty(reflectedViewNames))
-            {
-                AddDrawingError(drawingMark, drawingName, $"Присутствует вид с включенным Reflected View: {reflectedViewNames.Trim()}");
             }
         }
 
         private void CheckDrawnByCheckBy(Drawing drawing, string drawingMark, string drawingName)
         {
-            string drawnby = string.Empty;
-            string checkby = string.Empty;
-            string projectdrawnby = string.Empty;
-            string projectcheckby = string.Empty;
+            string drawnBy = string.Empty;
+            string checkedBy = string.Empty;
 
-            drawing.GetUserProperty("DR_DRAWN_BY", ref drawnby);
-            drawing.GetUserProperty("DR_CHECKED_BY", ref checkby);
+            drawing.GetUserProperty("DR_DRAWN_BY", ref drawnBy);
+            drawing.GetUserProperty("DR_CHECKED_BY", ref checkedBy);
 
-            var model = new tsm.Model();
-            ProjectInfo projectInfo = model.GetProjectInfo();
-
-            projectInfo.GetUserProperty("FF_DR_BY", ref projectdrawnby);
-            projectInfo.GetUserProperty("FF_CH_BY", ref projectcheckby);
-
-            // Проверка, если поле в проекте не заполнено, проверяем соответствующее поле на чертеже
-            if (string.IsNullOrEmpty(projectdrawnby) && string.IsNullOrEmpty(drawnby))
-            {
+            if (string.IsNullOrEmpty(drawnBy))
                 AddDrawingError(drawingMark, drawingName, "На чертеже не заполнено поле DrawnBy");
-            }
 
-            if (string.IsNullOrEmpty(projectcheckby) && string.IsNullOrEmpty(checkby))
-            {
+            if (string.IsNullOrEmpty(checkedBy))
                 AddDrawingError(drawingMark, drawingName, "На чертеже не заполнено поле CheckBy");
-            }
         }
 
-
-
-        private void AddDrawingError(string drawingMark, string drawingName, string errorMessage) =>
+        private void AddDrawingError(string drawingMark, string drawingName, string errorMessage)
+        {
             DataItems.Add(new DrawingData
             {
                 DrawingMark = drawingMark,
                 DrawingName = drawingName,
                 Details = errorMessage
             });
-
-        private void SaveDrawingsReportButton_Click(object sender, RoutedEventArgs e)
-        {
-            SaveToExcelFile();
         }
 
-        private void SaveToExcelFile()
+        private void SaveDrawingsReportButton_Click(object sender, RoutedEventArgs e)
         {
             var saveFileDialog = new SaveFileDialog
             {
@@ -200,18 +161,13 @@ namespace mdcheckerwpf.MVVM.View
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                string filePath = saveFileDialog.FileName;
-
                 using (var workbook = new XLWorkbook())
                 {
                     var worksheet = workbook.Worksheets.Add("Отчет");
-
-                    // Заголовки столбцов
                     worksheet.Cell(1, 1).Value = "Марка";
                     worksheet.Cell(1, 2).Value = "Имя";
                     worksheet.Cell(1, 3).Value = "Подробности";
 
-                    // Заполнение данных из DataItems
                     int row = 2;
                     foreach (var item in DataItems)
                     {
@@ -221,22 +177,15 @@ namespace mdcheckerwpf.MVVM.View
                         row++;
                     }
 
-                    // Установка ширины колонок по содержимому
                     worksheet.Columns().AdjustToContents();
-
-                    // Сохранение файла
-                    workbook.SaveAs(filePath);
-                    MessageBox.Show("Данные успешно сохранены в Excel", "Сохранение", MessageBoxButton.OK, MessageBoxImage.Information);
+                    workbook.SaveAs(saveFileDialog.FileName);
                 }
+
+                MessageBox.Show("Данные успешно сохранены в Excel", "Сохранение", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
         private void LoadDrawingsReportButton_Click(object sender, RoutedEventArgs e)
-        {
-            LoadFromExcelFile();
-        }
-
-        private void LoadFromExcelFile()
         {
             var openFileDialog = new OpenFileDialog
             {
@@ -246,28 +195,22 @@ namespace mdcheckerwpf.MVVM.View
 
             if (openFileDialog.ShowDialog() == true)
             {
-                string filePath = openFileDialog.FileName;
                 try
                 {
-                    using (var workbook = new XLWorkbook(filePath))
+                    using (var workbook = new XLWorkbook(openFileDialog.FileName))
                     {
-                        var worksheet = workbook.Worksheets.Worksheet(1); // Открываем первый лист
-
-                        // Читаем данные из Excel
-                        var rows = worksheet.RowsUsed();
+                        var worksheet = workbook.Worksheets.Worksheet(1);
                         DataItems.Clear();
 
-                        foreach (var row in rows.Skip(1)) // Пропускаем заголовок
+                        foreach (var row in worksheet.RowsUsed().Skip(1))
                         {
-                            var drawingData = new DrawingData
+                            DataItems.Add(new DrawingData
                             {
                                 DrawingMark = row.Cell(1).GetString(),
                                 DrawingName = row.Cell(2).GetString(),
                                 Details = row.Cell(3).GetString()
-                            };
-                            DataItems.Add(drawingData);
+                            });
                         }
-
                     }
 
                     MessageBox.Show("Данные успешно загружены", "Загрузка", MessageBoxButton.OK, MessageBoxImage.Information);

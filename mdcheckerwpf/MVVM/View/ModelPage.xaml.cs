@@ -13,6 +13,9 @@ using Part = Tekla.Structures.Model.Part;
 using tsm = Tekla.Structures.Model;
 using System.Threading.Tasks;
 using Task = System.Threading.Tasks.Task;
+using Tekla.Structures;
+using System.Linq;
+using static mdcheckerwpf.MVVM.View.ModelPage;
 
 namespace mdcheckerwpf.MVVM.View
 {
@@ -113,15 +116,17 @@ namespace mdcheckerwpf.MVVM.View
                     {
                         string objectName = part.Name;
                         string objectNumber = part.GetPartMark();
+                        string guid = part.Identifier.GUID.ToString();
 
-                        CheckPartLength(part, objectName, objectNumber, userFields);
-                        CheckMaterialPart(part, objectName, objectNumber, userFields);
-                        CheckDrawingsForPart(part, objectName, objectNumber, allDrawings);
+                        CheckPartLength(part, objectName, objectNumber, userFields,guid);
+                        CheckMaterialPart(part, objectName, objectNumber, userFields,guid);
+                        CheckDrawingsForPart(part, objectName, objectNumber, allDrawings,guid);
                     }
                     else if (item is BoltGroup bolt)
                     {
-                        CheckBoltsLength(bolt);
-                        CheckScrewsWithScrewsAndWashers(bolt);
+                        string guid = bolt.Identifier.GUID.ToString();
+                        CheckBoltsLength(bolt,guid);
+                        CheckScrewsWithScrewsAndWashers(bolt,guid);
                     }
 
                     processedObjects++;
@@ -150,9 +155,7 @@ namespace mdcheckerwpf.MVVM.View
             }
         }
 
-
-
-        private void CheckDrawingsForPart(Part part, string objectName, string objectNumber, List<Drawing> allDrawings)
+        private void CheckDrawingsForPart(Part part, string objectName, string objectNumber, List<Drawing> allDrawings,string guid)
         {
             bool singlePartDrawingFound = false;
             bool assemblyDrawingFound = false;
@@ -179,16 +182,16 @@ namespace mdcheckerwpf.MVVM.View
 
             if (!singlePartDrawingFound)
             {
-                AddModelError(objectName, objectNumber, "Отсутствует Single Part чертёж");
+                AddModelError(objectName, objectNumber, "Отсутствует Single Part чертёж",guid,"Отсутствует чертеж Single Part" );
             }
 
             if (isMainPart && !assemblyDrawingFound)
             {
-                AddModelError(objectName, objectNumber, "Отсутствует Assembly чертёж");
+                AddModelError(objectName, objectNumber, "Отсутствует Assembly чертёж",guid, "Отсутствует чертеж Assembly");
             }
         }
 
-         private void CheckMaterialPart(Part part, string objectName, string objectNumber, Dictionary<string, double> userFields)
+         private void CheckMaterialPart(Part part, string objectName, string objectNumber, Dictionary<string, double> userFields,string guid)
         {
             string profileType = string.Empty;
             part.GetReportProperty("PROFILE_TYPE", ref profileType);
@@ -213,11 +216,11 @@ namespace mdcheckerwpf.MVVM.View
 
             if (!isMaterialCorrect)
             {
-                AddModelError(objectName, objectNumber, $"Неверный материал: должно быть '{expectedMaterial}', а сейчас '{material}'");
+                AddModelError(objectName, objectNumber, $"Неверный материал: должно быть '{expectedMaterial}', а сейчас '{material}'",guid,"Неправильный материал");
             }
         }
 
-        private void CheckPartLength(Part part, string objectName, string objectNumber, Dictionary<string, double> userFields)
+        private void CheckPartLength(Part part, string objectName, string objectNumber, Dictionary<string, double> userFields,string guid)
         {
             string profileType = part.Profile.ProfileString;
             double partLength = double.NaN;
@@ -241,11 +244,11 @@ namespace mdcheckerwpf.MVVM.View
              .ToFractionalInchesString()
              .ToString();
 
-                AddModelError(objectName, objectNumber, $"Превышена длина: {partLengthstring} (макс: {partmaxLengthstring})");
+                AddModelError(objectName, objectNumber, $"Превышена длина: {partLengthstring} (макс: {partmaxLengthstring})",guid,"Неправильная длина детали");
             }
         }
 
-        private void CheckBoltsLength(BoltGroup bolt)
+        private void CheckBoltsLength(BoltGroup bolt,string guid)
         {
             var model = new tsm.Model();
             var projectInfo = model.GetProjectInfo();
@@ -267,11 +270,11 @@ namespace mdcheckerwpf.MVVM.View
                 string boltSizeString = ConvertToFeetAndInchesString(bolt.BoltSize);
 
                 AddModelError(bolt.BoltStandard, boltSizeString,
-                    $"Длина болта меньше ожидаемой: {boltLengthString} (по полю MINIMALBOLTLENGTH надо: {expectedBoltLengthString}).");
+                    $"Длина болта меньше ожидаемой: {boltLengthString} (по полю MINIMALBOLTLENGTH надо: {expectedBoltLengthString}).",guid,"Неправильная длина болта");
             }
         }
 
-        private void CheckScrewsWithScrewsAndWashers(BoltGroup bolt)
+        private void CheckScrewsWithScrewsAndWashers(BoltGroup bolt,string guid)
         {
             // Проверяем наличие гайки или шайбы для SCREW
             if (bolt.BoltStandard.Contains("SCREW") &&
@@ -279,9 +282,11 @@ namespace mdcheckerwpf.MVVM.View
             {
                 string boltSizeString = ConvertToFeetAndInchesString(bolt.BoltSize);
 
-                AddModelError(bolt.BoltStandard, boltSizeString, "Тип болта - Screw, но в нем есть гайка/шайба");
+                AddModelError(bolt.BoltStandard, boltSizeString, "Тип болта - Screw, но в нем есть гайка/шайба",guid,"Неправильный комплект болта");
             }
         }
+
+
 
         // Вспомогательные функции для конвертации
         private string ConvertToInchesString(double value)
@@ -301,7 +306,7 @@ namespace mdcheckerwpf.MVVM.View
 
 
 
-        private void AddModelError(string objectName, string objectNumber, string errorMessage)
+        private void AddModelError(string objectName, string objectNumber, string errorMessage,string guid, string errortype)
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -310,7 +315,8 @@ namespace mdcheckerwpf.MVVM.View
                     ObjectNumber = objectNumber,
                     ObjectName = objectName,
                     Description = errorMessage,
-                    Guid = Guid.NewGuid().ToString() // Генерация нового GUID
+                    Guid = guid,
+                    Errortype = errortype
                 });
             });
         }
@@ -321,6 +327,7 @@ namespace mdcheckerwpf.MVVM.View
             public string ObjectName { get; set; }
             public string Description { get; set; }
             public string Guid { get; set; }
+            public string Errortype { get; set; }
         }
 
         private void SaveModelReportButton_Click(object sender, RoutedEventArgs e)
@@ -427,6 +434,55 @@ namespace mdcheckerwpf.MVVM.View
                 }
             }
         }
+
+        private void Button_SelectModel_Click(object sender, RoutedEventArgs e)
+        {
+            // Проверяем, есть ли выбранные строки в DataGrid
+            var selectedItems = ModelDataGrid.SelectedItems;
+            if (selectedItems == null || selectedItems.Count == 0)
+            {
+                MessageBox.Show("Выберите строки в таблице, чтобы выделить объекты в модели.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Проверяем подключение к модели Tekla
+            var model = new tsm.Model();
+            if (!model.GetConnectionStatus())
+            {
+                MessageBox.Show("Не удалось подключиться к модели Tekla.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            var selector = new Tekla.Structures.Model.UI.ModelObjectSelector();
+
+            // Список объектов для выделения
+            var selectedModelObjects = new System.Collections.ArrayList();
+
+            // Проходим по выбранным строкам в таблице
+            foreach (var selectedItem in selectedItems)
+            {
+                if (selectedItem is ModelData modelData && !string.IsNullOrEmpty(modelData.Guid) && Guid.TryParse(modelData.Guid, out Guid objectGuid))
+                {
+                    var modelObject = model.SelectModelObject(new Identifier(objectGuid));
+                    if (modelObject != null)
+                    {
+                        selectedModelObjects.Add(modelObject);
+                    }
+                }
+            }
+
+            // Если найдены объекты, выделяем их в модели Tekla
+            if (selectedModelObjects.Count > 0)
+            {
+                selector.Select(selectedModelObjects);
+                
+            }
+            else
+            {
+                MessageBox.Show("Не удалось найти соответствующие объекты в модели Tekla.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
 
     }
 }

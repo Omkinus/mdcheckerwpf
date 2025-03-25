@@ -51,7 +51,7 @@
                             <Border.Background>
                                 <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                                     <GradientStop Color="#FF3F7BE4" Offset="0"/>
-                                    <GradientStop Color="#FF2B3460" Offset="1"/>
+                                    <GradientStop Color="#FF3F7BE4" Offset="1"/>
                                 </LinearGradientBrush>
                             </Border.Background>
                             <Grid>
@@ -67,12 +67,12 @@
                         </Border>
 
 
-                        <RadioButton Content="Model" Foreground="Black" Checked="RadioButton_Checked" Style="{StaticResource MenuButtonTheme}"  Margin="-25,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="ModelPage" HorizontalContentAlignment="Left"/>
-                        <RadioButton Content="Drawings" Checked="RadioButton_Checked" Foreground="Black" Style="{StaticResource MenuButtonTheme}" Margin="-25,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="DrawingsPage" HorizontalContentAlignment="Left"/>
+                        <RadioButton Content="Модель" Foreground="Black" Checked="RadioButton_Checked" Style="{StaticResource MenuButtonTheme}"  Margin="-30,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="ModelPage" HorizontalContentAlignment="Left" FontFamily="ScriptC"/>
+                        <RadioButton Content="Чертежи" Checked="RadioButton_Checked" Foreground="Black" Style="{StaticResource MenuButtonTheme}" Margin="-30,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="DrawingsPage" HorizontalContentAlignment="Left"/>
 
-                        <StackPanel VerticalAlignment="Bottom" Margin="-25,450,0,10">
-                            <RadioButton Content="Settings" Checked="RadioButton_Checked" Foreground="Black" Style="{StaticResource MenuButtonTheme}"  Margin="0,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="SettingsPage" HorizontalContentAlignment="Left"/>
-                            <RadioButton Content="About" Checked="RadioButton_Checked" Style="{StaticResource MenuButtonTheme}"  Margin="0,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="HelpPage" HorizontalContentAlignment="Left" Foreground="Black"/>
+                        <StackPanel VerticalAlignment="Bottom" Margin="-30,450,0,10">
+                            <RadioButton Content="Настройки" Checked="RadioButton_Checked" Foreground="Black" Style="{StaticResource MenuButtonTheme}"  Margin="0,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="SettingsPage" HorizontalContentAlignment="Left"/>
+                            <RadioButton Content="Помощь" Checked="RadioButton_Checked" Style="{StaticResource MenuButtonTheme}"  Margin="0,0,0,0" Cursor="Hand" GroupName="MenuButtons" Tag="HelpPage" HorizontalContentAlignment="Left" Foreground="Black"/>
                         </StackPanel>
                     </StackPanel>
 
@@ -111,7 +111,7 @@
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="CloseBorder" Property="Background" Value="#FF8F0101"/>
+                                        <Setter TargetName="CloseBorder" Property="Background" Value="#FFE81616"/>
                                         <Setter TargetName="CloseImage" Property="Opacity" Value="0.8"/>
                                     </Trigger>
                                     <Trigger Property="IsPressed" Value="True">

@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using mdcheckerwpf.MVVM.View;
 
 
@@ -11,7 +13,21 @@ namespace mdcheckerwpf
         {
             InitializeComponent();
             SetInitialPage();
-            this.MouseDown += delegate { DragMove(); };
+
+            this.MouseDown += (sender, e) =>
+            {
+                if (e.ChangedButton == MouseButton.Left) // Проверяем, что нажата левая кнопка мыши
+                {
+                    try
+                    {
+                        DragMove();
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // Игнорируем ошибку, если DragMove вызывается некорректно
+                    }
+                }
+            };
         }
 
         private void SetInitialPage()

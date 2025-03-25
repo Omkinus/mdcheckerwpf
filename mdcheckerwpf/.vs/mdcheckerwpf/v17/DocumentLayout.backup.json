@@ -1,0 +1,52 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\User\\_teklaplugins\\mdcheckerwpf\\mdcheckerwpf\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|c:\\users\\user\\_teklaplugins\\mdcheckerwpf\\mdcheckerwpf\\mvvm\\view\\modelpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|solutionrelative:mvvm\\view\\modelpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|c:\\users\\user\\_teklaplugins\\mdcheckerwpf\\mdcheckerwpf\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ModelPage.xaml",
+              "DocumentMoniker": "C:\\Users\\User\\_teklaplugins\\mdcheckerwpf\\mdcheckerwpf\\MVVM\\View\\ModelPage.xaml",
+              "RelativeDocumentMoniker": "MVVM\\View\\ModelPage.xaml",
+              "ToolTip": "C:\\Users\\User\\_teklaplugins\\mdcheckerwpf\\mdcheckerwpf\\MVVM\\View\\ModelPage.xaml*",
+              "RelativeToolTip": "MVVM\\View\\ModelPage.xaml*",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-03-11T07:46:29.378Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\User\\_teklaplugins\\mdcheckerwpf\\mdcheckerwpf\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "MainWindow.xaml",
+              "ToolTip": "C:\\Users\\User\\_teklaplugins\\mdcheckerwpf\\mdcheckerwpf\\MainWindow.xaml",
+              "RelativeToolTip": "MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-03-11T07:45:59.697Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

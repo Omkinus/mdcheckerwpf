@@ -86,7 +86,7 @@
             <RowDefinition Height="54"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Drawings Check"
+        <TextBlock Text="Проверка чертежей"
                    Foreground="#FF2B3460"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Top"

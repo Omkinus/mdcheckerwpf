@@ -78,13 +78,13 @@
                     <StackPanel Orientation="Horizontal" Margin="0,5">
                         <CheckBox Margin="30,0,20,0" Style="{StaticResource CheckboxStyle}" 
                                  IsChecked="{Binding IsSetting2Enabled, Mode=TwoWay}" />
-                        <TextBlock Text="Настройка 2" FontSize="16" FontFamily="Roboto" VerticalAlignment="Center" FontWeight="DemiBold"/>
+                        <TextBlock Text="Сделать стартовой страницу проверки модели" FontSize="16" FontFamily="Roboto" VerticalAlignment="Center" FontWeight="DemiBold"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0,5">
                         <CheckBox Margin="30,0,20,0" Style="{StaticResource CheckboxStyle}" 
                                   IsChecked="{Binding IsSetting3Enabled, Mode=TwoWay}" />
-                        <TextBlock Text="Настройка 3" FontSize="16" FontFamily="Roboto" VerticalAlignment="Center" FontWeight="DemiBold"/>
+                        <TextBlock Text="Сделать стартовой страницу проверки чертежей" FontSize="16" FontFamily="Roboto" VerticalAlignment="Center" FontWeight="DemiBold"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0,5">
