@@ -16,6 +16,9 @@ using Task = System.Threading.Tasks.Task;
 using Tekla.Structures;
 using System.Linq;
 using static mdcheckerwpf.MVVM.View.ModelPage;
+using DocumentFormat.OpenXml.EMMA;
+using System.Text.RegularExpressions;
+
 
 namespace mdcheckerwpf.MVVM.View
 {
@@ -69,28 +72,53 @@ namespace mdcheckerwpf.MVVM.View
                 var projectInfo = model.GetProjectInfo();
 
                 // Кешируем пользовательские поля
-                var userFields = new Dictionary<string, double>();
-                string[] fieldNames = {
-            "PROJECT_USERFIELD_1", "PROJECT_USERFIELD_2", "PROJECT_USERFIELD_3", "PROJECT_USERFIELD_4",
-            "PROJECT_USERFIELD_5", "PROJECT_USERFIELD_6", "PROJECT_USERFIELD_7", "PROJECT_USERFIELD_8",
-            "ANGLES_LENGTH", "PLATES_LENGTH", "BENTPLATES_LENGTH", "ESDBOLTLENGTH"
-        };
+                var numericFields = new Dictionary<string, double>();
+                var stringFields = new Dictionary<string, string>();
 
-                foreach (var fieldName in fieldNames)
+                // Числовые поля (длины)
+                string[] numericFieldNames = {
+                    "ANGLES_LENGTH",
+                    "PLATES_LENGTH",
+                    "BENTPLATES_LENGTH",
+                    "ESDBOLTLENGTH"
+                };
+
+                                // Строковые поля (пользовательские)
+                                string[] stringFieldNames = {
+                    "PROJECT_USERFIELD_1", "PROJECT_USERFIELD_2", "PROJECT_USERFIELD_3", "PROJECT_USERFIELD_4",
+                    "PROJECT_USERFIELD_5", "PROJECT_USERFIELD_6", "PROJECT_USERFIELD_7", "PROJECT_USERFIELD_8"
+                };
+
+                // Обработка числовых полей
+                foreach (var fieldName in numericFieldNames)
                 {
                     double fieldValue = double.NaN;
-                    if (projectInfo.GetUserProperty(fieldName, ref fieldValue) && !double.IsNaN(fieldValue))
+                    if (projectInfo.GetUserProperty(fieldName, ref fieldValue))
                     {
-                        userFields[fieldName] = fieldValue;
+                        numericFields[fieldName] = fieldValue;
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Поле {fieldName} в Project properties не заполнено или имеет неверный формат.", "Ошибка");
+                        return;
+                    }
+                    UpdateProgressBar(10);
+                }
+
+                // Обработка строковых полей
+                foreach (var fieldName in stringFieldNames)
+                {
+                    string fieldValue = string.Empty;
+                    if (projectInfo.GetUserProperty(fieldName, ref fieldValue))
+                    {
+                        stringFields[fieldName] = fieldValue;
                     }
                     else
                     {
                         MessageBox.Show($"Поле {fieldName} в Project properties не заполнено.", "Ошибка");
                         return;
                     }
-
-                    // Обновление прогресса после каждой итерации
-                    UpdateProgressBar(10); // Например, увеличиваем на 10 за каждое поле
+                    UpdateProgressBar(10);
                 }
 
                 // Загружаем список чертежей один раз
@@ -118,8 +146,8 @@ namespace mdcheckerwpf.MVVM.View
                         string objectNumber = part.GetPartMark();
                         string guid = part.Identifier.GUID.ToString();
 
-                        CheckPartLength(part, objectName, objectNumber, userFields,guid);
-                        CheckMaterialPart(part, objectName, objectNumber, userFields,guid);
+                        CheckPartLength(part, objectName, objectNumber, numericFields,guid);
+                        CheckMaterialPart(part, objectName, objectNumber, stringFields,guid);
                         CheckDrawingsForPart(part, objectName, objectNumber, allDrawings,guid);
                     }
                     else if (item is BoltGroup bolt)
@@ -160,18 +188,36 @@ namespace mdcheckerwpf.MVVM.View
             bool singlePartDrawingFound = false;
             bool assemblyDrawingFound = false;
 
-            string partMark = part.GetPartMark().Trim('[', ']');
+           
             bool isMainPart = part.GetAssembly().GetMainPart().Identifier.Equals(part.Identifier);
 
             foreach (var drawing in allDrawings)
             {
-                if (drawing is SinglePartDrawing singlePartDrawing && singlePartDrawing.Mark.Trim('[', ']') == partMark)
+                if (drawing is SinglePartDrawing)
                 {
-                    singlePartDrawingFound = true;
+                    SinglePartDrawing singlePartDrawing = drawing as SinglePartDrawing;
+                   
+                    if (Regex.Replace(singlePartDrawing.Mark.Trim(), @"[^a-zA-Z0-9]", "")
+                        .Equals(
+                            Regex.Replace(part.GetPartMark().ToString().Trim(), @"[^a-zA-Z0-9]", ""),
+                            StringComparison.OrdinalIgnoreCase
+                        ))
+                    {
+                        singlePartDrawingFound = true;
+                    }    
                 }
-                else if (isMainPart && drawing is AssemblyDrawing assemblyDrawing && assemblyDrawing.Mark.Trim('[', ']') == partMark)
+                else if (isMainPart && drawing is AssemblyDrawing)
                 {
-                    assemblyDrawingFound = true;
+                    AssemblyDrawing assemblyDrawing = drawing as AssemblyDrawing;
+
+                    if (Regex.Replace(assemblyDrawing.Mark.Trim(), @"[^a-zA-Z0-9]", "")
+                        .Equals(
+                            Regex.Replace(part.GetPartMark().ToString().Trim(), @"[^a-zA-Z0-9]", ""),
+                            StringComparison.OrdinalIgnoreCase
+                        ))
+                    {
+                        assemblyDrawingFound = true;
+                    }
                 }
 
                 if (singlePartDrawingFound && (assemblyDrawingFound || !isMainPart))
@@ -191,7 +237,7 @@ namespace mdcheckerwpf.MVVM.View
             }
         }
 
-         private void CheckMaterialPart(Part part, string objectName, string objectNumber, Dictionary<string, double> userFields,string guid)
+         private void CheckMaterialPart(Part part, string objectName, string objectNumber, Dictionary<string, string> userFields,string guid)
         {
             string profileType = string.Empty;
             part.GetReportProperty("PROFILE_TYPE", ref profileType);
@@ -203,6 +249,7 @@ namespace mdcheckerwpf.MVVM.View
             switch (profileType)
             {
                 case "I":
+                case "T":
                     expectedMaterial = userFields["PROJECT_USERFIELD_1"].ToString();
                     isMaterialCorrect = material == expectedMaterial;
                     break;
@@ -211,7 +258,23 @@ namespace mdcheckerwpf.MVVM.View
                     expectedMaterial = userFields["PROJECT_USERFIELD_2"].ToString();
                     isMaterialCorrect = material == expectedMaterial;
                     break;
-                    // Другие условия...
+                case "U":
+                    expectedMaterial = userFields["PROJECT_USERFIELD_3"].ToString();
+                    isMaterialCorrect = material == expectedMaterial;
+                    break;
+                case "B":
+                case "RU":
+                    expectedMaterial = userFields["PROJECT_USERFIELD_4"].ToString();
+                    isMaterialCorrect = material == expectedMaterial;
+                    break;
+                case "M":
+                    expectedMaterial = userFields["PROJECT_USERFIELD_5"].ToString();
+                    isMaterialCorrect = material == expectedMaterial;
+                    break;
+                case "RO":
+                    expectedMaterial = userFields["PROJECT_USERFIELD_6"].ToString();
+                    isMaterialCorrect = material == expectedMaterial;
+                    break;
             }
 
             if (!isMaterialCorrect)
@@ -232,7 +295,7 @@ namespace mdcheckerwpf.MVVM.View
                                double.NaN;
           
 
-            if (maxLength < partLength)
+            if (Math.Round(maxLength,1) < Math.Round(partLength,1))
             {
                 string partLengthstring = Tekla.Structures.Datatype.Distance
                .FromDecimalString(partLength.ToString())

@@ -3,19 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
         <TextBlock HorizontalAlignment="Left" 
-                   Height="83" 
-                   Margin="30,180,0,0" 
-                   Grid.Row="1" 
+                   Height="107" 
+                   Margin="22,402,0,0" 
                    TextWrapping="Wrap" 
                    Text="Preview" 
                    VerticalAlignment="Top" 
-                   Width="376" FontSize="72" 
-                   Foreground="#FF2B51D1" 
+                   Width="489" FontSize="100" 
+                   Foreground="#FF2A7C9C" 
                    FontFamily="/mdcheckerwpf;component/Fonts/#Inter" 
                    LineHeight="14"/>
         <TextBlock HorizontalAlignment="Left" 
-                   Margin="30,280,0,0" 
-                   Grid.Row="1" 
+                   Margin="27,523,0,0" 
                    TextWrapping="Wrap" 
                    VerticalAlignment="Top" 
                    
@@ -26,6 +24,6 @@
             <Run Text="Добро пожаловать в Preview — ваш помощник для удобной проверки моделей и чертежей созданных в Tekla Structures." FontFamily="Helvetica"/></TextBlock>
 
         <!-- Упростим Image для проверки -->
-        <Image HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="874" Height="688" Source="/mdcheckerwpf;component/Resources/background3.png"/>
+        <Image Height="688" Source="/mdcheckerwpf;component/Resources/background3.png" Margin="161,10,-32,0"/>
     </Grid>
 </UserControl>

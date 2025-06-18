@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/horizontal-shot-abstract-buildings-with-white-metallic-ribs-glass-windows." +
-    "jpg")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/crayon.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/drawingstabexample.png")]
 
 

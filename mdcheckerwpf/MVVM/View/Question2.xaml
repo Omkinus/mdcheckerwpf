@@ -18,8 +18,8 @@
 
         <StackPanel>
             <!-- Место под картинку -->
-           
-                <Image Source="C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\Images\selectdrawingsexample.png"
+
+            <Image Source="/mdcheckerwpf;component/Resources/selectdrawingsexample.png"
                         Width="450" Margin="0,50,0,20">
                     <Image.Effect>
                         <DropShadowEffect ShadowDepth="10" BlurRadius="10" Opacity="0.5" />

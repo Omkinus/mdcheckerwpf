@@ -11,6 +11,7 @@ using Tekla.Structures.Model;
 using tsm = Tekla.Structures.Model;
 using System.Threading.Tasks;
 using System.Linq;
+using DocumentFormat.OpenXml.EMMA;
 
 namespace mdcheckerwpf.MVVM.View
 {
@@ -50,6 +51,7 @@ namespace mdcheckerwpf.MVVM.View
 
             var model = new tsm.Model();
             var drawingHandler = new DrawingHandler();
+            ProjectInfo projectInfo = model.GetProjectInfo();
 
             if (!model.GetConnectionStatus() || !drawingHandler.GetConnectionStatus())
                 return;
@@ -72,7 +74,7 @@ namespace mdcheckerwpf.MVVM.View
 
                 CheckPrecision(drawing, drawingMark, drawingName);
                 CheckReflectedView(drawing, drawingMark, drawingName);
-                CheckDrawnByCheckBy(drawing, drawingMark, drawingName);
+                CheckDrawnByCheckBy(drawing, drawingMark, drawingName, projectInfo);
 
                 currentDrawing++;
                 ProgressBar.Value = (double)currentDrawing / totalDrawings * 100;
@@ -125,18 +127,24 @@ namespace mdcheckerwpf.MVVM.View
             }
         }
 
-        private void CheckDrawnByCheckBy(Drawing drawing, string drawingMark, string drawingName)
+        private void CheckDrawnByCheckBy(Drawing drawing, string drawingMark, string drawingName, ProjectInfo projectInfo)
         {
             string drawnBy = string.Empty;
             string checkedBy = string.Empty;
+            string projectDrawnby = string.Empty;
+            string projectCheckedby = string.Empty;
 
             drawing.GetUserProperty("DR_DRAWN_BY", ref drawnBy);
             drawing.GetUserProperty("DR_CHECKED_BY", ref checkedBy);
+            projectInfo.GetUserProperty("FF_DR_BY", ref projectDrawnby);
+            projectInfo.GetUserProperty("FF_CH_BY", ref projectCheckedby);
 
-            if (string.IsNullOrEmpty(drawnBy))
+
+
+            if (string.IsNullOrEmpty(projectDrawnby))
                 AddDrawingError(drawingMark, drawingName, "На чертеже не заполнено поле DrawnBy");
 
-            if (string.IsNullOrEmpty(checkedBy))
+            if (string.IsNullOrEmpty(projectCheckedby))
                 AddDrawingError(drawingMark, drawingName, "На чертеже не заполнено поле CheckBy");
         }
 

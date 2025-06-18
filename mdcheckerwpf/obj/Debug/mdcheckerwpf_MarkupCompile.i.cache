@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\obj\Debug\
+C:\Users\user\OmkinusApps\mdcheckerwpf\mdcheckerwpf\obj\Debug\
 mdcheckerwpf
 none
 false
 DEBUG;TRACE
-C:\Users\User\_teklaplugins\mdcheckerwpf\mdcheckerwpf\App.xaml
-131572830266
+C:\Users\user\OmkinusApps\mdcheckerwpf\mdcheckerwpf\App.xaml
+13-684578370
 
-211707098238
-151674743314
+21-1180583905
+151-208311036
 MainWindow.xaml;MVVM\View\DrawingsPage.xaml;MVVM\View\HelpPage.xaml;MVVM\View\HomePage.xaml;MVVM\View\ModelPage.xaml;MVVM\View\Question1.xaml;MVVM\View\Question2.xaml;MVVM\View\Question3.xaml;MVVM\View\Question4.xaml;MVVM\View\Question5.xaml;MVVM\View\Question6.xaml;MVVM\View\SettingsPage.xaml;Theme\MenuButtonTheme.xaml;
 
-True
+False
 

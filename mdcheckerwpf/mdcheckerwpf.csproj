@@ -451,13 +451,11 @@
     <Resource Include="Resources\element_catalog_cross_section.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Images\" />
     <Folder Include="MVVM\ViewModel\" />
     <Folder Include="Styles\" />
     <Folder Include="Utilities\" />
     <Folder Include="ViewModel\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\223.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\background2.png" />
@@ -469,30 +467,22 @@
     <Resource Include="Resources\closebutton.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\crayon.png" />
-    <Resource Include="Images\play.png" />
-    <Resource Include="Images\question.png" />
-    <Resource Include="Images\settings.png" />
-    <Resource Include="Images\tech.png" />
+    <Resource Include="Resources\question.png" />
+    <Resource Include="Resources\sadcat.png" />
+    <Resource Include="Resources\selectdrawingsexample.png" />
+    <Resource Include="Resources\selectmodelexample.png" />
+    <Resource Include="Resources\settings.png" />
+    <Resource Include="Resources\tech.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\selectdrawingsexample.png" />
-    <Resource Include="Images\selectmodelexample.png" />
+    <Resource Include="Resources\horizontal-shot-abstract-buildings-with-white-metallic-ribs-glass-windows.jpg" />
+    <Resource Include="Resources\modeltabexample.png" />
+    <Resource Include="Resources\okpic.png" />
+    <Resource Include="Resources\play.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\modeltabexample.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\sadcat.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\drawingstabexample.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\okpic.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\horizontal-shot-abstract-buildings-with-white-metallic-ribs-glass-windows.jpg" />
+    <Resource Include="Resources\crayon.png" />
+    <Resource Include="Resources\drawingstabexample.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
