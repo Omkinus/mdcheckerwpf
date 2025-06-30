@@ -1,6 +1,4 @@
 {
-  "IsMainPartsCheckEnabled": true,
-  "IsSetting2Enabled": true,
-  "IsSetting3Enabled": false,
-  "IsSetting4Enabled": false
+  "checkMainParts": true,
+  "startPage": "drawings"
 }

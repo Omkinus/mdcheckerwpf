@@ -478,7 +478,6 @@
     <Resource Include="Resources\tech.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\horizontal-shot-abstract-buildings-with-white-metallic-ribs-glass-windows.jpg" />
     <Resource Include="Resources\modeltabexample.png" />
     <Resource Include="Resources\okpic.png" />
     <Resource Include="Resources\play.png" />
