@@ -38,6 +38,9 @@
     <WarningLevel>4</WarningLevel>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon9_256x256_transparent.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ClosedXML, Version=0.104.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\ClosedXML.0.104.1\lib\netstandard2.0\ClosedXML.dll</HintPath>
@@ -483,6 +486,12 @@
   <ItemGroup>
     <Resource Include="Resources\crayon.png" />
     <Resource Include="Resources\drawingstabexample.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon9_200x200.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon9_256x256_transparent.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

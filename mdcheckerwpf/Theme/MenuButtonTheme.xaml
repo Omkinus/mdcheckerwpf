@@ -109,19 +109,47 @@
 
     <!-- Специфические стили для кнопок -->
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CustomButtonStyle}" x:Key="LoadButtonStyle">
-        <Setter Property="Background" Value="#FF5568C0"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF4A61AF" Offset="1"/>
+                    <GradientStop Color="#FF6C8CF9" Offset="0"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CustomButtonStyle}" x:Key="SaveButtonStyle">
-        <Setter Property="Background" Value="#FF5568C0"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF4A61AF" Offset="1"/>
+                    <GradientStop Color="#FF6C8CF9" Offset="0"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CustomButtonStyle}" x:Key="ClashCheckButtonStyle">
-        <Setter Property="Background" Value="#FF5568C0"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF4A61AF" Offset="1"/>
+                    <GradientStop Color="#FF6C8CF9" Offset="0"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource CustomButtonStyle}" x:Key="NewCheckButtonStyle">
-        <Setter Property="Background" Value="#FF5568C0"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF4A61AF" Offset="1"/>
+                    <GradientStop Color="#FF6C8CF9" Offset="0"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <!-- Стиль для строк таблицы -->

@@ -152,8 +152,8 @@
                         HorizontalAlignment="Left"
                         Margin="10,-19,0,0"
                         Grid.Column="0" Grid.ColumnSpan="2">
-                <Button Content="Загрузить" Style="{StaticResource LoadButtonStyle}" Margin="7,9,0,9" Click="LoadDrawingsReportButton_Click" Background="#FF5075F1"/>
-                <Button Content="Сохранить" Style="{StaticResource SaveButtonStyle}" Margin="10,0,0,0" Click="SaveDrawingsReportButton_Click" Background="#FF5075F1"/>
+                <Button Content="Загрузить" Style="{StaticResource LoadButtonStyle}" Margin="7,9,0,9" Click="LoadDrawingsReportButton_Click" />
+                <Button Content="Сохранить" Style="{StaticResource SaveButtonStyle}" Margin="10,0,0,0" Click="SaveDrawingsReportButton_Click" />
                 <Button Content="Новая проверка" Style="{StaticResource NewCheckButtonStyle}" Margin="327,0,0,0" Click="Button_Click">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0,0" StartPoint="0,1">

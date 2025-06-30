@@ -120,8 +120,8 @@
                     <GroupStyle.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                               
-                               
+
+
                                 <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="16" Foreground="DarkSlateGray" />
                             </StackPanel>
                         </DataTemplate>
@@ -164,9 +164,9 @@
                         HorizontalAlignment="Left"
                         Margin="10,-11,0,1"
                         Grid.Column="0" Grid.ColumnSpan="3">
-                <Button Content="Загрузить" Style="{StaticResource LoadButtonStyle}" Margin="7,9,0,9" Click="LoadModelReportButton_Click" Background="#FF5075F1"/>
-                <Button x:Name="SaveModelReportButton" Content="Сохранить" Style="{StaticResource SaveButtonStyle}" Margin="10,0,0,0" Click="SaveModelReportButton_Click" Background="#FF5075F1"/>
-                <Button Content="Clash check" Style="{StaticResource ClashCheckButtonStyle}" Margin="10,0,0,0" Background="#FF5075F1"/>
+                <Button Content="Загрузить" Style="{StaticResource LoadButtonStyle}" Margin="7,9,0,9" Click="LoadModelReportButton_Click"/>
+                <Button  x:Name="SaveModelReportButton" Content="Сохранить" Style="{StaticResource SaveButtonStyle}" Margin="10,0,0,0" Click="SaveModelReportButton_Click" />
+                <Button Visibility="Hidden" Content="Clash check" Style="{StaticResource ClashCheckButtonStyle}" Margin="10,0,0,0" />
             </StackPanel>
 
             <Button Content="Новая проверка" Style="{StaticResource NewCheckButtonStyle}"
@@ -199,8 +199,8 @@
            FontSize="20"
            FontFamily="Yu Gothic UI Semibold"
            TextAlignment="Center"
-           Margin="136,38,623,0"
-           Grid.Row="0" Grid.ColumnSpan="2"/>
+           Margin="140,38,0,0"
+           Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Width="356"/>
 
         <!-- Прогресс-бар -->
         <ProgressBar x:Name="ProgressBar" Height="40" Width="300" Visibility="Collapsed"

@@ -70,8 +70,6 @@ namespace mdcheckerwpf.MVVM.View
                 if (!model.GetConnectionStatus()) return;
 
                 var projectInfo = model.GetProjectInfo();
-
-                // Кешируем пользовательские поля
                 var numericFields = new Dictionary<string, double>();
                 var stringFields = new Dictionary<string, string>();
 
@@ -83,8 +81,7 @@ namespace mdcheckerwpf.MVVM.View
                     "ESDBOLTLENGTH"
                 };
 
-                                // Строковые поля (пользовательские)
-                                string[] stringFieldNames = {
+                string[] stringFieldNames = {
                     "PROJECT_USERFIELD_1", "PROJECT_USERFIELD_2", "PROJECT_USERFIELD_3", "PROJECT_USERFIELD_4",
                     "PROJECT_USERFIELD_5", "PROJECT_USERFIELD_6", "PROJECT_USERFIELD_7", "PROJECT_USERFIELD_8"
                 };
@@ -102,7 +99,7 @@ namespace mdcheckerwpf.MVVM.View
                         MessageBox.Show($"Поле {fieldName} в Project properties не заполнено или имеет неверный формат.", "Ошибка");
                         return;
                     }
-                    UpdateProgressBar(10);
+                    
                 }
 
                 // Обработка строковых полей
@@ -118,7 +115,7 @@ namespace mdcheckerwpf.MVVM.View
                         MessageBox.Show($"Поле {fieldName} в Project properties не заполнено.", "Ошибка");
                         return;
                     }
-                    UpdateProgressBar(10);
+                   
                 }
 
                 // Загружаем список чертежей один раз
@@ -129,8 +126,7 @@ namespace mdcheckerwpf.MVVM.View
                 {
                     allDrawings.Add(drawingsEnum.Current);
 
-                    // Обновляем прогресс
-                    UpdateProgressBar(20); // Прогресс обновляется после добавления каждого чертежа
+                    UpdateProgressBar(20); 
                 }
 
                 // Обрабатываем выбранные объекты
@@ -164,7 +160,7 @@ namespace mdcheckerwpf.MVVM.View
                 }
             });
 
-            // Скрыть прогресс-бар после завершения
+        
             ProgressBar.Visibility = Visibility.Collapsed;
             StatusMessage.Visibility = Visibility.Collapsed;
         }
@@ -187,8 +183,6 @@ namespace mdcheckerwpf.MVVM.View
         {
             bool singlePartDrawingFound = false;
             bool assemblyDrawingFound = false;
-
-           
             bool isMainPart = part.GetAssembly().GetMainPart().Identifier.Equals(part.Identifier);
 
             foreach (var drawing in allDrawings)
@@ -366,8 +360,6 @@ namespace mdcheckerwpf.MVVM.View
                 .FromDecimalString(value.ToString())
                 .ToFractionalFeetAndInchesString();
         }
-
-
 
         private void AddModelError(string objectName, string objectNumber, string errorMessage,string guid, string errortype)
         {
