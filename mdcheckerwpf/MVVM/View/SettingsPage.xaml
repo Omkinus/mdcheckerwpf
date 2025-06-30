@@ -1,65 +1,38 @@
 ﻿<UserControl x:Class="mdcheckerwpf.MVVM.View.SettingsPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Width="854" Height="658">
+             Width="400" Height="300"
+             Background="Transparent">
 
     <UserControl.Resources>
-        <DropShadowEffect x:Key="DropShadowEffect"
-                          Color="#80000000"
-                          BlurRadius="4"
-                          ShadowDepth="0.2" />
+        <!-- Акцентная кисть -->
+        <SolidColorBrush x:Key="AccentBrush" Color="#3B82F6"/>
 
-        <!-- Стиль чекбокса для MainParts -->
-        <Style x:Key="CheckboxStyle" TargetType="CheckBox">
-            <Setter Property="Width" Value="36" />
-            <Setter Property="Height" Value="36" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="Cursor" Value="Hand" />
+        <!-- Стиль для RadioButton -->
+        <Style TargetType="RadioButton" x:Key="PageOptionStyle">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="#333"/>
+            <Setter Property="Margin" Value="6"/>
+            <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="CheckBox">
-                        <Grid>
-                            <Rectangle x:Name="CheckboxBackground"
-                                       Fill="Transparent"
-                                       Stroke="#CCCCCC"
-                                       StrokeThickness="1.5"
-                                       RadiusX="6"
-                                       RadiusY="6" />
-                            <Path x:Name="CheckMark"
-                                  Data="M 5 12 L 13 20 L 24 6"
-                                  Stroke="White"
-                                  StrokeThickness="4"
-                                  Visibility="Collapsed"
-                                  RenderTransformOrigin="0.5,0.5">
-                                <Path.RenderTransform>
-                                    <TranslateTransform X="3" Y="4" />
-                                </Path.RenderTransform>
-                            </Path>
-                            <ContentPresenter VerticalAlignment="Center"
-                                              HorizontalAlignment="Center" />
-                        </Grid>
+                    <ControlTemplate TargetType="RadioButton">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border x:Name="Dot"
+                                    Width="16" Height="16"
+                                    CornerRadius="8"
+                                    BorderBrush="#AAA"
+                                    BorderThickness="2"
+                                    Background="Transparent" />
+                            <ContentPresenter Margin="8,0,0,0"
+                                              VerticalAlignment="Center"/>
+                        </StackPanel>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="CheckboxBackground"
-                                        Property="Fill"
-                                        Value="#FF3B82F6" />
-                                <Setter TargetName="CheckMark"
-                                        Property="Visibility"
-                                        Value="Visible" />
+                                <Setter TargetName="Dot" Property="Background" Value="{StaticResource AccentBrush}"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="CheckboxBackground"
-                                        Property="Stroke"
-                                        Value="#888888" />
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="CheckboxBackground"
-                                        Property="Fill"
-                                        Value="#4CAF50" />
-                                <Setter TargetName="CheckboxBackground"
-                                        Property="Stroke"
-                                        Value="#FFFFFF" />
+                                <Setter TargetName="Dot" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -69,59 +42,56 @@
     </UserControl.Resources>
 
     <Grid>
-        <Border BorderBrush="White"
-                Background="White"
-                CornerRadius="8"
-                Padding="24"
-                Margin="24"
-                Effect="{StaticResource DropShadowEffect}">
-            <StackPanel>
-                <!-- Заголовок -->
-                <TextBlock Text="Общие настройки"
-                           FontSize="26"
-                           FontWeight="SemiBold"
-                           Margin="0,0,0,24" />
+        <StackPanel Orientation="Vertical"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="16,16,0,0">
+            <!-- Заголовок -->
+            <TextBlock Text="Общие настройки"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Foreground="#222"
+                       Margin="0,0,0,16"/>
 
-                <!-- Чекбокс Main Parts -->
-                <StackPanel Orientation="Horizontal"
-                            Margin="0,0,0,32"
-                            VerticalAlignment="Center">
-                    <CheckBox x:Name="chkMainParts"
-                              Style="{StaticResource CheckboxStyle}"
-                              Checked="CheckBox_Toggled"
-                              Unchecked="CheckBox_Toggled"
-                              VerticalAlignment="Center" />
-                    <TextBlock Text="Проверять Main Parts в модели на наличие Single Part Drawing"
-                               VerticalAlignment="Center"
-                               FontSize="18"
-                               FontFamily="Roboto"
-                               Margin="16,0,0,0"
-                               TextWrapping="Wrap"
-                               Width="700" />
-                </StackPanel>
-
-                <!-- Группа радиокнопок -->
-                <TextBlock Text="Стартовая страница:"
-                           FontSize="20"
-                           FontWeight="Medium"
-                           Margin="0,0,0,12" />
-
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
-                    <RadioButton x:Name="rbStartModel"
-                                 Content="Проверка модели"
-                                 GroupName="StartPage"
-                                 Checked="StartPage_Toggled"
-                                 FontSize="18"
-                                 Margin="0,0,40,0"
-                                 VerticalAlignment="Center" />
-                    <RadioButton x:Name="rbStartDrawings"
-                                 Content="Проверка чертежей"
-                                 GroupName="StartPage"
-                                 Checked="StartPage_Toggled"
-                                 FontSize="18"
-                                 VerticalAlignment="Center" />
-                </StackPanel>
+            <!-- Чекбокс MainParts -->
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,0,0,24"
+                        VerticalAlignment="Center">
+                <CheckBox x:Name="chkMainParts"
+                          Width="20" Height="20"
+                          VerticalAlignment="Center"
+                          Checked="CheckBox_Toggled"
+                          Unchecked="CheckBox_Toggled"/>
+                <TextBlock Text="Проверять на наличие SPD для MainPart"
+                           FontSize="18"
+                           VerticalAlignment="Center"
+                           Margin="8,0,0,0"/>
             </StackPanel>
-        </Border>
+
+            <!-- Стартовая страница -->
+            <TextBlock Text="Стартовая страница"
+                       FontSize="20"
+                       FontWeight="SemiBold"
+                       Foreground="#444"
+                       Margin="0,0,0,12"/>
+
+            <UniformGrid Columns="3">
+                <RadioButton x:Name="rbStartMain"
+                             Content="Главная"
+                             GroupName="StartPage"
+                             Style="{StaticResource PageOptionStyle}"
+                             Checked="StartPage_Toggled"/>
+                <RadioButton x:Name="rbStartModel"
+                             Content="Модель"
+                             GroupName="StartPage"
+                             Style="{StaticResource PageOptionStyle}"
+                             Checked="StartPage_Toggled"/>
+                <RadioButton x:Name="rbStartDrawings"
+                             Content="Чертежи"
+                             GroupName="StartPage"
+                             Style="{StaticResource PageOptionStyle}"
+                             Checked="StartPage_Toggled"/>
+            </UniformGrid>
+        </StackPanel>
     </Grid>
 </UserControl>

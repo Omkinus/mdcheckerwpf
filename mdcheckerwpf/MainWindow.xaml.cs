@@ -20,63 +20,69 @@ namespace mdcheckerwpf
         {
             InitializeComponent();
 
-            // Позволяем тянуть окно за любую область
+            // Делаем окно перетаскиваемым
             this.MouseDown += (s, e) =>
             {
                 if (e.ChangedButton == MouseButton.Left)
                     try { DragMove(); } catch { }
             };
 
-            // Определяем путь к settings.json рядом с .exe
+            // Путь к settings.json
             var exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
                          ?? AppDomain.CurrentDomain.BaseDirectory;
             _settingsPath = Path.Combine(exeDir, FileName);
 
             LoadSettings();
 
-            // При старте отмечаем нужную кнопку — это тут же вызовет RadioButton_Checked
-            if (_settings.StartPage.Equals("drawings", StringComparison.OrdinalIgnoreCase))
-                rbDrawings.IsChecked = true;
-            else
-                rbModel.IsChecked = true;
+            // В зависимости от настроек отмечаем кнопку ИЛИ грузим HomePage
+            switch (_settings.StartPage?.ToLowerInvariant())
+            {
+                case "drawings":
+                    rbDrawings.IsChecked = true;
+                    ContentArea.Content = new DrawingsPage();
+                    break;
+
+                case "model":
+                    rbModel.IsChecked = true;
+                    ContentArea.Content = new ModelPage();
+                    break;
+
+                default:
+                    // ни "drawings", ни "model" → HomePage
+                    ContentArea.Content = new HomePage();  // или HomePage, если у вас такой класс
+                    break;
+            }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             var rb = (RadioButton)sender;
-            string tag = rb.Tag as string;
-
-            // Загружаем нужный UserControl
-            UserControl pageToLoad;
-            switch (tag)
+            UserControl page;
+            switch (rb.Tag as string)
             {
                 case "DrawingsPage":
-                    pageToLoad = new DrawingsPage();
+                    page = new DrawingsPage();
                     _settings.StartPage = "drawings";
                     break;
-
                 case "SettingsPage":
-                    pageToLoad = new SettingsPage();
+                    page = new SettingsPage();
                     break;
-
+                case "HomePage":
+                    page = new HomePage();
+                    _settings.StartPage = "main";
+                    break;
                 case "HelpPage":
-                    pageToLoad = new HelpPage();
+                    page = new HelpPage();
+                   
                     break;
-
                 case "ModelPage":
                 default:
-                    pageToLoad = new ModelPage();
+                    page = new ModelPage();
                     _settings.StartPage = "model";
                     break;
             }
-
-            // Вставляем в ContentArea и сохраняем новый старт
-            ContentArea.Content = pageToLoad;
+            ContentArea.Content = page;
             SaveSettings();
         }
 
@@ -96,13 +102,8 @@ namespace mdcheckerwpf
                     SaveSettings();
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show(
-                    $"Не удалось загрузить настройки:\n{ex.Message}",
-                    "Ошибка",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
                 _settings = new Settings();
             }
         }
@@ -115,14 +116,7 @@ namespace mdcheckerwpf
                 var json = JsonSerializer.Serialize(_settings, opts);
                 File.WriteAllText(_settingsPath, json);
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Не удалось сохранить настройки:\n{ex.Message}",
-                    "Ошибка",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
-            }
+            catch { }
         }
 
         private class Settings
@@ -130,9 +124,13 @@ namespace mdcheckerwpf
             [JsonPropertyName("checkMainParts")]
             public bool CheckMainParts { get; set; }
 
-            // "model" или "drawings"
             [JsonPropertyName("startPage")]
             public string StartPage { get; set; } = "model";
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

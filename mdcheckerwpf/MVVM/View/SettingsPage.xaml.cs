@@ -18,8 +18,8 @@ namespace mdcheckerwpf.MVVM.View
         {
             InitializeComponent();
 
-            // Получаем путь к папке с .exe
-            string exeDir = Path.GetDirectoryName(
+            // Путь к папке с .exe
+            var exeDir = Path.GetDirectoryName(
                 Assembly.GetExecutingAssembly().Location
             ) ?? AppDomain.CurrentDomain.BaseDirectory;
             _filePath = Path.Combine(exeDir, FileName);
@@ -28,17 +28,22 @@ namespace mdcheckerwpf.MVVM.View
             ApplyToUi();
         }
 
-        // При каждом клике по чекбоксу Main Parts
         private void CheckBox_Toggled(object sender, RoutedEventArgs e)
         {
+            // Защита от null при загрузке компонента
+            if (_settings == null) return;
+
             _settings.CheckMainParts = chkMainParts.IsChecked == true;
             SaveSettings();
         }
 
-        // При выборе одной из радиокнопок
         private void StartPage_Toggled(object sender, RoutedEventArgs e)
         {
-            if (rbStartModel.IsChecked == true)
+            if (_settings == null) return;
+
+            if (rbStartMain.IsChecked == true)
+                _settings.StartPage = "main";
+            else if (rbStartModel.IsChecked == true)
                 _settings.StartPage = "model";
             else if (rbStartDrawings.IsChecked == true)
                 _settings.StartPage = "drawings";
@@ -52,7 +57,7 @@ namespace mdcheckerwpf.MVVM.View
             {
                 if (File.Exists(_filePath))
                 {
-                    string json = File.ReadAllText(_filePath);
+                    var json = File.ReadAllText(_filePath);
                     _settings = JsonSerializer.Deserialize<Settings>(json)
                                 ?? new Settings();
                 }
@@ -62,41 +67,41 @@ namespace mdcheckerwpf.MVVM.View
                     SaveSettings();
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show($"Не удалось загрузить настройки:\n{ex.Message}",
-                                "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                // Если чтение/десериализация не удалась, используем настройки по умолчанию
                 _settings = new Settings();
             }
         }
 
         private void ApplyToUi()
         {
-            // Main Parts
+            // Устанавливаем состояние чекбокса
             chkMainParts.IsChecked = _settings.CheckMainParts;
 
-            // Стартовая страница
-            if (_settings.StartPage == "drawings")
-                rbStartDrawings.IsChecked = true;
-            else
-                rbStartModel.IsChecked = true;  // по умолчанию model
+            // Устанавливаем выбранный RadioButton
+            switch (_settings.StartPage)
+            {
+                case "main":
+                    rbStartMain.IsChecked = true; break;
+                case "drawings":
+                    rbStartDrawings.IsChecked = true; break;
+                default:
+                    rbStartModel.IsChecked = true; break;
+            }
         }
 
         private void SaveSettings()
         {
             try
             {
-                var options = new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                };
-                string json = JsonSerializer.Serialize(_settings, options);
+                var opts = new JsonSerializerOptions { WriteIndented = true };
+                var json = JsonSerializer.Serialize(_settings, opts);
                 File.WriteAllText(_filePath, json);
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show($"Не удалось сохранить настройки:\n{ex.Message}",
-                                "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                // Игнорируем ошибки записи
             }
         }
 
@@ -105,7 +110,6 @@ namespace mdcheckerwpf.MVVM.View
             [JsonPropertyName("checkMainParts")]
             public bool CheckMainParts { get; set; }
 
-            // "model" или "drawings"
             [JsonPropertyName("startPage")]
             public string StartPage { get; set; } = "model";
         }
