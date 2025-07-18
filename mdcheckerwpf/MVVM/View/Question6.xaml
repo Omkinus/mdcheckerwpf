@@ -17,9 +17,10 @@
        FontSize="16" 
        Margin="10,51,-10,263"
        FontFamily="Roboto"><Run Text="  Проверка чертежей находит следующие ошибки:"/><LineBreak/>
-            <Run/><LineBreak/><Run Text="- Есть ли округленные размеры на видах"/><LineBreak/>
-            <Run Text="- Есть ли виды с включенным Reflected View"/><LineBreak/>
-            <Run Text="- Есть ли размеры, округленные не на 1/16"/><LineBreak/>
+            <Run/><LineBreak/><Run Text="- Есть ли виды с включенным Reflected View"/><LineBreak/>
+            <Run Text="- Есть ли угловые размеры округленные не на 1/100 на виде"/><LineBreak/>
+            <Run Text="- Есть ли размеры, округленные не на 1/16 на виде"/><LineBreak/>
+            <Run Text="- Не заполнены поля DrawnBy/CheckBy"/><LineBreak/>
             
         </TextBlock>
    

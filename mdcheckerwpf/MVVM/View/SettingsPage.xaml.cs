@@ -2,9 +2,9 @@
 using System.IO;
 using System.Reflection;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Windows;
 using System.Windows.Controls;
+using mdcheckerwpf.MVVM;
 
 namespace mdcheckerwpf.MVVM.View
 {
@@ -18,22 +18,31 @@ namespace mdcheckerwpf.MVVM.View
         {
             InitializeComponent();
 
-            // Путь к папке с .exe
-            var exeDir = Path.GetDirectoryName(
-                Assembly.GetExecutingAssembly().Location
-            ) ?? AppDomain.CurrentDomain.BaseDirectory;
+            var exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+                         ?? AppDomain.CurrentDomain.BaseDirectory;
             _filePath = Path.Combine(exeDir, FileName);
 
             LoadSettings();
             ApplyToUi();
         }
 
-        private void CheckBox_Toggled(object sender, RoutedEventArgs e)
+        private void CheckBox_CheckedChanged(object sender, RoutedEventArgs e)
         {
-            // Защита от null при загрузке компонента
-            if (_settings == null) return;
+            if (!(sender is CheckBox checkBox)) return;
 
-            _settings.CheckMainParts = chkMainParts.IsChecked == true;
+            bool isChecked = checkBox.IsChecked == true;
+
+            if (checkBox.Name == "chkMainParts") _settings.CheckMainParts = isChecked;
+            else if (checkBox.Name == "chkLength") _settings.CheckLength = isChecked;
+            else if (checkBox.Name == "chkMaterial") _settings.CheckMaterial = isChecked;
+            else if (checkBox.Name == "chkDetailDrawings") _settings.CheckDetailDrawings = isChecked;
+            else if (checkBox.Name == "chkBoltLength") _settings.CheckBoltLength = isChecked;
+            else if (checkBox.Name == "chkScrewAssembly") _settings.CheckScrewAssembly = isChecked;
+            else if (checkBox.Name == "chkRounding") _settings.CheckRounding = isChecked;
+            else if (checkBox.Name == "chkReflectedView") _settings.CheckReflectedView = isChecked;
+            else if (checkBox.Name == "chkDrawnCheckedBy") _settings.CheckDrawnCheckedBy = isChecked;
+            else if (checkBox.Name == "chkPartMarkMissing") _settings.CheckPartMarkMissing = isChecked;
+
             SaveSettings();
         }
 
@@ -41,12 +50,9 @@ namespace mdcheckerwpf.MVVM.View
         {
             if (_settings == null) return;
 
-            if (rbStartMain.IsChecked == true)
-                _settings.StartPage = "main";
-            else if (rbStartModel.IsChecked == true)
-                _settings.StartPage = "model";
-            else if (rbStartDrawings.IsChecked == true)
-                _settings.StartPage = "drawings";
+            if (rbStartMain.IsChecked == true) _settings.StartPage = "main";
+            else if (rbStartModel.IsChecked == true) _settings.StartPage = "model";
+            else if (rbStartDrawings.IsChecked == true) _settings.StartPage = "drawings";
 
             SaveSettings();
         }
@@ -58,8 +64,7 @@ namespace mdcheckerwpf.MVVM.View
                 if (File.Exists(_filePath))
                 {
                     var json = File.ReadAllText(_filePath);
-                    _settings = JsonSerializer.Deserialize<Settings>(json)
-                                ?? new Settings();
+                    _settings = JsonSerializer.Deserialize<Settings>(json) ?? new Settings();
                 }
                 else
                 {
@@ -69,49 +74,44 @@ namespace mdcheckerwpf.MVVM.View
             }
             catch
             {
-                // Если чтение/десериализация не удалась, используем настройки по умолчанию
                 _settings = new Settings();
             }
         }
 
         private void ApplyToUi()
         {
-            // Устанавливаем состояние чекбокса
             chkMainParts.IsChecked = _settings.CheckMainParts;
+            chkLength.IsChecked = _settings.CheckLength;
+            chkMaterial.IsChecked = _settings.CheckMaterial;
+            chkDetailDrawings.IsChecked = _settings.CheckDetailDrawings;
+            chkBoltLength.IsChecked = _settings.CheckBoltLength;
+            chkScrewAssembly.IsChecked = _settings.CheckScrewAssembly;
+            chkRounding.IsChecked = _settings.CheckRounding;
+            chkReflectedView.IsChecked = _settings.CheckReflectedView;
+            chkDrawnCheckedBy.IsChecked = _settings.CheckDrawnCheckedBy;
+            chkPartMarkMissing.IsChecked = _settings.CheckPartMarkMissing;
 
-            // Устанавливаем выбранный RadioButton
             switch (_settings.StartPage)
             {
-                case "main":
-                    rbStartMain.IsChecked = true; break;
-                case "drawings":
-                    rbStartDrawings.IsChecked = true; break;
-                default:
-                    rbStartModel.IsChecked = true; break;
+                case "main": rbStartMain.IsChecked = true; break;
+                case "drawings": rbStartDrawings.IsChecked = true; break;
+                default: rbStartModel.IsChecked = true; break;
             }
+
+            SaveSettings(); // гарантируем запись
         }
 
         private void SaveSettings()
         {
+            if (string.IsNullOrEmpty(_filePath)) return;
+
             try
             {
                 var opts = new JsonSerializerOptions { WriteIndented = true };
                 var json = JsonSerializer.Serialize(_settings, opts);
                 File.WriteAllText(_filePath, json);
             }
-            catch
-            {
-                // Игнорируем ошибки записи
-            }
-        }
-
-        private class Settings
-        {
-            [JsonPropertyName("checkMainParts")]
-            public bool CheckMainParts { get; set; }
-
-            [JsonPropertyName("startPage")]
-            public string StartPage { get; set; } = "model";
+            catch { }
         }
     }
 }

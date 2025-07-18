@@ -1,13 +1,13 @@
 {
   "checkMainParts": true,
   "startPage": "drawings",
-  "checkLength": false,
-  "checkMaterial": true,
+  "checkLength": true,
+  "checkMaterial": false,
   "checkDetailDrawings": false,
-  "checkBoltLength": false,
-  "checkScrewAssembly": true,
+  "checkBoltLength": true,
+  "checkScrewAssembly": false,
   "checkRounding": false,
   "checkReflectedView": false,
-  "checkDrawnCheckedBy": false,
+  "checkDrawnCheckedBy": true,
   "checkPartMarkMissing": false
 }

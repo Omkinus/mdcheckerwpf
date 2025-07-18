@@ -3,15 +3,27 @@
   "WorkspaceRootPath": "C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|c:\\users\\user\\omkinusapps\\mdcheckerwpf\\mdcheckerwpf\\mvvm\\view\\settingspage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|solutionrelative:mvvm\\view\\settingspage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|c:\\users\\user\\omkinusapps\\mdcheckerwpf\\mdcheckerwpf\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|c:\\users\\user\\omkinusapps\\mdcheckerwpf\\mdcheckerwpf\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|c:\\users\\user\\omkinusapps\\mdcheckerwpf\\mdcheckerwpf\\mvvm\\settings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|solutionrelative:mvvm\\settings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|c:\\users\\user\\omkinusapps\\mdcheckerwpf\\mdcheckerwpf\\mvvm\\view\\settingspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|c:\\users\\user\\omkinusapps\\mdcheckerwpf\\mdcheckerwpf\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|solutionrelative:app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|c:\\users\\user\\omkinusapps\\mdcheckerwpf\\mdcheckerwpf\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|solutionrelative:app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\mvvm\\view\\settingspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{FE71378B-0365-43E8-B24A-7D32BAA5E548}|mdcheckerwpf.csproj|solutionrelative:mvvm\\view\\settingspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
   ],
@@ -22,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,39 +50,78 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\MainWindow.xaml.cs",
-              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\MainWindow.xaml.cs",
-              "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AgIAACUAAAAAAAAAAAAgwEkAAAAaAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "Settings.cs",
+              "DocumentMoniker": "C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\MVVM\\Settings.cs",
+              "RelativeDocumentMoniker": "MVVM\\Settings.cs",
+              "ToolTip": "C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\MVVM\\Settings.cs",
+              "RelativeToolTip": "MVVM\\Settings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-30T14:00:26.987Z",
+              "WhenOpened": "2025-07-18T13:22:10.912Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "MainWindow.xaml",
-              "ToolTip": "C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\MainWindow.xaml",
-              "RelativeToolTip": "MainWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-06-30T14:00:13.133Z",
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\MainWindow.xaml.cs",
+              "RelativeToolTip": "MainWindow.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-18T13:20:28.869Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
+              "Title": "App.xaml",
+              "DocumentMoniker": "C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\App.xaml",
+              "RelativeDocumentMoniker": "App.xaml",
+              "ToolTip": "C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\App.xaml",
+              "RelativeToolTip": "App.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-07-18T13:20:21.463Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\App.xaml.cs",
+              "RelativeDocumentMoniker": "App.xaml.cs",
+              "ToolTip": "C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\App.xaml.cs",
+              "RelativeToolTip": "App.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-18T13:20:18.299Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "SettingsPage.xaml",
               "DocumentMoniker": "C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\MVVM\\View\\SettingsPage.xaml",
               "RelativeDocumentMoniker": "MVVM\\View\\SettingsPage.xaml",
               "ToolTip": "C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\MVVM\\View\\SettingsPage.xaml",
               "RelativeToolTip": "MVVM\\View\\SettingsPage.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-06-30T13:04:26.74Z",
+              "WhenOpened": "2025-07-18T09:19:43.18Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SettingsPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\MVVM\\View\\SettingsPage.xaml.cs",
+              "RelativeDocumentMoniker": "MVVM\\View\\SettingsPage.xaml.cs",
+              "ToolTip": "C:\\Users\\user\\OmkinusApps\\mdcheckerwpf\\mdcheckerwpf\\MVVM\\View\\SettingsPage.xaml.cs",
+              "RelativeToolTip": "MVVM\\View\\SettingsPage.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAABVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-18T09:02:56.542Z",
               "EditorCaption": ""
             }
           ]

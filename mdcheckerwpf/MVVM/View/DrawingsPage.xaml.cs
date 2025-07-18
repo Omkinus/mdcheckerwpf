@@ -12,6 +12,10 @@ using tsm = Tekla.Structures.Model;
 using System.Threading.Tasks;
 using System.Linq;
 using DocumentFormat.OpenXml.EMMA;
+using Tekla.Structures;
+using ModelObject = Tekla.Structures.Model.ModelObject;
+using Part = Tekla.Structures.Drawing.Part;
+using System.Collections.Generic;
 
 namespace mdcheckerwpf.MVVM.View
 {
@@ -75,6 +79,7 @@ namespace mdcheckerwpf.MVVM.View
                 CheckPrecision(drawing, drawingMark, drawingName);
                 CheckReflectedView(drawing, drawingMark, drawingName);
                 CheckDrawnByCheckBy(drawing, drawingMark, drawingName, projectInfo);
+                CheckAssembliesMissingPartMarks(drawing, drawingMark, drawingName);
 
                 currentDrawing++;
                 ProgressBar.Value = (double)currentDrawing / totalDrawings * 100;
@@ -99,14 +104,14 @@ namespace mdcheckerwpf.MVVM.View
                     if (obj is StraightDimensionSet dimensionSet &&
                         dimensionSet.Attributes.Format.Precision != DimensionSetBaseAttributes.DimensionValuePrecisions.OnePerSixteen)
                     {
-                        AddDrawingError(drawingMark, drawingName, "Присутствует размер округленный не на 1/16");
+                        AddDrawingError(drawingMark, drawingName, "Присутствует размер округленный не на 1/16","Неправильное округление");
                         return;
                     }
 
                     if (obj is AngleDimension angleDimension &&
                         angleDimension.Attributes.Format.Precision != AngleDimensionAttributes.DimensionValuePrecisions.OnePerHundred)
                     {
-                        AddDrawingError(drawingMark, drawingName, "Присутствует угловой размер округленный не на 1/100");
+                        AddDrawingError(drawingMark, drawingName, "Присутствует угловой размер округленный не на 1/100","Неправильное округление");
                         return;
                     }
                 }
@@ -122,7 +127,7 @@ namespace mdcheckerwpf.MVVM.View
                 if (view.Attributes.ReflectedView)
                 {
                     string viewName = string.IsNullOrWhiteSpace(view.Name) ? "Главный вид" : view.Name;
-                    AddDrawingError(drawingMark, drawingName, $"Присутствует вид с включенным Reflected View: {viewName}");
+                    AddDrawingError(drawingMark, drawingName, $"Присутствует вид с включенным Reflected View: {viewName}","Reflected view");
                 }
             }
         }
@@ -142,19 +147,86 @@ namespace mdcheckerwpf.MVVM.View
 
 
             if (string.IsNullOrEmpty(projectDrawnby))
-                AddDrawingError(drawingMark, drawingName, "На чертеже не заполнено поле DrawnBy");
+                AddDrawingError(drawingMark, drawingName, "На чертеже не заполнено поле DrawnBy","Незаполненные поля");
 
             if (string.IsNullOrEmpty(projectCheckedby))
-                AddDrawingError(drawingMark, drawingName, "На чертеже не заполнено поле CheckBy");
+                AddDrawingError(drawingMark, drawingName, "На чертеже не заполнено поле CheckBy","Незаполненные поля");
         }
 
-        private void AddDrawingError(string drawingMark, string drawingName, string errorMessage)
+        private void CheckAssembliesMissingPartMarks(Drawing drawing, string drawingMark, string drawingName)
+        {
+            if (drawing == null) return;
+
+            if (drawing is AssemblyDrawing)
+            {
+                var model = new tsm.Model();
+
+                foreach (Tekla.Structures.Drawing.View view in drawing.GetSheet().GetAllViews())
+                {
+                    foreach (var obj in view.GetAllObjects())
+                    {
+                        if (obj is Tekla.Structures.Drawing.Part part)
+                        {
+                            Identifier partIdentifier = part.ModelIdentifier;
+
+                            ModelObject modelObject = model.SelectModelObject(partIdentifier);
+                            var modelPart = modelObject as Tekla.Structures.Model.Part;
+                            if (modelPart == null)
+                                continue;
+
+                            string partMark = modelPart.GetPartMark();
+                            bool markFoundForThisPart = false;
+
+                            // Перебираем все марки на виде и ищем связанную с этой конкретной деталью
+                            foreach (var objMark in view.GetObjects())
+                            {
+                                if (objMark is Tekla.Structures.Drawing.Mark mark)
+                                {
+                                    DrawingObjectEnumerator relatedObjects = mark.GetRelatedObjects();
+                                    foreach (var relatedObj in relatedObjects)
+                                    {
+                                        if (relatedObj is Tekla.Structures.Drawing.Part relatedPart)
+                                        {
+                                            if (relatedPart.ModelIdentifier.ToString() == partIdentifier.ToString())
+                                            {
+                                                markFoundForThisPart = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if (markFoundForThisPart)
+                                        break;
+                                }
+                            }
+
+                            if (!markFoundForThisPart)
+                            {
+                                string viewDisplayName = string.IsNullOrWhiteSpace(view.Name)
+                                    ? "на главном виде"
+                                    : $"на виде \"{view.Name}\"";
+
+                                AddDrawingError(
+                                    drawingMark,
+                                    drawingName,
+                                    $"Марка {partMark} не найдена на виде {viewDisplayName}","Отсутствует марка");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        private void AddDrawingError(string drawingMark, string drawingName, string errorMessage,string errortype)
         {
             DataItems.Add(new DrawingData
             {
                 DrawingMark = drawingMark,
                 DrawingName = drawingName,
-                Details = errorMessage
+                Details = errorMessage,
+                Errortype = errortype
             });
         }
 
@@ -236,5 +308,6 @@ namespace mdcheckerwpf.MVVM.View
         public string DrawingMark { get; set; }
         public string DrawingName { get; set; }
         public string Details { get; set; }
+        public string Errortype { get; internal set; }
     }
 }

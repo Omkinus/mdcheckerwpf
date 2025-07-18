@@ -2,10 +2,10 @@
 using System.IO;
 using System.Reflection;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using mdcheckerwpf.MVVM;
 using mdcheckerwpf.MVVM.View;
 
 namespace mdcheckerwpf
@@ -20,21 +20,18 @@ namespace mdcheckerwpf
         {
             InitializeComponent();
 
-            // Делаем окно перетаскиваемым
             this.MouseDown += (s, e) =>
             {
                 if (e.ChangedButton == MouseButton.Left)
                     try { DragMove(); } catch { }
             };
 
-            // Путь к settings.json
             var exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
                          ?? AppDomain.CurrentDomain.BaseDirectory;
             _settingsPath = Path.Combine(exeDir, FileName);
 
             LoadSettings();
 
-            // В зависимости от настроек отмечаем кнопку ИЛИ грузим HomePage
             switch (_settings.StartPage?.ToLowerInvariant())
             {
                 case "drawings":
@@ -48,17 +45,16 @@ namespace mdcheckerwpf
                     break;
 
                 default:
-                    // ни "drawings", ни "model" → HomePage
-                    ContentArea.Content = new HomePage();  // или HomePage, если у вас такой класс
+                    ContentArea.Content = new HomePage();
                     break;
             }
         }
-
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             var rb = (RadioButton)sender;
             UserControl page;
+
             switch (rb.Tag as string)
             {
                 case "DrawingsPage":
@@ -74,7 +70,6 @@ namespace mdcheckerwpf
                     break;
                 case "HelpPage":
                     page = new HelpPage();
-                   
                     break;
                 case "ModelPage":
                 default:
@@ -82,6 +77,7 @@ namespace mdcheckerwpf
                     _settings.StartPage = "model";
                     break;
             }
+
             ContentArea.Content = page;
             SaveSettings();
         }
@@ -93,8 +89,7 @@ namespace mdcheckerwpf
                 if (File.Exists(_settingsPath))
                 {
                     var json = File.ReadAllText(_settingsPath);
-                    _settings = JsonSerializer.Deserialize<Settings>(json)
-                                ?? new Settings();
+                    _settings = JsonSerializer.Deserialize<Settings>(json) ?? new Settings();
                 }
                 else
                 {
@@ -117,15 +112,6 @@ namespace mdcheckerwpf
                 File.WriteAllText(_settingsPath, json);
             }
             catch { }
-        }
-
-        private class Settings
-        {
-            [JsonPropertyName("checkMainParts")]
-            public bool CheckMainParts { get; set; }
-
-            [JsonPropertyName("startPage")]
-            public string StartPage { get; set; } = "model";
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
